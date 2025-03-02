@@ -1,35 +1,46 @@
-@file:UseSerializers(Vector3fSerializer::class)
 package dev.mayaqq.cynosure.models
 
-import dev.mayaqq.cynosure.utils.codecs.Either
-import dev.mayaqq.cynosure.data.ResourceLocationSerializer
-import dev.mayaqq.cynosure.data.Vector3fSerializer
+import com.mojang.serialization.Codec
+import com.mojang.serialization.Keyable
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.mayaqq.cynosure.models.baked.ModelRenderType
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.decodeFromJsonElement
+import dev.mayaqq.cynosure.utils.codecs.Either
+import it.unimi.dsi.fastutil.ints.IntList
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.ExtraCodecs
+import net.minecraft.util.StringRepresentable.EnumCodec
 import org.joml.Vector3f
 
 
-@Serializable
 data class ModelElementRotation(
     val angle: Float,
     val axis: Direction.Axis,
     val origin: Vector3f,
     val rescale: Boolean
-)
-
-@Serializable
-data class ModelElementFace(
-    val texture: String,
-    val uv: FloatArray,
-    val rotation: Float
 ) {
-    init {
-        require(uv.size == 4) { "UV array has to contain exactly 4 elements" }
+    companion object {
+        val CODEC: Codec<ModelElementRotation> = RecordCodecBuilder.create { it.group(
+            Codec.FLOAT.fieldOf("angle").forGetter(ModelElementRotation::angle),
+            Direction.Axis.CODEC.fieldOf("axis").forGetter(ModelElementRotation::axis),
+            ExtraCodecs.VECTOR3F.fieldOf("origin").forGetter(ModelElementRotation::origin),
+            Codec.BOOL.optionalFieldOf("rescale", false).forGetter(ModelElementRotation::rescale)
+        ).apply(it, ::ModelElementRotation) }
+    }
+}
+
+data class ModelElementFace(
+    val uv: FloatArray,
+    val rotation: Float,
+    val texture: String,
+) {
+
+    companion object {
+        val CODEC: Codec<ModelElementFace> = RecordCodecBuilder.create { it.group(
+            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = listOf(*array)).fieldOf("uvs").forGetter(ModelElementFace::uv),
+            Codec.FLOAT.optionalFieldOf("rotation", 0.0f).forGetter(ModelElementFace::rotation),
+            Codec.STRING.fieldOf("texture").forGetter(ModelElementFace::texture)
+        ).apply(it, ::ModelElementFace) }
     }
 
     private fun getShiftedIndex(index: Int): Int = ((index + rotation / 90) % 4).toInt()
@@ -65,37 +76,58 @@ data class ModelElementFace(
     }
 }
 
-@Serializable
 data class ModelElement(
     val from: Vector3f,
     val to: Vector3f,
     val faces: Map<Direction, ModelElementFace>,
     val rotation: ModelElementRotation? = null,
     val shade: Boolean = true
-)
+) {
+    companion object {
+        val CODEC: Codec<ModelElement> = RecordCodecBuilder.create { it.group(
+            ExtraCodecs.VECTOR3F.fieldOf("from").forGetter(ModelElement::from),
+            ExtraCodecs.VECTOR3F.fieldOf("to").forGetter(ModelElement::to),
+            Codec.simpleMap(Direction.CODEC, ModelElementFace.CODEC, Keyable.forStrings(fun() = Direction.entries.stream().map { it.serializedName })).fieldOf("faces").forGetter(ModelElement::faces),
+            ModelElementRotation.CODEC.optionalFieldOf("rotation", null).forGetter(ModelElement::rotation),
+            Codec.BOOL.optionalFieldOf("shade", true).forGetter(ModelElement::shade)
+        ).apply(it, ::ModelElement) }
+    }
+}
 
-@Serializable
 data class ModelElementGroup(
     val name: String,
     val renderType: ModelRenderType? = null,
     val origin: Vector3f,
-    val elements: List<Either<Int, ModelElementGroup>>
-)
+    val indices: IntList,
+    val subgroups: List<ModelElementGroup>
+) {
+    companion object {
+        val CODEC: Codec<ModelElementGroup> = RecordCodecBuilder.create { it.group(
+            Codec.STRING.fieldOf("name").forGetter(ModelElementGroup::name),
+            ModelRenderType.CODEC.optionalFieldOf("renderType", null).forGetter(ModelElementGroup::renderType),
+            ExtraCodecs.VECTOR3F.fieldOf("origin").forGetter(ModelElementGroup::origin),
+            Codec.either(Codec.INT)
+        ) }
 
-inline val ModelElementGroup.indices: List<Int>
-    get() = elements.mapNotNull { it.left }
+        private fun groupFromEitherList() {
 
-inline val ModelElementGroup.subgroups: List<ModelElementGroup>
-    get() = elements.mapNotNull { it.right }
+        }
 
-@Serializable
+        private val ModelElementGroup.indicesAndSubgroubs: List<Either<Int, ModelElementGroup>>
+            get() = TODO()
+    }
+
+}
+
+
 data class ModelData(
+    val textures: Map<String, ResourceLocation>,
     val renderType: ModelRenderType = ModelRenderType.CUTOUT,
-    val textures: Map<String, @Serializable(ResourceLocationSerializer::class) ResourceLocation>,
     val elements: List<ModelElement>,
-    val groups: List<ModelElementGroup>
-)
+    val groups: List<ModelElementGroup>,
+) {
+    companion object {
 
-@OptIn(ExperimentalSerializationApi::class)
-fun ModelData.Companion.fromJson(json: JsonElement): Result<ModelData> = runCatching { Json.decodeFromJsonElement(json) }
+    }
+}
 

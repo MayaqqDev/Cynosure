@@ -4,16 +4,15 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.mayaqq.cynosure.utils.codecs.alternatives
 import dev.mayaqq.cynosure.utils.codecs.toDataResult
-import org.checkerframework.checker.guieffect.qual.UI
 
 
 @JvmInline
-public value class Color(private val value: Int) {
+public value class Color private constructor(private val value: Int) {
 
     public companion object {
         public val CODEC: Codec<Color> = alternatives(
             Codec.INT.xmap(::Color, Color::value),
-            Codec.STRING.comapFlatMap({ parse(it).toDataResult() }, Color::toHex),
+            Codec.STRING.comapFlatMap({ tryParse(it).toDataResult() }, Color::toHex),
             RecordCodecBuilder.create { it.group(
                 Codec.INT.fieldOf("red").forGetter(Color::red),
                 Codec.INT.fieldOf("green").forGetter(Color::green),
@@ -23,14 +22,14 @@ public value class Color(private val value: Int) {
         )
 
         @OptIn(ExperimentalStdlibApi::class)
-        public fun parse(from: String, format: ColorFormat = ColorFormat.ARGB): Result<Color> = when {
+        public fun tryParse(from: String, format: ColorFormat = ColorFormat.ARGB): Result<Color> = when {
             namedColors.contains(from) -> Result.success(namedColors[from]!!)
             from.startsWith('#') -> from.substring(1).runCatching(String::hexToInt).map { Color(it, format) }
             from.startsWith("0x") -> from.substring(2).runCatching(String::hexToInt).map { Color(it, format) }
-//            from.startsWith('[') && from.endsWith(']') -> from.substring(1..from.length - 2).split(',')
-//                .runCatching { Color(this[0].toInt(), this[1].toInt(), this[2].toInt(), if(this.size >= 4) this[3].toInt() else 255) }
             else -> Result.failure(IllegalArgumentException("Invalid color format"))
         }
+
+        public fun parse(from: String, format: ColorFormat = ColorFormat.ARGB): Color = tryParse(from, format).getOrThrow()
     }
 
     public constructor(value: UInt) : this(value.toInt())
@@ -109,12 +108,12 @@ public value class Color(private val value: Int) {
 private val namedColors: MutableMap<String, Color> = mutableMapOf()
 
 public object Colors {
-    public val WHITE: Color = Color(0xffffff) named "white"
-    public val BLACK: Color = Color(0x000000) named "black"
-    public val BLUE: Color = Color(0x0000ff) named "blue"
-    public val GREEN: Color = Color(0x00ff00) named "green"
-    public val RED: Color = Color(0xff0000) named "red"
-    public val YELLOW: Color = Color(0xffff00) named "yellow"
+    public val WHITE: Color = Color(0xffffffu) named "white"
+    public val BLACK: Color = Color(0x000000u) named "black"
+    public val BLUE: Color = Color(0x0000ffu) named "blue"
+    public val GREEN: Color = Color(0x00ff00u) named "green"
+    public val RED: Color = Color(0xff0000u) named "red"
+    public val YELLOW: Color = Color(0xffff00u) named "yellow"
 
     private infix fun Color.named(name: String): Color = also { namedColors[name] = it }
 }

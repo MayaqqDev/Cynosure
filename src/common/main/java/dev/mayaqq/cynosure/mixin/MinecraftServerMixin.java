@@ -7,10 +7,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(MinecraftServer.class)
 public class MinecraftServerMixin {
     @Inject(method = "runServer", at = @At("HEAD"))
     private void runServer(CallbackInfo ci) {
         Cynosure.LOGGER.info("HAi");
+        Color
     }
 }
