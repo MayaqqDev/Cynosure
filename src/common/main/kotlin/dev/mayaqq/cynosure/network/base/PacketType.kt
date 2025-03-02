@@ -5,9 +5,9 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 public interface PacketType<T : Packet<T>> {
-    public fun type(): Class<T>
+    public val type: Class<T>
 
-    public fun id(): ResourceLocation
+    public val id: ResourceLocation
 
     public fun encode(packet: T, buffer: FriendlyByteBuf)
 

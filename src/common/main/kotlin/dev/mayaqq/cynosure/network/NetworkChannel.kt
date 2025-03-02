@@ -16,7 +16,7 @@ public class NetworkChannel(
     modId: String,
     protocolVersion: Int,
     channel: String,
-    optional: BooleanSupplier
+    optional: () -> Boolean
 ) : Network {
 
     private val network: Network = getNetwork(ResourceLocation(modId, channel), protocolVersion, optional)
@@ -99,4 +99,4 @@ public class NetworkChannel(
     }
 }
 
-public expect fun getNetwork(channel: ResourceLocation, protocolVersion: Int, optional: BooleanSupplier): Network
+public expect fun getNetwork(channel: ResourceLocation, protocolVersion: Int, optional: () -> Boolean): Network

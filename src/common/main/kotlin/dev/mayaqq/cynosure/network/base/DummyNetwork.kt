@@ -3,7 +3,7 @@ package dev.mayaqq.cynosure.network.base
 import dev.mayaqq.cynosure.network.Packet
 import net.minecraft.server.level.ServerPlayer
 
-public class DummyNetwork : Network {
+public object DummyNetwork : Network {
 
     override fun <T : Packet<T>> register(type: ClientBoundPacketType<T>) {}
 
@@ -15,9 +15,5 @@ public class DummyNetwork : Network {
 
     override fun canSendToPlayer(player: ServerPlayer): Boolean {
         return false
-    }
-
-    public companion object {
-        public val INSTANCE: Network = DummyNetwork()
     }
 }
