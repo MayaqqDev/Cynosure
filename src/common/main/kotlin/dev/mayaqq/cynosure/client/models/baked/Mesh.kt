@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.models.baked
+package dev.mayaqq.cynosure.client.models.baked
 
 internal const val STRIDE: Int = 6;
 internal const val PACK: Float = 127.0f

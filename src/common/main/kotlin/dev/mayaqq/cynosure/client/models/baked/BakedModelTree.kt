@@ -1,8 +1,8 @@
-package dev.mayaqq.cynosure.models.baked
+package dev.mayaqq.cynosure.client.models.baked
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import dev.mayaqq.cynosure.models.animations.Animatable
+import dev.mayaqq.cynosure.client.models.animations.Animatable
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.resources.ResourceLocation
 import org.joml.Quaternionf

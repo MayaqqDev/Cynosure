@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.utils.client
+package dev.mayaqq.cynosure.client.utils.client
 
 import org.joml.Vector2fc
 import org.joml.Vector3f

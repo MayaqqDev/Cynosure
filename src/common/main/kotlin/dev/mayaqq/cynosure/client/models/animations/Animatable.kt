@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.models.animations
+package dev.mayaqq.cynosure.client.models.animations
 
 import com.google.common.collect.HashBiMap
 import com.mojang.serialization.Codec

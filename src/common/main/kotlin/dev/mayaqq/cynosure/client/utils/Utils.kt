@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.utils
+package dev.mayaqq.cynosure.client.utils
 
 import dev.mayaqq.cynosure.utils.colors.Color
 import dev.mayaqq.cynosure.utils.colors.ColorFormat

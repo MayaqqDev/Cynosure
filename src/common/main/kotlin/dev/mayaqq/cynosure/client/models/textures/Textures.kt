@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.models.textures
+package dev.mayaqq.cynosure.client.models.textures
 
 import com.mojang.blaze3d.platform.NativeImage
 import kotlinx.coroutines.Deferred

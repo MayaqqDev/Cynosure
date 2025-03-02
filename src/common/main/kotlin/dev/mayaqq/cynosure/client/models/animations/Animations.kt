@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.models.animations
+package dev.mayaqq.cynosure.client.models.animations
 
 import net.minecraft.util.StringRepresentable
 import org.joml.Vector3f

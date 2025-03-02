@@ -1,9 +1,9 @@
-package dev.mayaqq.cynosure.models
+package dev.mayaqq.cynosure.client.models
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Keyable
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.mayaqq.cynosure.models.baked.ModelRenderType
+import dev.mayaqq.cynosure.client.models.baked.ModelRenderType
 import dev.mayaqq.cynosure.utils.codecs.Either
 import it.unimi.dsi.fastutil.ints.IntList
 import net.minecraft.core.Direction
@@ -37,7 +37,8 @@ data class ModelElementFace(
 
     companion object {
         val CODEC: Codec<ModelElementFace> = RecordCodecBuilder.create { it.group(
-            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = listOf(*array)).fieldOf("uvs").forGetter(ModelElementFace::uv),
+            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = listOf(*array)).fieldOf("uvs").forGetter(
+                ModelElementFace::uv),
             Codec.FLOAT.optionalFieldOf("rotation", 0.0f).forGetter(ModelElementFace::rotation),
             Codec.STRING.fieldOf("texture").forGetter(ModelElementFace::texture)
         ).apply(it, ::ModelElementFace) }
@@ -87,7 +88,9 @@ data class ModelElement(
         val CODEC: Codec<ModelElement> = RecordCodecBuilder.create { it.group(
             ExtraCodecs.VECTOR3F.fieldOf("from").forGetter(ModelElement::from),
             ExtraCodecs.VECTOR3F.fieldOf("to").forGetter(ModelElement::to),
-            Codec.simpleMap(Direction.CODEC, ModelElementFace.CODEC, Keyable.forStrings(fun() = Direction.entries.stream().map { it.serializedName })).fieldOf("faces").forGetter(ModelElement::faces),
+            Codec.simpleMap(Direction.CODEC,
+                ModelElementFace.CODEC, Keyable.forStrings(fun() = Direction.entries.stream().map { it.serializedName })).fieldOf("faces").forGetter(
+                ModelElement::faces),
             ModelElementRotation.CODEC.optionalFieldOf("rotation", null).forGetter(ModelElement::rotation),
             Codec.BOOL.optionalFieldOf("shade", true).forGetter(ModelElement::shade)
         ).apply(it, ::ModelElement) }

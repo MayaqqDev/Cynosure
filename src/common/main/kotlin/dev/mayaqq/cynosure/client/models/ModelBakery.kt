@@ -1,10 +1,13 @@
-package dev.mayaqq.cynosure.models
+package dev.mayaqq.cynosure.client.models
 
+import dev.mayaqq.cynosure.client.models.baked.*
+import dev.mayaqq.cynosure.client.models.baked.PACK
+import dev.mayaqq.cynosure.client.models.baked.STRIDE
+import dev.mayaqq.cynosure.client.utils.into
 import dev.mayaqq.cynosure.models.baked.*
-import dev.mayaqq.cynosure.models.baked.STRIDE
 import dev.mayaqq.cynosure.utils.*
-import dev.mayaqq.cynosure.utils.client.grow
-import dev.mayaqq.cynosure.utils.client.shrink
+import dev.mayaqq.cynosure.client.utils.client.grow
+import dev.mayaqq.cynosure.client.utils.client.shrink
 import it.unimi.dsi.fastutil.ints.IntArraySet
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
@@ -41,7 +44,7 @@ private class ModelBakery {
         return CustomBakedModel(bakeMesh(data.elements), ResourceLocation(""), data.renderType, minBound, maxBound)
     }
 
-    fun bakeAnimatable(data: ModelData): BakedModelTree  {
+    fun bakeAnimatable(data: ModelData): BakedModelTree {
         val ungrouped = 0..<data.elements.size into intSetOf(data.elements.size)
         val rootGroups = mutableMapOf<String, BakedModelTree>()
 
