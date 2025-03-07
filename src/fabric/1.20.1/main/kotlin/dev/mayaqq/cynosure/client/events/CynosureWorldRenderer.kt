@@ -1,0 +1,85 @@
+package dev.mayaqq.cynosure.client.events
+
+import dev.mayaqq.cynosure.CynosureInternal
+import dev.mayaqq.cynosure.client.events.render.WorldRenderEvent
+import dev.mayaqq.cynosure.events.api.MainBus
+import dev.mayaqq.cynosure.events.api.post
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+import net.minecraft.world.phys.HitResult
+
+internal object CynosureWorldRenderEventHandler : WorldRenderEvents.Start, WorldRenderEvents.AfterSetup, WorldRenderEvents.BeforeEntities,
+    WorldRenderEvents.AfterEntities, WorldRenderEvents.BeforeBlockOutline, WorldRenderEvents.BlockOutline,
+    WorldRenderEvents.DebugRender, WorldRenderEvents.AfterTranslucent, WorldRenderEvents.Last, WorldRenderEvents.End {
+
+
+    fun init() {
+        WorldRenderEvents.START.register(this)
+        WorldRenderEvents.AFTER_SETUP.register(this)
+        WorldRenderEvents.BEFORE_ENTITIES.register(this)
+        WorldRenderEvents.AFTER_ENTITIES.register(this)
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(this)
+        WorldRenderEvents.BLOCK_OUTLINE.register(this)
+        WorldRenderEvents.BEFORE_DEBUG_RENDER.register(this)
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(this)
+        WorldRenderEvents.LAST.register(this)
+        WorldRenderEvents.END.register(this)
+    }
+
+    override fun onStart(context: WorldRenderContext) {
+        WorldRenderEvent.Start(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun afterSetup(context: WorldRenderContext) {
+        WorldRenderEvent.BeforeTerrain(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun beforeEntities(context: WorldRenderContext) {
+        WorldRenderEvent.AfterTerrain(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun afterEntities(context: WorldRenderContext) {
+        WorldRenderEvent.AfterEntities(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun beforeBlockOutline(context: WorldRenderContext, hitResult: HitResult?): Boolean {
+        val event = WorldRenderEvent.BeforeBlockOutline(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers(), hitResult)
+        event.post()
+        return event.renderOutline
+    }
+
+    override fun onBlockOutline(
+        context: WorldRenderContext,
+        blockOutlineContext: WorldRenderContext.BlockOutlineContext
+    ): Boolean {
+        val event = WorldRenderEvent.BlockOutline(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers(), blockOutlineContext.entity(), blockOutlineContext.blockPos(), blockOutlineContext.blockState())
+        event.post()
+        return event.renderVanillaOutline
+    }
+
+    override fun beforeDebugRender(context: WorldRenderContext) {
+        WorldRenderEvent.DebugRender(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun afterTranslucent(context: WorldRenderContext) {
+        WorldRenderEvent.AfterParticles(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun onLast(context: WorldRenderContext) {
+        WorldRenderEvent.Last(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+
+    override fun onEnd(context: WorldRenderContext) {
+        WorldRenderEvent.End(context.worldRenderer(), context.matrixStack(), context.tickDelta(),
+            context.camera(), context.frustum(), context.consumers()).post()
+    }
+}

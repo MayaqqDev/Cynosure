@@ -1,14 +1,12 @@
 package dev.mayaqq.cynosure.utils.codecs
 
-import com.google.common.base.Suppliers
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.world.entity.animal.Cod
-import java.util.function.Supplier
-import java.util.function.UnaryOperator
+import com.teamresourceful.bytecodecs.base.ByteCodec
+import com.teamresourceful.bytecodecs.base.ObjectEntryByteCodec
 import kotlin.reflect.KProperty1
 
 
@@ -51,3 +49,6 @@ public class RecursiveCodec<T> internal constructor(private val name: String, wr
         return "RecursiveCodec[$name]"
     }
 }
+
+public infix fun <O, T> ByteCodec<T>.fieldOf(getter: (O) -> T): ObjectEntryByteCodec<O, T> =
+    ObjectEntryByteCodec(this, getter)

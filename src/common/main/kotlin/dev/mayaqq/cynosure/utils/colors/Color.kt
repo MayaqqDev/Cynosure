@@ -59,13 +59,13 @@ public value class Color internal constructor(internal val value: Int) {
         (this.alpha + (other.alpha - this.alpha) * weight).toInt()
     )
 
-    public operator fun component0(): Int = red
+    public operator fun component1(): Int = red
 
-    public operator fun component1(): Int = green
+    public operator fun component2(): Int = green
 
-    public operator fun component2(): Int = blue
+    public operator fun component3(): Int = blue
 
-    public operator fun component3(): Int = alpha
+    public operator fun component4(): Int = alpha
 
     override fun toString(): String {
         return "Color[$red, $green, $blue, $alpha]"

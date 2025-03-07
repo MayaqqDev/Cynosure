@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory
 public const val MODID: String = "cynosure"
 public const val NAME: String = "Cynosure"
 
+@RequiresOptIn(level = RequiresOptIn.Level.ERROR)
+public annotation class CynosureInternal
+
 @Suppress("NOTHING_TO_INLINE")
 public inline fun modId(path: String): ResourceLocation = ResourceLocation(MODID, path)
 
