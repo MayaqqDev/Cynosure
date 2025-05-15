@@ -1,7 +1,6 @@
 @file:Mod.EventBusSubscriber(modid = MODID)
 package dev.mayaqq.cynosure.events
 
-import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.MODID
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.block.BlockEvent
@@ -174,7 +173,7 @@ public fun onTickWorld(event: LevelTickEvent) {
     e.post(context = distContext)
 }
 
-@OptIn(CynosureInternal::class)
+
 @SubscribeEvent
 public fun onReloadListener(event: AddReloadListenerEvent) {
     CynosureHooksImpl.SERVER_RELOAD_LISTENERS.forEach { (_, listener) -> event.addListener(listener) }
@@ -191,7 +190,7 @@ public fun furnaceFuel(event: FurnaceFuelBurnTimeEvent) {
     }
 }
 
-@OptIn(CynosureInternal::class)
+
 @SubscribeEvent(priority = EventPriority.LOW)
 public fun furnaceFuel1(event: FurnaceFuelBurnTimeEvent) {
     val item = event.itemStack.item

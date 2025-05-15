@@ -9,9 +9,10 @@ import dev.mayaqq.cynosure.transactions.TransactionContext
 @PublishedApi
 internal object TransactionManagerAccess {
 
-    @JvmStatic
     fun openOuter() = LocalManager.openOuter()
 
-    @JvmStatic
-    fun openInner(current: TransactionContext): Transaction = (current as TransactionManager.TransactionImpl).openInner()
+    fun openInner(current: TransactionContext): Transaction = (current as TransactionManager.LinkedTransaction).openNested()
+
+    val Transaction.result
+        get() = (this as TransactionManager.LinkedTransaction).result
 }

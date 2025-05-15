@@ -4,7 +4,6 @@ import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import com.teamresourceful.bytecodecs.base.ByteCodec
-import com.teamresourceful.bytecodecs.base.ObjectEntryByteCodec
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Recipe

@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure.network
 
-import dev.mayaqq.cynosure.CynosureInternal
 import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.loader.api.FabricLoader
@@ -49,7 +48,7 @@ internal class FabricNetwork(
     }
 }
 
-@OptIn(CynosureInternal::class)
+
 public class NetworkProviderImpl : NetworkProvider {
     override fun createNetwork(networkId: ResourceLocation, protocolVersion: Int): Network {
         return FabricNetwork(networkId, protocolVersion)

@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure.client.particles
 
-import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.client.events.ParticleFactoryRegistrationEvent
 import dev.mayaqq.cynosure.events.api.MainBus
 import dev.mayaqq.cynosure.particles.ParticleTypeBuilder
@@ -14,7 +13,7 @@ import uwu.serenity.kritter.internal.NotUsableInBuilder
 
 public typealias SafeParticleFactory<T> = (T, ClientLevel, x: Double, y: Double, z: Double, xSpeed: Double, ySpeed: Double, zSpeed: Double) -> Particle
 
-@OptIn(NotUsableInBuilder::class, CynosureInternal::class)
+@OptIn(NotUsableInBuilder::class)
 public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinline factory: SafeParticleFactory<T>) {
     clientOnly {
         MainBus.register<ParticleFactoryRegistrationEvent> {
@@ -25,7 +24,7 @@ public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinl
     }
 }
 
-@OptIn(CynosureInternal::class, NotUsableInBuilder::class)
+@OptIn(NotUsableInBuilder::class)
 public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinline factory: (SpriteSet) -> ParticleProvider<T>) {
     clientOnly {
         MainBus.register<ParticleFactoryRegistrationEvent> {

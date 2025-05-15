@@ -5,7 +5,7 @@ import org.jetbrains.annotations.ApiStatus.NonExtendable
 
 @NonExtendable
 public abstract class Transaction protected constructor(
-    override val nestingDepth: Int
+    override val depth: Int
 ) : TransactionContext, AutoCloseable {
 
     public abstract val lifecycle: Lifecycle
@@ -13,11 +13,11 @@ public abstract class Transaction protected constructor(
     // val variants so u can use commit and abort like keywords
     @TransactionsDsl
     public inline val commit: Unit
-        get() { commit() }
+        @JvmName("doCommit") get() { commit() }
 
     @TransactionsDsl
     public inline val abort: Unit
-        get() { abort() }
+        @JvmName("doAbort") get() { abort() }
 
     @TransactionsDsl
     public fun commit() {
@@ -36,7 +36,7 @@ public abstract class Transaction protected constructor(
     protected abstract fun close(result: TransactionResult)
 
     public enum class Lifecycle {
-        NONE,
+        CLOSED,
         OPEN,
         CLOSING,
         OUTER_CLOSING
@@ -46,10 +46,10 @@ public abstract class Transaction protected constructor(
 
         @DelicateTransactionApi
         public val current: Transaction?
-            get() = LocalManager.getCurrentUnsafe()
+            get() = LocalManager.getCurrent()
 
         public val isOpen: Boolean
-            get() = LocalManager.isOpen
+            get() = LocalManager.lifecycle == Lifecycle.OPEN
 
         public val lifecycle: Lifecycle
             get() = LocalManager.lifecycle

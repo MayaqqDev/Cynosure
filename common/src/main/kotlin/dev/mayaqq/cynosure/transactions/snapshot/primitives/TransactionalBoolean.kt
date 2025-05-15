@@ -1,9 +1,9 @@
 package dev.mayaqq.cynosure.transactions.snapshot.primitives
 
 import dev.mayaqq.cynosure.transactions.TransactionContext
-import dev.mayaqq.cynosure.transactions.snapshot.SnapshotParticipant
+import dev.mayaqq.cynosure.transactions.snapshot.SnapshotHandler
 
-public class TransactionalBoolean(initial: Boolean) : SnapshotParticipant<Boolean>() {
+public class TransactionalBoolean(initial: Boolean) : SnapshotHandler<Boolean>() {
 
     public var value: Boolean = initial
         private set

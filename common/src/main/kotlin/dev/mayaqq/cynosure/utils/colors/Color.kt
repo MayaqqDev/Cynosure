@@ -7,9 +7,9 @@ import com.teamresourceful.bytecodecs.base.ByteCodec
 import dev.mayaqq.cynosure.core.codecs.Codecs
 import dev.mayaqq.cynosure.core.codecs.fieldOf
 import dev.mayaqq.cynosure.core.codecs.forGetter
-import dev.mayaqq.cynosure.utils.foldToLeft
 import dev.mayaqq.cynosure.utils.atMost
 import dev.mayaqq.cynosure.utils.dfu.toCynosure
+import dev.mayaqq.cynosure.utils.foldToLeft
 import dev.mayaqq.cynosure.utils.result.*
 import kotlinx.serialization.Serializable
 

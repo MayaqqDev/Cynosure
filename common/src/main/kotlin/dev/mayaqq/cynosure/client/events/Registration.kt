@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation
 import org.jetbrains.annotations.ApiStatus
 import kotlin.reflect.KMutableProperty0
 
-@OptIn(CynosureInternal::class)
 public class ParticleFactoryRegistrationEvent(private val context: Context) : Event {
 
     public fun <T : ParticleOptions> register(type: ParticleType<T>, provider: ParticleProvider<T>) {
@@ -24,7 +23,7 @@ public class ParticleFactoryRegistrationEvent(private val context: Context) : Ev
         context.register(type, factoryProvider)
     }
 
-    @ApiStatus.NonExtendable
+    @ApiStatus.Internal
     @CynosureInternal
     public interface Context {
         public fun <T : ParticleOptions> register(type: ParticleType<T>, provider: ParticleProvider<T>)
@@ -52,7 +51,6 @@ public class ParticleRenderTypeRegistrationEvent(
     }
 }
 
-@OptIn(CynosureInternal::class)
 public class CoreShaderRegistrationEvent(private val context: Context) : Event {
 
     public fun register(
@@ -69,7 +67,7 @@ public class CoreShaderRegistrationEvent(private val context: Context) : Event {
         property: KMutableProperty0<ShaderInstance>
     ): Unit = register(id, format, property::set)
 
-    @ApiStatus.NonExtendable
+    @ApiStatus.Internal
     @CynosureInternal
     public fun interface Context {
         public fun register(id: ResourceLocation, format: VertexFormat, onLoad: (ShaderInstance) -> Unit)

@@ -45,12 +45,12 @@ public fun <A> ByteCodec<A>.toCodec(): ByteCodecCodec<A> = ByteCodecCodec(this)
 @Suppress("Deprecation")
 public class CodecByteCodec<A> internal constructor(
     public val codec: Codec<A>
-) : ByteCodec<A> {
-    override fun encode(value: A, buffer: ByteBuf) {
-        buffer.friendzone().writeWithCodec(NbtOps.INSTANCE, codec, value)
+) : FriendlyByteCodec<A> {
+    override fun encodeFriendly(value: A, buf: FriendlyByteBuf) {
+        buf.writeWithCodec(NbtOps.INSTANCE, codec, value)
     }
 
-    override fun decode(buffer: ByteBuf): A = buffer.friendzone().readWithCodec(NbtOps.INSTANCE, codec)
+    override fun decodeFriendly(buf: FriendlyByteBuf): A = buf.readWithCodec(NbtOps.INSTANCE, codec)
 }
 
 /**

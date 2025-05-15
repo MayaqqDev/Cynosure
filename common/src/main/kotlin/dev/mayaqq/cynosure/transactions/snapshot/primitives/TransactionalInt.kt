@@ -1,11 +1,11 @@
 package dev.mayaqq.cynosure.transactions.snapshot.primitives
 
 import dev.mayaqq.cynosure.transactions.TransactionContext
-import dev.mayaqq.cynosure.transactions.snapshot.SnapshotParticipant
+import dev.mayaqq.cynosure.transactions.snapshot.SnapshotHandler
 
 public class TransactionalInt(
     initial: Int
-) : SnapshotParticipant<Int>() {
+) : SnapshotHandler<Int>() {
 
     public var value: Int = initial
         private set

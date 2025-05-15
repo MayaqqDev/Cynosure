@@ -1,7 +1,7 @@
 package dev.mayaqq.cynosure.events.world
 
-import dev.mayaqq.cynosure.events.api.Event
 import dev.mayaqq.cynosure.core.Environment
+import dev.mayaqq.cynosure.events.api.Event
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 

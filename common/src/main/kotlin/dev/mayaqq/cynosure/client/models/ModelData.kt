@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.Keyable
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.mayaqq.cynosure.client.models.baked.ModelRenderType
-import dev.mayaqq.cynosure.utils.Either
 import dev.mayaqq.cynosure.core.codecs.Codecs
 import dev.mayaqq.cynosure.core.codecs.fieldOf
+import dev.mayaqq.cynosure.utils.Either
 import net.minecraft.core.Direction
 import net.minecraft.util.ExtraCodecs
 import org.joml.Vector3f

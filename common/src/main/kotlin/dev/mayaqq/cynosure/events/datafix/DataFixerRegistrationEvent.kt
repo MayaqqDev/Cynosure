@@ -7,8 +7,8 @@ import dev.mayaqq.cynosure.events.api.Event
 
 public class DataFixerRegistrationEvent(public val builder: DataFixerBuilder) : Event {
 
-    public inline fun addSchema(version: Int, subversion: Int = 0, crossinline factory: (Int, Schema) -> Schema): Schema {
-        return builder.addSchema(version, subversion) { t, u -> factory(t, u) }
+    public fun addSchema(version: Int, subversion: Int = 0, factory: (Int, Schema) -> Schema): Schema {
+        return builder.addSchema(version, subversion, factory)
     }
 
     public fun addSchema(schema: Schema) {

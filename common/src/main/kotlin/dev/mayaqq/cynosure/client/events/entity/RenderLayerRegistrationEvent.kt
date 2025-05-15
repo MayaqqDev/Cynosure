@@ -16,7 +16,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import org.jetbrains.annotations.ApiStatus.NonExtendable
 
-@OptIn(CynosureInternal::class)
+
 public class RenderLayerRegistrationEvent(
     public val renderers: EntityRenderDispatcher,
     public val models: EntityModelSet,

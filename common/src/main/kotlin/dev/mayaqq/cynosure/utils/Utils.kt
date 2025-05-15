@@ -34,6 +34,10 @@ public fun <I : Any, V> mapBacked(initializer: (I) -> V): MapBackedProperty<I, V
 
 public operator fun <T> ThreadLocal<T>.getValue(thisRef: Any?, property: KProperty<*>): T = get()
 
+public operator fun <T> ThreadLocal<T>.setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+    set(value)
+}
+
 public infix fun <T, C : MutableCollection<in T>> Iterable<T>.into(destination: C): C {
     destination.addAll(this)
     return destination

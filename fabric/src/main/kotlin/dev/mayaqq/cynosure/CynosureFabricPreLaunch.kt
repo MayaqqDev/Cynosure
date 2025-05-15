@@ -1,5 +1,7 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.core.Environment
+import dev.mayaqq.cynosure.core.PlatformHooks
 import dev.mayaqq.cynosure.events.api.EventBus
 import dev.mayaqq.cynosure.events.api.EventSubscriber
 import dev.mayaqq.cynosure.events.api.MainBus
@@ -7,8 +9,6 @@ import dev.mayaqq.cynosure.events.internal.CynosureEventLogger
 import dev.mayaqq.cynosure.events.internal.subscribeASMMethods
 import dev.mayaqq.cynosure.internal.boolean
 import dev.mayaqq.cynosure.internal.getCynosureValue
-import dev.mayaqq.cynosure.core.Environment
-import dev.mayaqq.cynosure.core.PlatformHooks
 import dev.mayaqq.cynosure.utils.asm.descriptorToClassName
 import dev.mayaqq.cynosure.utils.asm.mappedValues
 import kotlinx.coroutines.Dispatchers

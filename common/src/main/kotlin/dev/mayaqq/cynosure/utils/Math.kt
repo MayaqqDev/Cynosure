@@ -1,7 +1,5 @@
 package dev.mayaqq.cynosure.utils
 
-import dev.mayaqq.cynosure.utils.colors.Color
-
 public const val PI: Double = java.lang.Math.PI
 public const val DEG_TO_RAD: Double = PI / 180.0
 public const val RAD_TO_DEG: Double = 180.0 / PI

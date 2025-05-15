@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure.network
 
-import dev.mayaqq.cynosure.CynosureInternal
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.network.NetworkEvent.Context
@@ -84,7 +83,7 @@ internal class ForgeNetwork(
 
 }
 
-@OptIn(CynosureInternal::class)
+
 public class NetworkProviderImpl : NetworkProvider {
     override fun createNetwork(networkId: ResourceLocation, protocolVersion: Int): Network {
         return ForgeNetwork(networkId, protocolVersion)

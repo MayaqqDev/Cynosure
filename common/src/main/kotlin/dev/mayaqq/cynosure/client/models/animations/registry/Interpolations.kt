@@ -1,8 +1,8 @@
 package dev.mayaqq.cynosure.client.models.animations.registry
 
 import dev.mayaqq.cynosure.client.models.animations.Keyframe
-import dev.mayaqq.cynosure.modId
 import dev.mayaqq.cynosure.core.registry.NamedRegistry
+import dev.mayaqq.cynosure.modId
 import net.minecraft.util.Mth
 import org.joml.Vector3f
 import kotlin.math.max

@@ -1,11 +1,11 @@
 package dev.mayaqq.cynosure.client.events.tooltip
 
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.items.extensions.CustomTooltip
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
-import dev.mayaqq.cynosure.items.extensions.CustomTooltip
 
 /**
  * Generic event for modifying tooltip components. For specific stuff use the item extension [CustomTooltip].

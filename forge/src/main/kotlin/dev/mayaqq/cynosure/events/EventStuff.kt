@@ -1,14 +1,13 @@
 package dev.mayaqq.cynosure.events
 
 import dev.mayaqq.cynosure.CynosureForge
-import dev.mayaqq.cynosure.CynosureInternal
+import dev.mayaqq.cynosure.core.Environment
+import dev.mayaqq.cynosure.core.PlatformHooks
 import dev.mayaqq.cynosure.events.api.EventBus
 import dev.mayaqq.cynosure.events.api.EventSubscriber
 import dev.mayaqq.cynosure.events.api.MainBus
 import dev.mayaqq.cynosure.events.internal.CynosureEventLogger
 import dev.mayaqq.cynosure.events.internal.subscribeASMMethods
-import dev.mayaqq.cynosure.core.Environment
-import dev.mayaqq.cynosure.core.PlatformHooks
 import dev.mayaqq.cynosure.utils.asm.getClassByteArray
 import net.minecraftforge.fml.ModList
 import org.objectweb.asm.ClassReader
@@ -17,7 +16,7 @@ import org.objectweb.asm.tree.ClassNode
 
 internal val SUB_ANNOTATION_TYPE = Type.getType(EventSubscriber::class.java)
 
-@OptIn(CynosureInternal::class)
+
 internal fun gatherEventSubscribers() {
     for(scandata in ModList.get().allScanData) {
         for(annotation in scandata.annotations) {

@@ -4,7 +4,7 @@ import dev.mayaqq.cynosure.utils.Either
 import dev.mayaqq.cynosure.utils.Either.Left
 import dev.mayaqq.cynosure.utils.Either.Right
 
-public val Result.Companion.unit: Result<Unit> get() = success(Unit)
+public val Result.Companion.UNIT: Result<Unit> get() = success(Unit)
 
 public fun <A> Result<A>.omit(): Result<Unit> = map { }
 

@@ -1,5 +1,7 @@
 package dev.mayaqq.cynosure.events
 
+import dev.mayaqq.cynosure.core.GameInstance
+import dev.mayaqq.cynosure.core.GameInstanceImpl
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.command.CommandRegistrationEvent
 import dev.mayaqq.cynosure.events.entity.LivingEntityEvent
@@ -8,8 +10,6 @@ import dev.mayaqq.cynosure.events.entity.player.interaction.InteractionEvent
 import dev.mayaqq.cynosure.events.server.DataPackSyncEvent
 import dev.mayaqq.cynosure.events.server.ServerEvent
 import dev.mayaqq.cynosure.events.world.LevelEvent
-import dev.mayaqq.cynosure.core.GameInstance
-import dev.mayaqq.cynosure.core.GameInstanceImpl
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents

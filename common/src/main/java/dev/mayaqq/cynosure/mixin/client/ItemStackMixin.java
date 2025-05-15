@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure.mixin.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import dev.mayaqq.cynosure.client.events.tooltip.ModifyTooltipComponentsEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.items.extensions.CustomTooltip;

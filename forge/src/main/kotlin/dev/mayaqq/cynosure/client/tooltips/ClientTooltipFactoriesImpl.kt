@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.client.tooltips
 
 import com.google.common.collect.ImmutableMap
 import dev.mayaqq.cynosure.MODID
+import dev.mayaqq.cynosure.transactions.transaction
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.world.inventory.tooltip.TooltipComponent
 import net.minecraftforge.api.distmarker.Dist
@@ -31,6 +32,10 @@ internal object ClientTooltipFactoriesImpl : ClientTooltipFactories {
             FACTORIES[null] = newMap
         } else {
             deferredComponents[klass] = factory as (TooltipComponent) -> ClientTooltipComponent
+        }
+
+        transaction {
+            commit
         }
 
     }

@@ -15,7 +15,6 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.entity.BlockEntity
 import java.util.*
-import java.util.stream.Collectors
 
 /*
  * This code includes modifications based on or derived from code provided by fabric-api.

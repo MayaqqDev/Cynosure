@@ -1,7 +1,7 @@
 package dev.mayaqq.cynosure.core
 
-import dev.mayaqq.cynosure.internal.loadPlatform
 import dev.mayaqq.cynosure.core.mod.Mod
+import dev.mayaqq.cynosure.internal.loadPlatform
 
 public fun isModLoaded(modid: String): Boolean = PlatformHooks.isModLoaded(modid)
 

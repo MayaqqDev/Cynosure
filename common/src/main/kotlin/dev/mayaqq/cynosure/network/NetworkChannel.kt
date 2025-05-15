@@ -3,10 +3,9 @@ package dev.mayaqq.cynosure.network
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import com.teamresourceful.bytecodecs.base.ByteCodec
-import dev.mayaqq.cynosure.CynosureInternal
+import dev.mayaqq.cynosure.core.GameInstance
 import dev.mayaqq.cynosure.entities.PlayerLookup
 import dev.mayaqq.cynosure.network.serialization.KByteCodec
-import dev.mayaqq.cynosure.core.GameInstance
 import dev.mayaqq.cynosure.utils.set
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializerOrNull
@@ -33,7 +32,7 @@ public class NetworkChannel(
     public val channelId: ResourceLocation,
     protocolVersion: Int
 ) {
-    @OptIn(CynosureInternal::class)
+    
     private val network: Network = NetworkProvider.createNetwork(channelId, protocolVersion)
 
     private val packets: Table<Class<*>, NetworkDirection, Network.PacketInfo<*>> = HashBasedTable.create()

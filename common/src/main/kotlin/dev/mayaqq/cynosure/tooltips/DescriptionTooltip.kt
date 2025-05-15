@@ -1,8 +1,9 @@
 package dev.mayaqq.cynosure.tooltips
 
 import dev.mayaqq.cynosure.items.extensions.CustomTooltip
-import dev.mayaqq.cynosure.utils.colors.*
-import net.minecraft.ChatFormatting
+import dev.mayaqq.cynosure.utils.colors.Color
+import dev.mayaqq.cynosure.utils.colors.DarkGray
+import dev.mayaqq.cynosure.utils.colors.LightGray
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Player

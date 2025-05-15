@@ -130,7 +130,8 @@ subprojects {
 
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
-            this.freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers")
+            optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
+            freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers")
         }
     }
 }

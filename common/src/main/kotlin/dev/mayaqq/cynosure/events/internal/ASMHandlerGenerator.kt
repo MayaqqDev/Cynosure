@@ -26,7 +26,7 @@ private val SUBSCRIPTION: String = Subscription::class.qualifiedName!!
 @CynosureInternal
 public val CynosureEventLogger: Logger = LoggerFactory.getLogger("Cynosure Event Registration")
 
-@OptIn(CynosureInternal::class)
+
 @Suppress("UNCHECKED_CAST")
 internal fun generateASMEventListener(className: String, methodName: String, methodDesc: String, instanceFieldName: String?, instanceFieldOwnerName: String?): Consumer<Any> {
 
