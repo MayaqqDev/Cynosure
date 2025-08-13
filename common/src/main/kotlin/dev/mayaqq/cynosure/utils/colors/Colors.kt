@@ -46,6 +46,8 @@ public val Blue: Color = namedColor("blue", 0x0000ffu)
 
 public val BlueViolet: Color = namedColor("blueviolet", 0x8a2be2u)
 
+public val BohemianBlue: Color = namedColor("bohemianblue", 0x0000aau)
+
 public val Brown: Color = namedColor("brown", 0xa52a2au)
 
 public val Burlywood: Color = namedColor("burlywood", 0xdeb887u)
@@ -104,9 +106,13 @@ public val DarkTurquoise: Color = namedColor("darkturquoise", 0x00ced1u)
 
 public val DarkViolet: Color = namedColor("darkviolet", 0x9400d3u)
 
+public val DavysGrey: Color = namedColor("davysgrey", 0x555555u)
+
 public val DeepPink: Color = namedColor("deeppink", 0xff1493u)
 
 public val DeepSkyblue: Color = namedColor("deepskyblue", 0x00bfffu)
+
+public val DhusarGrey: Color = namedColor("dhusargrey", 0xaaaaaau)
 
 public val DimGray: Color = namedColor("dimgray", 0x696969u)
 
@@ -116,7 +122,11 @@ public val DodgerBlue: Color = namedColor("dodgerblue", 0x1e90ffu)
 
 public val Firebrick: Color = namedColor("firebrick", 0xb22222u)
 
+public val FlashOfOrange: Color = namedColor("flashoforange", 0xffaa00u)
+
 public val FloralWhite: Color = namedColor("floralwhite", 0xfffaf0u)
+
+public val FluorescentRed: Color = namedColor("fluorescentred", 0xFF5555u)
 
 public val ForestGreen: Color = namedColor("forestgreen", 0x228b22u)
 
@@ -146,6 +156,8 @@ public val IndianRed: Color = namedColor("indianred", 0xcd5c5cu)
 
 public val Indigo: Color = namedColor("indigo", 0x4b0082u)
 
+public val IslamicGreen: Color = namedColor("islamicgreen", 0x00AA00u)
+
 public val Ivory: Color = namedColor("ivory", 0xfffff0u)
 
 public val Khaki: Color = namedColor("khaki", 0xf0e68cu)
@@ -162,7 +174,9 @@ public val LightBlue: Color = namedColor("lightblue", 0xadd8e6u)
 
 public val LightCoral: Color = namedColor("lightcoral", 0xf08080u)
 
-public val LightCyan: Color = namedColor("lightcyan", 0xe0ffffu)
+public val LightCyan: Color = namedColor("lightcyan", 0x55ffffu)
+
+public val LightCyan1: Color = namedColor("lightcyan", 0xe0ffffu)
 
 public val LightGoldenrodYellow: Color = namedColor("lightgoldenrodyellow", 0xfafad2u)
 
@@ -171,6 +185,10 @@ public val LightGray: Color = namedColor("lightgray", 0xd3d3d3u)
 public val LightGreen: Color = namedColor("lightgreen", 0x90ee90u)
 
 public val LightGrey: Color = namedColor("lightgrey", 0xd3d3d3u)
+
+public val LightLimeGreen: Color = namedColor("lightlimegreen", 0x55ff55u)
+
+public val LightMagenta: Color = namedColor("lightmagenta", 0xff55ffu)
 
 public val LightPink: Color = namedColor("lightpink", 0xffb6c1u)
 
@@ -304,9 +322,15 @@ public val Teal: Color = namedColor("teal", 0x008080u)
 
 public val Thistle: Color = namedColor("thistle", 0xd8bfd8u)
 
+public val TiffanyBlue: Color = namedColor("tiffanyblue", 0x00aaaau)
+
 public val Tomato: Color = namedColor("tomato", 0xff6347u)
 
 public val Turquoise: Color = namedColor("turquoise", 0x40e0d0u)
+
+public val UnnamedLightBlue: Color = namedColor("unnamedlightblue", 0x5555ffu)
+public val UnnamedLightYellow: Color = namedColor("unnamedlightyellow", 0xffff55u)
+public val UnnamedMagenta: Color = namedColor("unnamedmagenta", 0xaa00aau)
 
 public val Violet: Color = namedColor("violet", 0xee82eeu)
 
@@ -321,3 +345,24 @@ public val Yellow: Color = namedColor("yellow", 0xffff00u)
 public val YellowGreen: Color = namedColor("yellowgreen", 0x9acd32u)
 
 public val Transparent: Color = namedColorWithAlpha("transparent", 0x00000000u)
+
+// Minecraft Colors
+public val McBlack: Color get() = Black
+public val McDarkBlue: Color get() = BohemianBlue
+public val McDarkGreen: Color get() = IslamicGreen
+public val McDarkAqua: Color get() = TiffanyBlue
+public val McDarkRed: Color get() = Red
+public val McDarkPurple: Color get() = UnnamedMagenta
+public val McMagenta: Color get() = UnnamedMagenta
+public val McGold: Color get() = FlashOfOrange
+public val McOrange: Color get() = FlashOfOrange
+public val McGray: Color get() = DhusarGrey
+public val McDarkGray: Color get() = DavysGrey
+public val McBlue: Color get() = UnnamedLightBlue
+public val McGreen: Color get() = LightLimeGreen
+public val McAqua: Color get() = LightCyan
+public val McRed: Color get() = FluorescentRed
+public val McLightPurple: Color get() = LightMagenta
+public val McPink: Color get() = LightMagenta
+public val McYellow: Color get() = UnnamedLightYellow
+public val McWhite: Color get() = White
