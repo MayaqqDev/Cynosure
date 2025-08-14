@@ -17,7 +17,7 @@ private val PHRASES = arrayOf(
 )
 
 @JvmOverloads
-public fun String.uwufy(first: Boolean = true, last: Boolean = true, forceUppercase: Boolean = false): String {
+public fun String.uwufy(first: Boolean = true, last: Boolean = true, forceUppercase: Boolean = false, forceLowercase: Boolean = false): String {
     var input = this
     val stringLength = input.length
     // Replace 'r' and 'l' with 'w', and 'R' and 'L' with 'W'
@@ -31,7 +31,7 @@ public fun String.uwufy(first: Boolean = true, last: Boolean = true, forceUpperc
         .replace("!".toRegex(), "!!!").replace("\\?".toRegex(), "???")
 
     // Convert to uppercase
-    if (stringLength % 3 == 0 || forceUppercase) {
+    if ((stringLength % 3 == 0 || forceUppercase) && !forceLowercase) {
         input = input.uppercase()
     }
 
