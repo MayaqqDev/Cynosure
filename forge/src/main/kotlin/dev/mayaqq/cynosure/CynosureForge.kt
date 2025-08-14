@@ -5,6 +5,7 @@ import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.gatherEventSubscribers
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.PathPackResources
 import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.PackSource
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent
+import net.minecraftforge.fml.loading.moddiscovery.ModFile
 import net.minecraftforge.forgespi.locating.IModFile
 
 @Mod(MODID)
@@ -37,15 +39,23 @@ public class CynosureForge {
     @SubscribeEvent
     public fun addPackFinders(event: AddPackFindersEvent) {
         for (mod in ModList.get().mods) {
-            val metadata = mod.modProperties.getCynosureValue("resourcepacks") as? List<*> ?: continue
+            val resourcemetadata = mod.modProperties.getCynosureValue("resourcepacks") as? List<*> ?: continue
+            val datametadata = mod.modProperties.getCynosureValue("datapacks") as? List<*> ?: continue
             try {
-                for (pack in metadata) {
-                    when (pack) {
-                        is String -> event.createPack(mod.owningFile.file, ResourceLocation(mod.modId, pack))
+                if (event.packType == PackType.CLIENT_RESOURCES)
+                    for (pack in resourcemetadata) {
+                        when (pack) {
+                            is String -> event.createPack(mod.owningFile.file, ResourceLocation(mod.modId, pack))
+                        }
                     }
-                }
+                if (event.packType == PackType.SERVER_DATA)
+                    for (pack in datametadata) {
+                        when (pack) {
+                            is String -> event.createDataPack(mod.owningFile.file, ResourceLocation(mod.modId, pack))
+                        }
+                    }
             } catch (ex: Exception) {
-                Cynosure.error("Failed to load pack for mod ${mod.modId}")
+                Cynosure.error("Failed to load ${if (event.packType == PackType.CLIENT_RESOURCES) "resourcepack" else "datapack"} for mod ${mod.modId}")
             }
         }
     }
@@ -56,6 +66,18 @@ public class CynosureForge {
         Pack.readMetaAndCreate(
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("resourcepack")),
+            false,
+            { path -> PathPackResources(path, resourcePath, true) },
+            packType, Pack.Position.TOP, PackSource.BUILT_IN
+        )?.let { addRepositorySource { consumer -> consumer.accept(it) } }
+    }
+
+    private fun AddPackFindersEvent.createDataPack(modFile: IModFile, id: ResourceLocation) {
+        val resourcePath = modFile.findResource("datapack/$id")
+
+        Pack.readMetaAndCreate(
+            "${id.namespace}/${id.path}",
+            Component.translatable(id.toLanguageKey("datapack")),
             false,
             { path -> PathPackResources(path, resourcePath, true) },
             packType, Pack.Position.TOP, PackSource.BUILT_IN
