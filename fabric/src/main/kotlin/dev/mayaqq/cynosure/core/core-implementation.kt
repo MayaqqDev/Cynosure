@@ -34,7 +34,8 @@ internal class PlatformHooksImpl : PlatformHooks {
                     modid,
                     it.metadata.name,
                     it.metadata.description,
-                    it.metadata.version.friendlyString
+                    it.metadata.version.friendlyString,
+                    it.metadata.getIconPath(64).getOrNull()
                 )
             }
     }

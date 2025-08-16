@@ -34,7 +34,8 @@ internal class PlatformHooksImpl : PlatformHooks {
                     modid,
                     it.modInfo.displayName,
                     it.modInfo.description,
-                    it.modInfo.version.toString()
+                    it.modInfo.version.toString(),
+                    it.modInfo.logoFile.getOrNull()
                 )
             }
     }
