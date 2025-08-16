@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure
 
-import dev.mayaqq.cynosure.client.splash.CynosureSplashRenderer
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.fapiFeed
@@ -8,12 +7,12 @@ import dev.mayaqq.cynosure.internal.arrayOrNull
 import dev.mayaqq.cynosure.internal.getCynosureValue
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.CustomValue.CvArray
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.PackType
 import kotlin.reflect.typeOf
 
 internal object CynosureFabric {
@@ -55,8 +54,10 @@ internal object CynosureFabric {
         for (pack in packs) {
             try {
                 val packId = ResourceLocation(metadata.id, pack.asString)
-                ResourceManagerHelper.registerBuiltinResourcePack(
-                    packId, mod,
+                ResourceManagerHelperImpl.registerBuiltinResourcePack(
+                    packId,
+                    "datapacks/" + packId.path,
+                    mod,
                     Component.translatable(packId.toLanguageKey("datapacks")),
                     ResourcePackActivationType.NORMAL
                 )

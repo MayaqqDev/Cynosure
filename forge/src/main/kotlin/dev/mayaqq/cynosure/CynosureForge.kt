@@ -73,7 +73,7 @@ public class CynosureForge {
     }
 
     private fun AddPackFindersEvent.createDataPack(modFile: IModFile, id: ResourceLocation) {
-        val resourcePath = modFile.findResource("datapack/$id")
+        val resourcePath = modFile.findResource("datapacks/$id")
 
         Pack.readMetaAndCreate(
             "${id.namespace}/${id.path}",
