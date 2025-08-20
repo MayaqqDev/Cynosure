@@ -28,7 +28,7 @@ public fun ByteBuf.friendzone(): FriendlyByteBuf =
  * bytecodec is not very efficient
  * @return  a [CodecByteCodec] that can encode/decode values of type [A]
  */
-public fun <A> Codec<A>.toByteCodec(): CodecByteCodec<A> = CodecByteCodec(this)
+public fun <A : Any> Codec<A>.toByteCodec(): CodecByteCodec<A> = CodecByteCodec(this)
 
 /**
  * Create a codec from a byte codec, that encodes the resulying bytes directly
@@ -42,15 +42,14 @@ public fun <A> ByteCodec<A>.toCodec(): ByteCodecCodec<A> = ByteCodecCodec(this)
 /**
  * A bytecodec backed by a codec. See [toByteCodec]
  */
-@Suppress("Deprecation")
-public class CodecByteCodec<A> internal constructor(
+public class CodecByteCodec<A : Any> internal constructor(
     public val codec: Codec<A>
 ) : FriendlyByteCodec<A> {
     override fun encodeFriendly(value: A, buf: FriendlyByteBuf) {
-        buf.writeWithCodec(NbtOps.INSTANCE, codec, value)
+        buf.writeJsonWithCodec(codec, value)
     }
 
-    override fun decodeFriendly(buf: FriendlyByteBuf): A = buf.readWithCodec(NbtOps.INSTANCE, codec)
+    override fun decodeFriendly(buf: FriendlyByteBuf): A = buf.readJsonWithCodec(codec)
 }
 
 /**
