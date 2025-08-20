@@ -15,6 +15,7 @@ import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.fml.loading.moddiscovery.ModFile
 import net.minecraftforge.forgespi.locating.IModFile
 
@@ -23,6 +24,7 @@ import net.minecraftforge.forgespi.locating.IModFile
 public class CynosureForge {
 
     init {
+        FMLJavaModLoadingContext.get().modEventBus.register(this)
         Cynosure.init()
     }
 
