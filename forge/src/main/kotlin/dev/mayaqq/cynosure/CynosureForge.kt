@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.biome.CarverRegistry
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.gatherEventSubscribers
@@ -25,6 +26,7 @@ public class CynosureForge {
 
     init {
         FMLJavaModLoadingContext.get().modEventBus.register(this)
+        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(FMLJavaModLoadingContext.get().modEventBus)
         Cynosure.init()
     }
 
