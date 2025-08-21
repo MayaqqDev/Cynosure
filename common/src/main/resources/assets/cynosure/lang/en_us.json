@@ -1,4 +1,6 @@
 {
   "tooltip.generic.cynosure.hold_shift.off": "§8Hold [§7Shift§8] for Summary",
-  "tooltip.generic.cynosure.hold_shift.on": "§8Hold [§fShift§8] for Summary"
+  "tooltip.generic.cynosure.hold_shift.on": "§8Hold [§fShift§8] for Summary",
+
+  "tag.item.cynosure.disables_cape": "Disables Cape"
 }
