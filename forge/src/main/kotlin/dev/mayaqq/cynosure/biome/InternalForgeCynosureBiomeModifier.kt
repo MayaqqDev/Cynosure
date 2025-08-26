@@ -37,7 +37,7 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
             }
             BiomeModifier.Phase.ADD -> {
                 val generationSettings = info.generationSettings
-                BiomeModifiers.featureAdd.forEach { feature ->
+                BiomeModifiersImpl.featureAdd.forEach { feature ->
                     if (feature.biome.invoke(biome.get())) {
                         registryAccess?.registry(Registries.PLACED_FEATURE)?.getOrNull()?.let { registry ->
                             generationSettings.addFeature(
@@ -49,7 +49,7 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
                 }
                 val spawnSettings = info.mobSpawnSettings
                 logInIde("Cynosure Adding Spawns")
-                BiomeModifiers.spawnsAdd.forEach { spawn ->
+                BiomeModifiersImpl.spawnAdd.forEach { spawn ->
                     if (spawn.biome.invoke(biome.get())) {
                         spawnSettings.addSpawn(spawn.category, MobSpawnSettings.SpawnerData(
                             spawn.type,
@@ -59,7 +59,7 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
                         ))
                     }
                 }
-                BiomeModifiers.carverAdd.forEach { carver ->
+                BiomeModifiersImpl.carverAdd.forEach { carver ->
                     if (carver.biome.invoke(biome.get())) {
                         registryAccess?.registry(Registries.CONFIGURED_CARVER)?.getOrNull()?.let { registry ->
                             generationSettings.addCarver(
