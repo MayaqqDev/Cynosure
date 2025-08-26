@@ -36,7 +36,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 @CynosureInternal
-public object CynosureForgeClient {
+public class CynosureForgeClient {
     @SubscribeEvent
     public fun clientSetup(event: FMLClientSetupEvent) {
         CynosureClient.init()
