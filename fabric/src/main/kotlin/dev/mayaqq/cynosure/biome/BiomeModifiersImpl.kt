@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.biome
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
@@ -12,26 +13,26 @@ import kotlin.ranges.step
 
 public object BiomeModifiersImpl : BiomeModifiers {
     override fun addFeature(
-        biome: (Biome) -> Boolean,
+        biome: (Holder<Biome>) -> Boolean,
         step: GenerationStep.Decoration,
         feature: ResourceKey<PlacedFeature>
     ) {
         BiomeModifications.addFeature(
-            { biome.invoke(it.biome) },
+            { biome.invoke(it.biomeRegistryEntry) },
             step,
             feature
         )
     }
 
     override fun addSpawn(
-        biome: (Biome) -> Boolean,
+        biome: (Holder<Biome>) -> Boolean,
         category: MobCategory,
         type: EntityType<*>,
         weight: Int,
         groupSize: Pair<Int, Int>
     ) {
         BiomeModifications.addSpawn(
-            { biome.invoke(it.biome) },
+            { biome.invoke(it.biomeRegistryEntry) },
             category,
             type,
             weight,
@@ -41,12 +42,12 @@ public object BiomeModifiersImpl : BiomeModifiers {
     }
 
     override fun addCarver(
-        biome: (Biome) -> Boolean,
+        biome: (Holder<Biome>) -> Boolean,
         step: GenerationStep.Carving,
         carver: ResourceKey<ConfiguredWorldCarver<*>>
     ) {
         BiomeModifications.addCarver(
-            { biome.invoke(it.biome) },
+            { biome.invoke(it.biomeRegistryEntry) },
             step,
             carver
         )
