@@ -4,6 +4,7 @@ import dev.mayaqq.cynosure.biome.BiomeModifiers
 import dev.mayaqq.cynosure.items.extensions.CustomTooltip
 import dev.mayaqq.cynosure.items.extensions.registerExtension
 import dev.mayaqq.cynosure.tooltips.DescriptionTooltip
+import net.minecraft.core.Holder
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
@@ -12,7 +13,7 @@ import uwu.serenity.kritter.stdlib.ItemBuilder
 
 // Biome Modifiers
 public inline fun EntityBuilder<*>.addSpawn(
-    noinline biome: (Biome) -> Boolean,
+    noinline biome: (Holder<Biome>) -> Boolean,
     category: MobCategory,
     weight: Int,
     groupSize: Pair<Int, Int>
