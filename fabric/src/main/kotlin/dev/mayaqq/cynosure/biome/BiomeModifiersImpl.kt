@@ -1,7 +1,10 @@
 package dev.mayaqq.cynosure.biome
 
+import dev.mayaqq.cynosure.Cynosure
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.minecraft.core.Holder
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
@@ -17,6 +20,7 @@ public object BiomeModifiersImpl : BiomeModifiers {
         step: GenerationStep.Decoration,
         feature: ResourceKey<PlacedFeature>
     ) {
+        Cynosure.debug("Adding new feature: {}", feature.location())
         BiomeModifications.addFeature(
             { biome.invoke(it.biomeRegistryEntry) },
             step,
@@ -31,6 +35,7 @@ public object BiomeModifiersImpl : BiomeModifiers {
         weight: Int,
         groupSize: Pair<Int, Int>
     ) {
+        Cynosure.debug("Adding new spawn: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type))
         BiomeModifications.addSpawn(
             { biome.invoke(it.biomeRegistryEntry) },
             category,
@@ -46,6 +51,7 @@ public object BiomeModifiersImpl : BiomeModifiers {
         step: GenerationStep.Carving,
         carver: ResourceKey<ConfiguredWorldCarver<*>>
     ) {
+        Cynosure.debug("Adding new carver: {}", carver.location())
         BiomeModifications.addCarver(
             { biome.invoke(it.biomeRegistryEntry) },
             step,
