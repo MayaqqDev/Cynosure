@@ -232,3 +232,7 @@ public object TextBuilder {
     public fun MutableComponent.append(number: Number, init: MutableComponent.() -> Unit = {}) = this.append(number.toString().asComponent(init))
     public fun MutableComponent.append(boolean: Boolean, init: MutableComponent.() -> Unit = {}) = this.append(boolean.toString().asComponent(init))
 }
+
+public operator fun Component.plus(component: Component): Component = Text.join(this, component)
+public operator fun String.unaryPlus(): Component = this.asComponent()
+public operator fun String.unaryMinus(): Component = Text.translatable(this)

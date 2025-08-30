@@ -20,7 +20,6 @@ public object BiomeModifiersImpl : BiomeModifiers {
         step: GenerationStep.Decoration,
         feature: ResourceKey<PlacedFeature>
     ) {
-        Cynosure.debug("Adding new feature: {}", feature.location())
         BiomeModifications.addFeature(
             { biome.invoke(it.biomeRegistryEntry) },
             step,
@@ -35,7 +34,6 @@ public object BiomeModifiersImpl : BiomeModifiers {
         weight: Int,
         groupSize: Pair<Int, Int>
     ) {
-        Cynosure.debug("Adding new spawn: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type))
         BiomeModifications.addSpawn(
             { biome.invoke(it.biomeRegistryEntry) },
             category,
@@ -51,7 +49,6 @@ public object BiomeModifiersImpl : BiomeModifiers {
         step: GenerationStep.Carving,
         carver: ResourceKey<ConfiguredWorldCarver<*>>
     ) {
-        Cynosure.debug("Adding new carver: {}", carver.location())
         BiomeModifications.addCarver(
             { biome.invoke(it.biomeRegistryEntry) },
             step,

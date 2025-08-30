@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
@@ -38,6 +39,8 @@ public operator fun <T : Any> TagKey<in T>.contains(value: T): Boolean {
     return (registry.getResourceKey(value).get() as ResourceKey<T>) in this
 }
 
-public operator fun TagKey<Block>.contains(value: BlockState): Boolean = value.`is`(this)
-
-public operator fun TagKey<Item>.contains(value: ItemStack): Boolean = value.`is`(this)
+public operator fun TagKey<Block>.contains(state: BlockState): Boolean = state.`is`(this)
+public operator fun TagKey<Item>.contains(stack: ItemStack): Boolean = stack.`is`(this)
+public operator fun TagKey<EntityType<*>>.contains(entity: EntityType<*>): Boolean = entity.`is`(this)
+public operator fun <T> TagKey<T>.contains(holder: Holder<T>): Boolean = holder.`is`(this)
+public operator fun TagKey<DamageType>.contains(source: DamageSource): Boolean = source.`is`(this)
