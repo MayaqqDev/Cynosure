@@ -6,6 +6,7 @@ import java.io.IOException
 import java.nio.file.Path
 import kotlin.io.path.createDirectory
 import kotlin.io.path.exists
+import kotlin.io.path.notExists
 import kotlin.io.path.writeText
 
 public object GlobalStorage {
@@ -32,8 +33,8 @@ public object GlobalStorage {
         }
 
         try {
-            cache.createDirectory()
-            data.createDirectory()
+            if (cache.notExists()) cache.createDirectory()
+            if (data.notExists()) data.createDirectory()
 
             var readme = cache.resolve("README.txt")
             if (!readme.exists()) {
