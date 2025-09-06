@@ -3,8 +3,6 @@ package dev.mayaqq.cynosure.biome
 import dev.mayaqq.cynosure.Cynosure
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications
 import net.minecraft.core.Holder
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.MobCategory
@@ -12,7 +10,6 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
-import kotlin.ranges.step
 
 public object BiomeModifiersImpl : BiomeModifiers {
     override fun addFeature(

@@ -18,7 +18,6 @@ import net.minecraftforge.common.world.ModifiableBiomeInfo
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.RegistryObject
-import uwu.serenity.kritter.platform.isDevEnvironment
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -33,10 +32,11 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
     ) {
         when (phase) {
             BiomeModifier.Phase.BEFORE_EVERYTHING -> {
-                logInIde("Forge Cynosure Biome Modifier has Started")
+                Cynosure.info("Initializing Cynosure Biome Modifiers")
             }
             BiomeModifier.Phase.ADD -> {
                 val generationSettings = info.generationSettings
+                Cynosure.info("Cynosure Adding Features")
                 BiomeModifiersImpl.featureAdd.forEach { feature ->
                     if (feature.biome.invoke(biome)) {
                         registryAccess?.registry(Registries.PLACED_FEATURE)?.getOrNull()?.let { registry ->
@@ -48,7 +48,7 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
                     }
                 }
                 val spawnSettings = info.mobSpawnSettings
-                logInIde("Cynosure Adding Spawns")
+                Cynosure.info("Cynosure Adding Spawns")
                 BiomeModifiersImpl.spawnAdd.forEach { spawn ->
                     if (spawn.biome.invoke(biome)) {
                         spawnSettings.addSpawn(spawn.category, MobSpawnSettings.SpawnerData(
@@ -60,6 +60,7 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
                     }
                 }
                 BiomeModifiersImpl.carverAdd.forEach { carver ->
+                    Cynosure.info("Cynosure Adding Carvers")
                     if (carver.biome.invoke(biome)) {
                         registryAccess?.registry(Registries.CONFIGURED_CARVER)?.getOrNull()?.let { registry ->
                             generationSettings.addCarver(
@@ -77,19 +78,13 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
     }
 
     override fun codec(): Codec<out BiomeModifier> = CarverRegistry.CYNOSURE_BIOME_MODIFIER_CODEC.get()
-
-    private fun logInIde(info: String) {
-        if (isDevEnvironment) {
-            Cynosure.info(info)
-        }
-    }
 }
 
 internal object CarverRegistry {
     var BIOME_MODIFIER_SERIALIZERS: DeferredRegister<Codec<out BiomeModifier>> =
         DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID)
 
-    var CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register("cynosure") {
+    var CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register(MODID) {
         Codec.unit(InternalForgeCynosureBiomeModifier)
     }
 }
