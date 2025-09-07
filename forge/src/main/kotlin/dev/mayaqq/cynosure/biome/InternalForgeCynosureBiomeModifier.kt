@@ -1,16 +1,15 @@
-@file:EventSubscriber
 package dev.mayaqq.cynosure.biome
 
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import com.mojang.serialization.Dynamic
 import dev.mayaqq.cynosure.Cynosure
 import dev.mayaqq.cynosure.MODID
-import dev.mayaqq.cynosure.biome.InternalForgeCynosureBiomeModifier.registryAccess
-import dev.mayaqq.cynosure.events.api.EventSubscriber
-import dev.mayaqq.cynosure.events.api.Subscription
-import dev.mayaqq.cynosure.events.server.ServerEvent
 import net.minecraft.core.Holder
-import net.minecraft.core.RegistryAccess
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
+import net.minecraft.data.registries.VanillaRegistries
+import net.minecraft.resources.RegistryOps
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.biome.MobSpawnSettings
 import net.minecraftforge.common.world.BiomeModifier
@@ -21,9 +20,14 @@ import net.minecraftforge.registries.RegistryObject
 import kotlin.jvm.optionals.getOrNull
 
 
-internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
+internal class InternalForgeCynosureBiomeModifier(val ops: RegistryOps<*>) : BiomeModifier {
 
-    var registryAccess: RegistryAccess? = null
+    private var internalRegistryAccess: HolderLookup.Provider? = null
+    val registryAccess: HolderLookup.Provider
+        get() = run {
+            if (internalRegistryAccess == null) internalRegistryAccess = VanillaRegistries.createLookup()
+            internalRegistryAccess!!
+        }
 
     override fun modify(
         biome: Holder<Biome>,
@@ -36,19 +40,18 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
             }
             BiomeModifier.Phase.ADD -> {
                 val generationSettings = info.generationSettings
-                Cynosure.info("Cynosure Adding Features")
                 BiomeModifiersImpl.featureAdd.forEach { feature ->
                     if (feature.biome.invoke(biome)) {
-                        registryAccess?.registry(Registries.PLACED_FEATURE)?.getOrNull()?.let { registry ->
+                        ops.getter(Registries.PLACED_FEATURE).getOrNull()?.let { registry ->
                             generationSettings.addFeature(
                                 feature.step,
-                                registry.wrapAsHolder(registry.get(feature.feature)?: return@forEach)
+                                registry.get(feature.feature).getOrNull()?: return@forEach
                             )
                         }
                     }
                 }
                 val spawnSettings = info.mobSpawnSettings
-                Cynosure.info("Cynosure Adding Spawns")
+                Cynosure.info("Cynosure Adding Spawns: ${biome.unwrapKey().getOrNull()?.location()}")
                 BiomeModifiersImpl.spawnAdd.forEach { spawn ->
                     if (spawn.biome.invoke(biome)) {
                         spawnSettings.addSpawn(spawn.category, MobSpawnSettings.SpawnerData(
@@ -59,13 +62,13 @@ internal object InternalForgeCynosureBiomeModifier : BiomeModifier {
                         ))
                     }
                 }
+                Cynosure.info("Cynosure Adding Carvers: ${biome.unwrapKey().getOrNull()?.location()}")
                 BiomeModifiersImpl.carverAdd.forEach { carver ->
-                    Cynosure.info("Cynosure Adding Carvers")
                     if (carver.biome.invoke(biome)) {
-                        registryAccess?.registry(Registries.CONFIGURED_CARVER)?.getOrNull()?.let { registry ->
+                        ops.getter(Registries.CONFIGURED_CARVER).getOrNull()?.let { registry ->
                             generationSettings.addCarver(
                                 carver.step,
-                                registry.wrapAsHolder(registry.get(carver.carver)?: return@forEach)
+                                registry.get(carver.carver).getOrNull()?: return@forEach
                             )
                         }
                     }
@@ -84,12 +87,12 @@ internal object CarverRegistry {
     var BIOME_MODIFIER_SERIALIZERS: DeferredRegister<Codec<out BiomeModifier>> =
         DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID)
 
-    var CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register(MODID) {
-        Codec.unit(InternalForgeCynosureBiomeModifier)
-    }
-}
+    val REGISTRY_OPS_CODEC: Codec<RegistryOps<*>> = Codec.PASSTHROUGH.comapFlatMap(
+        { input -> (input.ops as? RegistryOps<*>)?.let { DataResult.success(it) } ?: DataResult.error { "Was not passed a registry ops can't load correctly" } },
+        { ops -> Dynamic(ops) },
+    )
 
-@Subscription(priority = Subscription.HIGHEST)
-public fun onServerStart(event: ServerEvent.Started) {
-    registryAccess = event.server.registryAccess()
+    var CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register(MODID) {
+        REGISTRY_OPS_CODEC.xmap(::InternalForgeCynosureBiomeModifier, InternalForgeCynosureBiomeModifier::ops)
+    }
 }
