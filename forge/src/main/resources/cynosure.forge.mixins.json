@@ -6,6 +6,7 @@
   "refmap": "cynosure.refmap.json",
   "mixins": [
     "ForgePoiTypesAccessor",
+    "LootDataManagerMixin",
     "PiglinAiMixin"
   ],
   "client": [
