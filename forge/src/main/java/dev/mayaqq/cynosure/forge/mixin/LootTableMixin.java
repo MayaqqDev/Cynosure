@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.mixin;
+package dev.mayaqq.cynosure.forge.mixin;
 
 import dev.mayaqq.cynosure.injection.ILootTable;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ public class LootTableMixin implements ILootTable {
 
     @Shadow
     @Final
-    private LootPool[] pools;
+    private List<LootPool> pools;
 
     @Shadow
     @Final
@@ -31,7 +31,7 @@ public class LootTableMixin implements ILootTable {
 
     @Override
     public @NotNull List<@NotNull LootPool> cynosure_getPools() {
-        return List.of(this.pools);
+        return this.pools;
     }
 
     @Override
