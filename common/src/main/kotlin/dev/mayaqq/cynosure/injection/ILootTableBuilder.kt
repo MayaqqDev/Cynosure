@@ -10,10 +10,15 @@ public interface ILootTableBuilder {
     public fun cynosure_apply(functions: MutableList<LootItemFunction>)
 }
 
-public val LootTable.Builder.pools: MutableList<LootPool> get() = (this as ILootTableBuilder).cynosure_getPools()
-public val LootTable.Builder.functions: MutableList<LootItemFunction> get() = (this as ILootTableBuilder).cynosure_getFunctions()
+public val LootTable.Builder.lootPools: MutableList<LootPool> get() = (this as ILootTableBuilder).cynosure_getPools()
+public val LootTable.Builder.lootFunctions: MutableList<LootItemFunction> get() = (this as ILootTableBuilder).cynosure_getFunctions()
 
 public fun LootTable.Builder.apply(functions: MutableList<LootItemFunction>): LootTable.Builder {
-    this.functions.addAll(functions)
+    this.lootFunctions.addAll(functions)
+    return this
+}
+
+public fun LootTable.Builder.pools(pools: List<LootPool>): LootTable.Builder {
+    this.lootPools.addAll(pools)
     return this
 }

@@ -12,6 +12,7 @@
     "LevelChunkMixin",
     "LevelMixin",
     "LivingEntityMixin",
+    "LootPoolBuilderMixin",
     "LootTableBuilderMixin",
     "LootTableMixin",
     "ServerLevelMixin",

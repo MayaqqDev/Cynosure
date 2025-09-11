@@ -11,6 +11,6 @@ public interface ILootTable {
     public fun cynosure_getRandomSequnence(): ResourceLocation
 }
 
-public val LootTable.pools: MutableList<LootPool> get() = (this as ILootTable).cynosure_getPools()
-public val LootTable.functions: MutableList<LootItemFunction> get() = (this as ILootTable).cynosure_getFunctions()
-public val LootTable.randomSequence: ResourceLocation get() = (this as ILootTable).cynosure_getRandomSequnence()
+public val LootTable.lootPools: MutableList<LootPool> get() = (this as ILootTable).cynosure_getPools()
+public val LootTable.lootFunctions: MutableList<LootItemFunction> get() = (this as ILootTable).cynosure_getFunctions()
+public val LootTable.lootRandomSequence: ResourceLocation get() = (this as ILootTable).cynosure_getRandomSequnence()
