@@ -13,6 +13,7 @@ import net.minecraft.core.Direction
 import net.minecraft.util.ExtraCodecs
 import org.joml.Vector3f
 import java.util.Optional
+import kotlin.jvm.optionals.getOrDefault
 import kotlin.jvm.optionals.getOrNull
 
 @Serializable
@@ -137,18 +138,22 @@ private val ModelElementGroup.indicesAndSubgroubs: List<Either<Int, ModelElement
 
 @Serializable
 public data class ModelData(
-    val renderType: ModelRenderType = ModelRenderType.CUTOUT,
+    val renderType: ModelRenderType,
     val elements: List<ModelElement>,
     val groups: List<ModelElementGroup>,
 ) {
     public companion object {
         public val CODEC: Codec<ModelData> = RecordCodecBuilder.create { instance ->
             instance.group(
-            ModelRenderType.CODEC fieldOf ModelData::renderType,
+            ModelRenderType.CODEC.optionalFieldOf("renderType").forGetter { Optional.ofNullable(it.renderType) },
             ModelElement.CODEC.listOf() fieldOf ModelData::elements,
             ModelElementGroup.CODEC.listOf().optionalFieldOf("groups").forGetter { Optional.ofNullable(it.groups) }
         ).apply(instance) { type, elements, groups ->
-            ModelData(type, elements, groups.getOrNull()?: listOf())
+            ModelData(
+                renderType = type.getOrDefault(ModelRenderType.CUTOUT),
+                elements = elements,
+                groups = groups.getOrNull()?: listOf()
+            )
         } }
     }
 }
