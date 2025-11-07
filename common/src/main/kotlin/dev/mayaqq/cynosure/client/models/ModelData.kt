@@ -41,7 +41,7 @@ public data class ModelElementFace(
 
     public companion object {
         public val CODEC: Codec<ModelElementFace> = RecordCodecBuilder.create { it.group(
-            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = array.toList()).fieldOf("uvs").forGetter(
+            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = array.toList()).fieldOf("uv").forGetter(
                 ModelElementFace::uv),
             Codec.FLOAT.optionalFieldOf("rotation", 0.0f).forGetter(ModelElementFace::rotation),
             Codec.STRING.fieldOf("texture").forGetter(ModelElementFace::texture)
