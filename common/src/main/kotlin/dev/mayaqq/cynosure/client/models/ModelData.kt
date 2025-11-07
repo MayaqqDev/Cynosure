@@ -139,14 +139,17 @@ private val ModelElementGroup.indicesAndSubgroubs: List<Either<Int, ModelElement
 public data class ModelData(
     val renderType: ModelRenderType = ModelRenderType.CUTOUT,
     val elements: List<ModelElement>,
-    val groups: List<ModelElementGroup>,
+    val groups: List<ModelElementGroup>?,
 ) {
     public companion object {
-        public val CODEC: Codec<ModelData> = RecordCodecBuilder.create { it.group(
+        public val CODEC: Codec<ModelData> = RecordCodecBuilder.create { instance ->
+            instance.group(
             ModelRenderType.CODEC fieldOf ModelData::renderType,
             ModelElement.CODEC.listOf() fieldOf ModelData::elements,
-            ModelElementGroup.CODEC.listOf() fieldOf ModelData::groups
-        ).apply(it, ::ModelData) }
+            ModelElementGroup.CODEC.listOf().optionalFieldOf("groups").forGetter { Optional.ofNullable(it.groups) }
+        ).apply(instance) { type, elements, groups ->
+            ModelData(type, elements, groups.getOrNull())
+        } }
     }
 }
 

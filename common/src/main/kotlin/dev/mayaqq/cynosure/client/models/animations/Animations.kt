@@ -1,23 +1,14 @@
 package dev.mayaqq.cynosure.client.models.animations
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.Keyable
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import com.teamresourceful.bytecodecs.defaults.EnumCodec
-import dev.mayaqq.cynosure.client.models.ModelElement
-import dev.mayaqq.cynosure.client.models.ModelElementFace
-import dev.mayaqq.cynosure.client.models.ModelElementRotation
-import dev.mayaqq.cynosure.client.models.animations.Animation.Target
 import dev.mayaqq.cynosure.client.models.animations.registry.Interpolations
-import dev.mayaqq.cynosure.core.codecs.Codecs
 import dev.mayaqq.cynosure.core.codecs.fieldOf
 import dev.mayaqq.cynosure.core.codecs.forGetter
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import net.minecraft.core.Direction
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.util.Mth
-import net.minecraft.util.StringRepresentable
 import org.joml.Vector3f
 import org.joml.Vector3fc
 import kotlin.math.max
