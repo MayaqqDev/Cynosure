@@ -83,7 +83,7 @@ public data class Keyframe(val timestamp: Float, val target: @Serializable(Confi
         public val CODEC: Codec<Keyframe> = RecordCodecBuilder.create { it.group(
             Codec.FLOAT.fieldOf("timestamp").forGetter(Keyframe::timestamp),
             ExtraCodecs.VECTOR3F.fieldOf("target").forGetter(Keyframe::target),
-            Interpolations.REGISTRY.codec() fieldOf "interpolations" forGetter Keyframe::interpolation
+            Interpolations.REGISTRY.codec() fieldOf "interpolation" forGetter Keyframe::interpolation
         ).apply(it, ::Keyframe) }
     }
 }
