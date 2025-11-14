@@ -12,6 +12,9 @@ import kotlinx.serialization.Serializable
 import net.minecraft.core.Direction
 import net.minecraft.util.ExtraCodecs
 import org.joml.Vector3f
+import java.util.Optional
+import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrNull
 
 @Serializable
 public data class ModelElementRotation(
@@ -39,7 +42,7 @@ public data class ModelElementFace(
 
     public companion object {
         public val CODEC: Codec<ModelElementFace> = RecordCodecBuilder.create { it.group(
-            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = array.toList()).fieldOf("uvs").forGetter(
+            Codec.FLOAT.listOf().xmap(fun(list) = floatArrayOf(list[0], list[1], list[2], list[3]), fun(array) = array.toList()).fieldOf("uv").forGetter(
                 ModelElementFace::uv),
             Codec.FLOAT.optionalFieldOf("rotation", 0.0f).forGetter(ModelElementFace::rotation),
             Codec.STRING.fieldOf("texture").forGetter(ModelElementFace::texture)
@@ -89,15 +92,18 @@ public data class ModelElement(
 ) {
     public companion object {
         @JvmField
-        public val CODEC: Codec<ModelElement> = RecordCodecBuilder.create { it.group(
+        public val CODEC: Codec<ModelElement> = RecordCodecBuilder.create { instance ->
+            instance.group(
             ExtraCodecs.VECTOR3F.fieldOf("from").forGetter(ModelElement::from),
             ExtraCodecs.VECTOR3F.fieldOf("to").forGetter(ModelElement::to),
             Codec.simpleMap(Direction.CODEC,
                 ModelElementFace.CODEC, Keyable.forStrings(fun() = Direction.entries.stream().map { it.serializedName })).fieldOf("faces").forGetter(
                 ModelElement::faces),
-            ModelElementRotation.CODEC.optionalFieldOf("rotation", null).forGetter(ModelElement::rotation),
+            ModelElementRotation.CODEC.optionalFieldOf("rotation").forGetter { Optional.ofNullable(it.rotation) },
             Codec.BOOL.optionalFieldOf("shade", true).forGetter(ModelElement::shade)
-        ).apply(it, ::ModelElement) }
+        ).apply(instance) { from, to, faces, rotation, shade ->
+            ModelElement(from, to, faces, rotation.getOrNull(), shade)
+        } }
     }
 }
 
@@ -110,17 +116,18 @@ public data class ModelElementGroup(
     val subgroups: List<ModelElementGroup>
 ) {
     public companion object {
-        public val CODEC: Codec<ModelElementGroup> = Codecs.recursive { RecordCodecBuilder.create { it.group(
+        public val CODEC: Codec<ModelElementGroup> = Codecs.recursive { RecordCodecBuilder.create { instance ->
+            instance.group(
             Codec.STRING fieldOf ModelElementGroup::name,
-            ModelRenderType.CODEC.optionalFieldOf("renderType", null).forGetter(ModelElementGroup::renderType),
+            ModelRenderType.CODEC.optionalFieldOf("renderType").forGetter { Optional.ofNullable(it.renderType) },
             ExtraCodecs.VECTOR3F fieldOf ModelElementGroup::origin,
             Either.codec(Codec.INT, this).listOf().fieldOf("elements").forGetter(ModelElementGroup::indicesAndSubgroubs)
-        ).apply(it, ::groupFromEitherList) } }
+        ).apply(instance, ::groupFromEitherList) } }
 
-        private fun groupFromEitherList(name: String, renderType: ModelRenderType?, origin: Vector3f, data: List<Either<Int, ModelElementGroup>>): ModelElementGroup {
+        private fun groupFromEitherList(name: String, renderType: Optional<ModelRenderType>, origin: Vector3f, data: List<Either<Int, ModelElementGroup>>): ModelElementGroup {
             val indices = data.mapNotNull { it.left }
             val subgroups = data.mapNotNull { it.right }
-            return ModelElementGroup(name, renderType, origin, indices, subgroups)
+            return ModelElementGroup(name, renderType.getOrNull(), origin, indices, subgroups)
         }
     }
 
@@ -131,16 +138,23 @@ private val ModelElementGroup.indicesAndSubgroubs: List<Either<Int, ModelElement
 
 @Serializable
 public data class ModelData(
-    val renderType: ModelRenderType = ModelRenderType.CUTOUT,
+    val renderType: ModelRenderType,
     val elements: List<ModelElement>,
     val groups: List<ModelElementGroup>,
 ) {
     public companion object {
-        public val CODEC: Codec<ModelData> = RecordCodecBuilder.create { it.group(
-            ModelRenderType.CODEC fieldOf ModelData::renderType,
+        public val CODEC: Codec<ModelData> = RecordCodecBuilder.create { instance ->
+            instance.group(
+            ModelRenderType.CODEC.optionalFieldOf("renderType").forGetter { Optional.ofNullable(it.renderType) },
             ModelElement.CODEC.listOf() fieldOf ModelData::elements,
-            ModelElementGroup.CODEC.listOf() fieldOf ModelData::groups
-        ).apply(it, ::ModelData) }
+            ModelElementGroup.CODEC.listOf().optionalFieldOf("groups").forGetter { Optional.ofNullable(it.groups) }
+        ).apply(instance) { type, elements, groups ->
+            ModelData(
+                renderType = type.getOrDefault(ModelRenderType.CUTOUT),
+                elements = elements,
+                groups = groups.getOrNull()?: listOf()
+            )
+        } }
     }
 }
 

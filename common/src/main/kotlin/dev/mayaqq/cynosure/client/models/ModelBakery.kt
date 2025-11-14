@@ -72,7 +72,7 @@ private class ModelBakery {
 
     private fun bakeMesh(elements: List<ModelElement>): Mesh {
         if(elements.isEmpty()) return Mesh.EMPTY
-        val vertices = IntArray(elements.sumOf { it.faces.size } * STRIDE)
+        val vertices = IntArray(elements.sumOf { it.faces.size } * 4 * STRIDE)
         var index = 0
 
         for(element in elements) {
