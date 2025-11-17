@@ -121,7 +121,7 @@ public data class ModelElementGroup(
             Codec.STRING fieldOf ModelElementGroup::name,
             ModelRenderType.CODEC.optionalFieldOf("renderType").forGetter { Optional.ofNullable(it.renderType) },
             ExtraCodecs.VECTOR3F fieldOf ModelElementGroup::origin,
-            Either.codec(Codec.INT, this).listOf().fieldOf("elements").forGetter(ModelElementGroup::indicesAndSubgroubs)
+            Either.codec(Codec.INT, this).listOf().fieldOf("children").forGetter(ModelElementGroup::indicesAndSubgroubs)
         ).apply(instance, ::groupFromEitherList) } }
 
         private fun groupFromEitherList(name: String, renderType: Optional<ModelRenderType>, origin: Vector3f, data: List<Either<Int, ModelElementGroup>>): ModelElementGroup {
