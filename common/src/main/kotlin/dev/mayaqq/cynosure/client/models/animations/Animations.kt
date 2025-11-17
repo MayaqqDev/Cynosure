@@ -3,6 +3,9 @@ package dev.mayaqq.cynosure.client.models.animations
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.mayaqq.cynosure.client.models.animations.registry.Interpolations
+import dev.mayaqq.cynosure.client.models.animations.registry.VectorType
+import dev.mayaqq.cynosure.client.models.animations.registry.VectorTypes
+import dev.mayaqq.cynosure.core.codecs.Codecs
 import dev.mayaqq.cynosure.core.codecs.fieldOf
 import dev.mayaqq.cynosure.core.codecs.forGetter
 import kotlinx.serialization.SerialName
@@ -73,7 +76,13 @@ public data class Keyframe(val timestamp: Float, val target: @Serializable(Confi
         @JvmField
         public val CODEC: Codec<Keyframe> = RecordCodecBuilder.create { it.group(
             Codec.FLOAT.fieldOf("timestamp").forGetter(Keyframe::timestamp),
-            ExtraCodecs.VECTOR3F.fieldOf("target").forGetter(Keyframe::target),
+            Codecs.alternatives(
+                ExtraCodecs.VECTOR3F,
+                VectorType.ConfiguredVec.CODEC.xmap<Vector3f>(
+                    { it.apply() },
+                    { VectorType.ConfiguredVec(VectorTypes.DEFAULT, it)}
+                )
+            ).fieldOf("target").forGetter(Keyframe::target),
             Interpolations.REGISTRY.codec() fieldOf "interpolation" forGetter Keyframe::interpolation
         ).apply(it, ::Keyframe) }
     }

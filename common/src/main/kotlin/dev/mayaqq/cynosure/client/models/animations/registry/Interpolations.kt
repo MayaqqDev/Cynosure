@@ -26,4 +26,8 @@ public object Interpolations {
             Mth.catmullrom(delta, vector3f.z(), vector3f2.z(), vector3f3.z(), vector3f4.z()) * strength
         )
     })
+
+    public val NONE: Keyframe.Interpolation = REGISTRY.register(modId("none"), Keyframe.Interpolation { _, _, keyframes, _, targetFrame, _ ->
+        keyframes[targetFrame].target
+    })
 }
