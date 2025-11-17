@@ -9,13 +9,13 @@ import dev.mayaqq.cynosure.utils.Either
 import dev.mayaqq.cynosure.utils.dfu.DFUPair
 import dev.mayaqq.cynosure.utils.dfu.toDFU
 import dev.mayaqq.cynosure.utils.dfu.toKt
+import dev.mayaqq.cynosure.utils.foldToLeft
 import dev.mayaqq.cynosure.utils.result.toDataResult
 import net.minecraft.core.Registry
 import kotlin.reflect.KProperty1
 
 
 public object Codecs {
-
     @JvmStatic
     public fun <T> alternatives(vararg codecs: Codec<T>): Codec<T> = AlternativesCodec(codecs.toList())
 
