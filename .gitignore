@@ -10,3 +10,4 @@ out
 *.ipr
 *.iws
 /run/
+/.kotlin/
