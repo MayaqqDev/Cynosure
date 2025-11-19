@@ -3,6 +3,7 @@ package dev.mayaqq.cynosure.client.models.baked
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import dev.mayaqq.cynosure.client.models.animations.Animatable
+import dev.mayaqq.cynosure.client.utils.pushPop
 import dev.mayaqq.cynosure.utils.colors.Color
 import org.joml.Quaternionf
 import org.joml.Vector3fc
@@ -61,7 +62,7 @@ public class BakedModelTree(
 
     private fun applyTransform(poseStack: PoseStack) {
         poseStack.translate(x / 16f, y / 16f, z / 16f)
-        poseStack.translate(origin.x, origin.y, origin.z)
+        //poseStack.translate(origin.x, origin.y, origin.z)
 
         if (xRot != 0f || yRot != 0f || zRot != 0f) {
             poseStack.mulPose(Quaternionf().rotationXYZ(xRot, yRot, zRot))
@@ -70,17 +71,17 @@ public class BakedModelTree(
             poseStack.scale(xScale, yScale, zScale)
         }
 
-        poseStack.translate(-origin.x, -origin.y, -origin.z)
+        //poseStack.translate(-origin.x, -origin.y, -origin.z)
     }
 
-    override fun render(buffer: VertexConsumer, matrices: PoseStack, color: Color, light: Int, overlay: Int) {
-        applyTransform(matrices)
-        super.render(buffer, matrices, color, light, overlay)
+    override fun render(buffer: VertexConsumer, stack: PoseStack, color: Color, light: Int, overlay: Int) {
+        applyTransform(stack)
+        super.render(buffer, stack, color, light, overlay)
 
         children.forEach { (_, child) ->
-            matrices.pushPose()
-            child.render(buffer, matrices, color, light, overlay)
-            matrices.popPose()
+            stack.pushPop {
+                child.render(buffer, stack, color, light, overlay)
+            }
         }
     }
 }

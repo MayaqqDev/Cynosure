@@ -17,7 +17,7 @@ public open class CustomBakedModel(
 ) {
 
     public open fun render(
-        buffer: VertexConsumer, matrices: PoseStack,
+        buffer: VertexConsumer, stack: PoseStack,
         color: Color = White,
         light: Int = LightTexture.FULL_BRIGHT,
         overlay: Int = OverlayTexture.NO_OVERLAY
@@ -29,9 +29,9 @@ public open class CustomBakedModel(
 
         for(i in 0..<mesh.vertexCount) {
             posVec.set(mesh.x(i), mesh.y(i), mesh.z(i))
-                .mul(matrices.last().pose())
+                .mul(stack.last().pose())
             normalVec.set(mesh.normalX(i), mesh.normalY(i), mesh.normalZ(i))
-                .mul(matrices.last().normal())
+                .mul(stack.last().normal())
 
             buffer.vertex(
                 posVec.x, posVec.y, posVec.z,

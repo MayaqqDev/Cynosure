@@ -12,7 +12,7 @@ public object Interpolations {
     public val REGISTRY: NamedRegistry<Keyframe.Interpolation> = NamedRegistry()
     
     public val LINEAR: Keyframe.Interpolation = REGISTRY.register(modId("linear"), Keyframe.Interpolation { vector, delta, keyframes, currentFrame, targetFrame, strength ->
-        keyframes[currentFrame].target.lerp(keyframes[targetFrame].target, delta, vector).mul(strength)
+        vector.set(keyframes[currentFrame].target.lerp(keyframes[targetFrame].target, delta, vector).mul(strength))
     })
 
     public val CATMULLROM: Keyframe.Interpolation = REGISTRY.register(modId("catmullrom"), Keyframe.Interpolation { vector, delta, keyframes, currentFrame, targetFrame, strength ->
@@ -27,7 +27,7 @@ public object Interpolations {
         )
     })
 
-    public val NONE: Keyframe.Interpolation = REGISTRY.register(modId("none"), Keyframe.Interpolation { _, _, keyframes, _, targetFrame, _ ->
-        keyframes[targetFrame].target
+    public val NONE: Keyframe.Interpolation = REGISTRY.register(modId("none"), Keyframe.Interpolation { vector, _, keyframes, _, targetFrame, _ ->
+        vector.set(keyframes[targetFrame].target)
     })
 }
