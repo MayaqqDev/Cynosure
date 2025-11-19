@@ -14,6 +14,8 @@ import net.minecraft.util.ExtraCodecs
 import net.minecraft.util.Mth
 import org.joml.Vector3f
 import org.joml.Vector3fc
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -33,7 +35,7 @@ public data class AnimationDefinition(val duration: Float, val looping: Boolean,
 }
 
 @Serializable
-public data class Animation(val target: Target, val keyframes: List<Keyframe>) {
+public data class Animation(val target: Target, val duration: Float?, val keyframes: List<Keyframe>) {
 
     @Serializable
     public enum class Target {
@@ -61,8 +63,9 @@ public data class Animation(val target: Target, val keyframes: List<Keyframe>) {
         @JvmField
         public val CODEC: Codec<Animation> = RecordCodecBuilder.create { it.group(
             Target.CODEC.fieldOf("target").forGetter(Animation::target),
+            Codec.FLOAT.optionalFieldOf("duration").forGetter { Optional.ofNullable(it.duration) },
             Keyframe.CODEC.listOf().fieldOf("keyframes").forGetter(Animation::keyframes)
-        ).apply(it, ::Animation) }
+        ).apply(it) { target, duration, keyframes -> Animation(target, duration.getOrNull(), keyframes) } }
     }
 }
 
@@ -94,7 +97,7 @@ public fun Animatable.Provider.animate(definition: AnimationDefinition, accumula
         getAny(key)?.let { animatable ->
             animations.forEach { animation ->
                 val keyframes: List<Keyframe> = animation.keyframes
-                val elapsed: Float = definition.getElapsedSeconds(accumulatedTime)
+                val elapsed: Float = definition.getElapsedSeconds(accumulatedTime, animation)
                 val last = max(0.0, (Mth.binarySearch(0, keyframes.size) { index: Int -> elapsed <= keyframes[index].timestamp } - 1).toDouble()).toInt()
                 val next = min((keyframes.size - 1).toDouble(), (last + 1).toDouble()).toInt()
 
@@ -110,7 +113,7 @@ public fun Animatable.Provider.animate(definition: AnimationDefinition, accumula
     }
 }
 
-private fun AnimationDefinition.getElapsedSeconds(accumulatedTime: Long): Float {
+private fun AnimationDefinition.getElapsedSeconds(accumulatedTime: Long, animation: Animation): Float {
     val f = accumulatedTime / 1000.0
-    return if (looping) f.toFloat() % duration else f.toFloat()
+    return if (looping) f.toFloat() % (animation.duration ?: duration) else f.toFloat()
 }
