@@ -44,10 +44,9 @@ private class ModelBakery {
 
     fun bakeAnimatable(data: ModelData): BakedModelTree {
         val ungrouped = 0..<data.elements.size into intSetOf(data.elements.size)
-        val rootGroups = mutableMapOf<String, BakedModelTree>()
 
         resetBounds()
-        data.groups.associate {
+        val rootGroups = data.groups.associate {
             it.name to it.compile(data, null) { index ->
                 if (ungrouped.remove(index)) data.elements[index]
                 else throw IllegalStateException("Element $index referenced in multiple groups")
