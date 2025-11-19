@@ -54,7 +54,7 @@ private class ModelBakery {
             }
         }
 
-        return BakedModelTree(if(ungrouped.isEmpty()) Mesh.EMPTY else bakeMesh(ungrouped.map(data.elements::get)),
+        return BakedModelTree(if (ungrouped.isNotEmpty()) Mesh.EMPTY else bakeMesh(ungrouped.map(data.elements::get)),
             data.renderType, Vector3f(minBound), Vector3f(maxBound), ZERO_VEC, rootGroups)
     }
 
