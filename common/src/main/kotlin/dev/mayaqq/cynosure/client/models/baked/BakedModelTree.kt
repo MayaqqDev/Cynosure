@@ -62,16 +62,16 @@ public class BakedModelTree(
 
     private fun applyTransform(poseStack: PoseStack) {
         poseStack.translate(x / 16f, y / 16f, z / 16f)
-        //poseStack.translate(origin.x, origin.y, origin.z)
 
         if (xRot != 0f || yRot != 0f || zRot != 0f) {
+            poseStack.translate(origin.x / 16f, origin.y / 16, origin.z / 16)
             poseStack.mulPose(Quaternionf().rotationXYZ(xRot, yRot, zRot))
+            poseStack.translate(-origin.x / 16f, -origin.y / 16, -origin.z / 16)
         }
+
         if (xScale != 1f || yScale != 1f || zScale != 1f) {
             poseStack.scale(xScale, yScale, zScale)
         }
-
-        //poseStack.translate(-origin.x, -origin.y, -origin.z)
     }
 
     override fun render(buffer: VertexConsumer, stack: PoseStack, color: Color, light: Int, overlay: Int) {

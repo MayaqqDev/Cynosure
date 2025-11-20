@@ -95,6 +95,7 @@ public data class Keyframe(val timestamp: Float, val target: @Serializable(Confi
 public fun Animatable.Provider.animate(definition: AnimationDefinition, accumulatedTime: Long, vecCache: Vector3f = LOCAL_VEC_CACHE.get()) {
     definition.bones.forEach { (key, animations) ->
         getAny(key)?.let { animatable ->
+            animatable.reset()
             animations.forEach { animation ->
                 val keyframes: List<Keyframe> = animation.keyframes
                 val elapsed: Float = definition.getElapsedSeconds(accumulatedTime, animation)
