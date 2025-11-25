@@ -7,6 +7,8 @@ it's many features and technologies.
 
 _*While the library is usable in a java-only environment, it is not recommended and you will lose a lot of the advantages and utilities with it._
 
+All builds are available on https://maven.is-immensely.gay/nightly, full releases on https://maven.is-immensely.gay/releases
+
 ![Features](https://cdn.modrinth.com/data/4JVfdODB/images/5e2e59ac18e1c4187db80d222700732a775a84b9.png)
 
 - Giant Event API

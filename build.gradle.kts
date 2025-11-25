@@ -10,7 +10,10 @@ plugins {
    // alias(libs.plugins.blossom) apply false
     alias(libs.plugins.ideaext)
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.modpublish)
 }
+
+val modVersion = providers.gradleProperty("version").get()
 
 subprojects {
     repositories {
@@ -133,5 +136,65 @@ subprojects {
             optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
             freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers")
         }
+    }
+}
+
+publishMods {
+    val nameFabric = "Cynosure $modVersion Fabric"
+    val nameForge = "Cynosure $modVersion Forge"
+    changelog = file("CHANGELOG.md").readText().replace("@VERSION@", modVersion)
+    type = BETA
+
+    val optionsCurseforge = curseforgeOptions {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        minecraftVersions.add("1.20.1")
+        projectId = "1259952"
+        javaVersions.add(JavaVersion.VERSION_17)
+        clientRequired = true
+        serverRequired = true
+    }
+
+    val optionsModrinth = modrinthOptions {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "4JVfdODB"
+        minecraftVersions.add("1.20.1")
+    }
+
+    curseforge("curseforgeFabric") {
+        from(optionsCurseforge)
+        modLoaders.add("fabric")
+        modLoaders.add("quilt")
+        file(project(":fabric"))
+        displayName = nameFabric
+        version = "$modVersion-fabric"
+        requires("fabric-api", "fabric-language-kotlin")
+    }
+
+    curseforge("curseforgeForge") {
+        from(optionsCurseforge)
+        modLoaders.add("forge")
+        file(project(":forge"))
+        displayName = nameForge
+        version = "$modVersion-forge"
+        requires("kotlin-for-forge")
+    }
+
+    modrinth("modrinthFabric") {
+        from(optionsModrinth)
+        modLoaders.add("fabric")
+        modLoaders.add("quilt")
+        file(project(":fabric"))
+        displayName = nameFabric
+        version = "$modVersion-fabric"
+        requires("fabric-api", "fabric-language-kotlin")
+    }
+
+    modrinth("modrinthForge") {
+        from(optionsModrinth)
+        modLoaders.add("forge")
+        file(project(":forge"))
+        displayName = nameForge
+        version = "$modVersion-forge"
+        requires("kotlin-for-forge")
     }
 }
