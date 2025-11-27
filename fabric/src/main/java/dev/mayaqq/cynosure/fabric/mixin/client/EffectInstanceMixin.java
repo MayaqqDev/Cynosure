@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = EffectInstance.class, priority = Integer.MAX_VALUE)
+@Mixin(value = EffectInstance.class, priority = 949)
 public class EffectInstanceMixin {
 
 
@@ -19,7 +19,8 @@ public class EffectInstanceMixin {
         at = @At(
             value = "NEW",
             target = "(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;"
-        )
+        ),
+        require = 0
     )
     private ResourceLocation redirectCreateShaderLocation(String p_135809_, @Local(argsOnly = true) String string) {
         String[] parts = string.split(":");
@@ -32,7 +33,8 @@ public class EffectInstanceMixin {
         at = @At(
             value = "NEW",
             target = "(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;"
-        )
+        ),
+        require = 0
     )
     private static ResourceLocation redirectCreateResourceLocation(String p_135809_, @Local(argsOnly = true) String string, @Local(argsOnly = true) Program.Type type) {
         String[] parts = string.split(":");
