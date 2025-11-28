@@ -4,6 +4,7 @@ import dev.mayaqq.cynosure.core.GameInstance
 import dev.mayaqq.cynosure.core.GameInstanceImpl
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.command.CommandRegistrationEvent
+import dev.mayaqq.cynosure.events.entity.EntityTrackingEvent
 import dev.mayaqq.cynosure.events.entity.LivingEntityEvent
 import dev.mayaqq.cynosure.events.entity.player.PlayerConnectionEvent
 import dev.mayaqq.cynosure.events.entity.player.interaction.InteractionEvent
@@ -11,6 +12,7 @@ import dev.mayaqq.cynosure.events.server.DataPackSyncEvent
 import dev.mayaqq.cynosure.events.server.ServerEvent
 import dev.mayaqq.cynosure.events.world.LevelEvent
 import dev.mayaqq.cynosure.events.world.LoottableEvents
+import dev.mayaqq.cynosure.utils.entityTypeTag
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
@@ -18,6 +20,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents
 import net.fabricmc.fabric.api.event.player.*
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
+import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.InteractionResultHolder
@@ -93,5 +96,11 @@ internal fun fapiFeed() {
     }
     LootTableEvents.ALL_LOADED.register { resourceManager, lootManager ->
         LoottableEvents.AllLoaded(resourceManager, lootManager).post()
+    }
+    EntityTrackingEvents.START_TRACKING.register { entity, player ->
+        EntityTrackingEvent.Start(entity, player).post()
+    }
+    EntityTrackingEvents.STOP_TRACKING.register { entity, player ->
+        EntityTrackingEvent.Stop(entity, player).post()
     }
 }

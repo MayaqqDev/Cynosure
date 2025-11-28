@@ -7,6 +7,7 @@ import dev.mayaqq.cynosure.events.block.BlockEvent
 import dev.mayaqq.cynosure.events.command.CommandExecuteEvent
 import dev.mayaqq.cynosure.events.command.CommandRegistrationEvent
 import dev.mayaqq.cynosure.events.entity.EntityCreatedEvent
+import dev.mayaqq.cynosure.events.entity.EntityTrackingEvent
 import dev.mayaqq.cynosure.events.entity.LivingEntityEvent
 import dev.mayaqq.cynosure.events.entity.MountEvent
 import dev.mayaqq.cynosure.events.entity.player.PlayerConnectionEvent
@@ -250,4 +251,14 @@ public fun onPlayerTick(event: PlayerTickEvent) {
         Phase.START -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.Begin(event.player).post(context = event)
         Phase.END -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.End(event.player).post(context = event)
     }
+}
+
+@SubscribeEvent
+public fun onStartTracking(event: PlayerEvent.StartTracking) {
+    if (event.entity is ServerPlayer) EntityTrackingEvent.Start(event.target, event.entity as ServerPlayer).post()
+}
+
+@SubscribeEvent
+public fun onStopTracking(event: PlayerEvent.StopTracking) {
+    if (event.entity is ServerPlayer) EntityTrackingEvent.Start(event.target, event.entity as ServerPlayer).post()
 }
