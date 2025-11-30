@@ -5,12 +5,17 @@
 package dev.mayaqq.cynosure.blocks.model
 
 import dev.mayaqq.cynosure.blocks.poi.add
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.ai.village.poi.PoiTypes
 import net.minecraft.world.item.DyeColor
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.BedBlock
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
+import net.minecraft.world.phys.shapes.VoxelShape
 
 /**
  * A model-based Bed Block class that uses block models instead of a Block Entity Renderer.
@@ -58,4 +63,6 @@ import net.minecraft.world.level.block.state.BlockState
 public class ModelBedBlock(properties: Properties, color: DyeColor? = null) : BedBlock(color, properties) {
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
     override fun skipRendering(state: BlockState, neigborState: BlockState, offset: Direction): Boolean = neigborState.block is BedBlock
+
+    override fun getShadeBrightness(state: BlockState, level: BlockGetter, pos: BlockPos): Float = 1.0F
 }

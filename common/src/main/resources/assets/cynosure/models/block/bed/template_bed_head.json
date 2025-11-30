@@ -4,6 +4,7 @@
   "textures": {
     "particle": "block/oak_planks"
   },
+  "ambientocclusion": false,
   "elements": [
     {
       "from": [0, 0, 13],
