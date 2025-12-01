@@ -218,7 +218,6 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
     excludes.add(libs.kritter.get().group)
 }
 
-/*
 publishMods {
     val nameFabric = "Cynosure $modVersion Fabric"
     val nameForge = "Cynosure $modVersion Forge"
@@ -244,7 +243,7 @@ publishMods {
         from(optionsCurseforge)
         modLoaders.add("fabric")
         modLoaders.add("quilt")
-        file(project(":fabric"))
+        file = cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile)
         displayName = nameFabric
         version = "$modVersion-fabric"
         requires("fabric-api", "fabric-language-kotlin")
@@ -253,7 +252,7 @@ publishMods {
     curseforge("curseforgeForge") {
         from(optionsCurseforge)
         modLoaders.add("forge")
-        file(project(":forge"))
+        file = cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile)
         displayName = nameForge
         version = "$modVersion-forge"
         requires("kotlin-for-forge")
@@ -263,7 +262,7 @@ publishMods {
         from(optionsModrinth)
         modLoaders.add("fabric")
         modLoaders.add("quilt")
-        file(project(":fabric"))
+        file = cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile)
         displayName = nameFabric
         version = "$modVersion-fabric"
         requires("fabric-api", "fabric-language-kotlin")
@@ -272,10 +271,9 @@ publishMods {
     modrinth("modrinthForge") {
         from(optionsModrinth)
         modLoaders.add("forge")
-        file(project(":forge"))
+        file = cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile)
         displayName = nameForge
         version = "$modVersion-forge"
         requires("kotlin-for-forge")
     }
 }
-*/
