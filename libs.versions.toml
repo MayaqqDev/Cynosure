@@ -2,10 +2,10 @@
 # Minecraft
 minecraft = "1.20.1"
 fabric = "0.16.9"
-forge = "1.20.1-47.3.0"
+forge = "47.3.0"
 # Common
-kotlin = "2.0.0"
-cloche = "0.9.0"
+cloche = "0.16.18"
+kotlin = "2.2.10"
 parchment = "2023.09.03"
 mixin = "0.8.3"
 mixinextras = "0.4.1"
@@ -14,10 +14,11 @@ kotlinx-coroutines = "1.10.1"
 bytecodecs = "1.0.2"
 kritter = "0.1.12+1.20.1"
 # Fabric
-fapi = "0.92.2+1.20.1"
+fapi = "0.92.2"
 fabrickotlin = "1.11.0+kotlin.2.0.0"
 # Forge
-forgekotlin = "4.11.0"
+klf = "2.10.5-k2.2.10-2.0+forge"
+kff = "4.11.0"
 
 [libraries]
 # Common
@@ -43,20 +44,12 @@ fabric-kritter = { module = "uwu.serenity.kritter:kritter-fabric", version.ref =
 
 # Forge
 forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
-forge-kotlin = { module = "thedarkcolour:kotlinforforge", version.ref = "forgekotlin" }
+forge-kotlin = { module = "thedarkcolour:kotlinforforge", version.ref = "kff" }
 forge-mixinextras = { module = "io.github.llamalad7:mixinextras-forge", version.ref = "mixinextras" }
 forge-kritter = { module = "uwu.serenity.kritter:kritter-forge", version.ref = "kritter" }
 
 [bundles]
 
 [plugins]
-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.24" }
-vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version = "0.2.1-SNAPSHOT" }
-blossom = { id = "net.kyori.blossom", version = "2.1.0" }
-fabricLoom = { id = "fabric-loom", version = "1.10.5" }
-archLoom = { id = "dev.architectury.loom", version = "1.9-SNAPSHOT" }
-forgeGradle = { id = "net.minecraftforge.gradle", version = "[6.0,6.2)" }
-mixin = { id = "org.spongepowered.mixin", version = "0.7-SNAPSHOT" }
-moddevgradle = { id = "net.neoforged.moddev.legacyforge", version = "2.0.79" }
-ideaext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.1.10" }
+cloche = { id = "earth.terrarium.cloche", version.ref = "cloche" }
 modpublish = { id = "me.modmuss50.mod-publish-plugin", version = "1.1.0" }

@@ -1,144 +1,224 @@
-@file:Suppress("PropertyName")
+@file:Suppress("PropertyName", "UnstableApiUsage")
 
-import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import net.msrandom.stubs.GenerateStubApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
 plugins {
-    java
-    kotlin("jvm") version libs.versions.kotlin apply false
-    kotlin("plugin.serialization") version libs.versions.kotlin apply false
-   // alias(libs.plugins.blossom) apply false
-    alias(libs.plugins.ideaext)
-    alias(libs.plugins.ksp) apply false
     alias(libs.plugins.modpublish)
+    alias(libs.plugins.cloche)
+    kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.serialization") version libs.versions.kotlin
+    // Need to explicitly set ksp versions cs cloche loads an old version by default
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    `maven-publish`
 }
 
 val modVersion = providers.gradleProperty("version").get()
+val mod_name: String by project
+val mod_id = providers.gradleProperty("modid").get()
+val author: String by project
+val mod_description = providers.gradleProperty("description").get()
+val mod_license = providers.gradleProperty("license").get()
 
-subprojects {
-    repositories {
-        mavenCentral()
-        maven(url = "https://maven.parchmentmc.org") { name = "Parchment" }
-        maven(url = "https://maven.fabricmc.net") { name = "FabricMC" }
-        maven(url = "https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
-        maven(url = "https://thedarkcolour.github.io/KotlinForForge/") { name = "KotlinForForge" }
-        maven(url = "https://maven.minecraftforge.net/") { name = "Forge" }
-        maven(url = "https://repo.spongepowered.org/repository/maven-public/") { name = "Sponge / Mixin" }
-        maven(url = "https://maven.resourcefulbees.com/repository/maven-public/") { name = "ResourcefulBees" }
-        maven(url = "https://maven.is-immensely.gay/releases")
-        maven(url = "https://maven.is-immensely.gay/nightly")
-        maven(url = "https://api.modrinth.com/maven")
-        mavenLocal()
+repositories {
+    mavenCentral()
+    maven(url = "https://maven.msrandom.net/repository/root") { name = "Ashley" }
+    maven(url = "https://maven.parchmentmc.org") { name = "Parchment" }
+    maven(url = "https://maven.fabricmc.net") { name = "FabricMC" }
+    maven(url = "https://maven.terraformersmc.com/releases/") { name = "TerraformersMC" }
+    maven(url = "https://thedarkcolour.github.io/KotlinForForge/") { name = "KotlinForForge" }
+    maven(url = "https://maven.minecraftforge.net/") { name = "Forge" }
+    maven(url = "https://repo.spongepowered.org/repository/maven-public/") { name = "Sponge / Mixin" }
+    maven(url = "https://maven.resourcefulbees.com/repository/maven-public/") { name = "ResourcefulBees" }
+    maven(url = "https://maven.is-immensely.gay/releases")
+    maven(url = "https://maven.is-immensely.gay/nightly")
+    maven(url = "https://api.modrinth.com/maven")
+    mavenLocal()
+}
+
+cloche {
+    metadata {
+        modId = mod_id
+        name = mod_name
+        description = mod_description
+        license = mod_license
+        icon = "icon.png"
+        url = "https://github.com/MayaqqDev/Cynosure"
+        sources = "https://github.com/MayaqqDev/Cynosure"
+        author(author)
+        contributor("serenyadev")
     }
 
-    val mod_name: String by project
-    val author: String by project
-
-    apply(plugin = "idea")
-    apply(plugin = "java")
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-    apply(plugin = "maven-publish")
-
-    configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-        withSourcesJar()
+    mappings {
+        official()
+        parchment(libs.versions.parchment)
     }
 
-    configure<KotlinProjectExtension> {
-        jvmToolchain(17)
-        explicitApiWarning()
+    common {
+        mixins.from(file("src/main/cynosure.mixins.json"))
+        accessWideners.from(file("src/main/cynosure.accessWidener"))
+
+        dependencies {
+            compileOnly(libs.mixin)
+            implementation(libs.mixinextras)
+            annotationProcessor(libs.mixinextras)
+            implementation(libs.kotlin.metadata) { isTransitive = false }
+            api(libs.kotlinx.serialization)
+            api(libs.kotlinx.coroutines)
+            api(libs.bytecodecs)
+            api(libs.javax.annotations)
+            modCompileOnly(libs.kritter)
+        }
     }
 
-    configure<PublishingExtension> {
-        repositories {
-            val username = "sapphoCompanyUsername".let { System.getenv(it) ?: findProperty(it) }?.toString()
-            val password = "sapphoCompanyPassword".let { System.getenv(it) ?: findProperty(it) }?.toString()
-            val maven_category: String by project
+    fabric {
+        loaderVersion = libs.versions.fabric
+        minecraftVersion = libs.versions.minecraft
 
-            if (username != null && password != null) {
-                maven("https://maven.is-immensely.gay/$maven_category") {
-                    name = "sapphoCompany"
-                    credentials {
-                        this.username = username
-                        this.password = password
-                    }
-                }
-            } else {
-                println("Sappho Company credentials not present.")
+        mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
+        accessWideners.from(file("src/main/cynosure.accessWidener"))
+
+        includedClient()
+
+        metadata {
+            custom("modmenu", mapOf(
+                "badges" to listOf("library"),
+                "updateChecker" to false
+            ))
+
+            dependency {
+                modId = "fabric-api"
+            }
+            dependency {
+                modId = "fabric-language-kotlin"
+            }
+
+            entrypoint("preLaunch") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabricPreLaunchKt::onPreLaunch")
+            }
+            entrypoint("main") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::init")
+            }
+            entrypoint("client") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.client.CynosureClientFabric::init")
+            }
+            entrypoint("server") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
             }
         }
-    }
 
-    tasks.jar {
-        from(rootProject.file("LICENSE")) {
-            rename { "${it}_$mod_name" }
-        }
+        dependencies {
+            fabricApi(libs.versions.fapi)
+            modApi(libs.fabric.kotlin)
+            modImplementation(libs.fabric.kritter)
+            api(libs.javax.annotations)
 
-        manifest {
-            attributes(
-                "Specification-Title" to name,
-                "Specification-Vendor" to author,
-                "Specification-Version" to archiveVersion,
-                "Implementation-Title" to project.name,
-                "Implementation-Version" to archiveVersion,
-                "Implementation-Vendor" to author,
-                //"Implementation-Timestamp" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date()),
-                "Timestamp" to System.currentTimeMillis(),
-                "Built-On-Java" to "${System.getProperty("java.vm.version")} (${System.getProperty("java.vm.vendor")})",
-                "Built-On-Minecraft" to "1.20.1"
-            )
+            include(libs.kotlin.metadata)
+            include(libs.bytecodecs)
+            include(libs.fabric.kritter)
+
+            modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
         }
     }
 
-    tasks.processResources {
-        val version: String by project
-        val group: String by project
-        val modid: String by project
-        val license: String by project
-        val description: String by project
+    forge {
+        loaderVersion = libs.versions.forge
+        minecraftVersion = libs.versions.minecraft
 
-        val expandProps = mapOf(
-            "version" to version,
-            "group" to group, //Else we target the task's group.
-            "minecraft_version" to libs.versions.minecraft,
-            "forge_version" to libs.versions.forge,
-            "fabric_version" to libs.versions.fapi,
-            "fabric_loader_version" to libs.versions.fabric,
-            "mod_name" to mod_name,
-            "mod_author" to author,
-            "mod_id" to modid,
-            "license" to license,
-            "description" to description
-        )
+        mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.forge.mixins.json"))
+        accessWideners.from(file("src/main/cynosure.accessWidener"))
 
-        filesMatching(listOf("pack.mcmeta", "fabric.mod.json", "META-INF/mods.toml", "*.mixins.json")) {
-            expand(expandProps)
+        metadata {
+            modLoader = "javafml"
+            loaderVersion("47")
+            blurLogo = false
         }
-        inputs.properties(expandProps)
-    }
 
-    tasks.named("compileTestJava") {
-        enabled = false
-    }
+        dependencies {
+            api(libs.forge.kotlin)
+            modImplementation(libs.forge.kritter)
+            api(libs.javax.annotations)
 
-    tasks.named("compileTestKotlin") {
-        enabled = false
-    }
+            include(libs.forge.mixinextras) { isTransitive = false }
+            include(libs.forge.kritter) { isTransitive = false }
+            include(libs.bytecodecs)
+            include(libs.kotlin.metadata)
 
-    tasks.withType<Test> {
-        enabled = false
-    }
-
-    tasks.withType<KotlinCompile>().configureEach {
-        compilerOptions {
-            optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
-            freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers")
+            modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
         }
     }
 }
 
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_2_0
+        optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
+        freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers", "-Xmulti-platform", "-Xno-check-actual", "-Xexpect-actual-classes")
+    }
+    jvmToolchain(17)
+    explicitApiWarning()
+}
+
+tasks.withType<KotlinCompile> {
+    explicitApiMode = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Warning
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_2_0
+        optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
+        freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers", "-Xmulti-platform", "-Xno-check-actual", "-Xexpect-actual-classes")
+    }
+}
+
+//Lemme just disable compiling java to fix issues
+tasks.compileJava {
+    enabled = false
+}
+tasks.compileKotlin {
+    enabled = false
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mod") {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        val username = "sapphoCompanyUsername".let { System.getenv(it) ?: findProperty(it) }?.toString()
+        val password = "sapphoCompanyPassword".let { System.getenv(it) ?: findProperty(it) }?.toString()
+        if (username != null && password != null) {
+            maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
+                name = "sapphoCompany"
+                credentials {
+                    this.username = username
+                    this.password = password
+                }
+            }
+        } else {
+            println("Sappho Company credentials not present.")
+        }
+    }
+}
+
+tasks.named("createCommonApiStub", GenerateStubApi::class) {
+    excludes.add(libs.kritter.get().group)
+}
+
+/*
 publishMods {
     val nameFabric = "Cynosure $modVersion Fabric"
     val nameForge = "Cynosure $modVersion Forge"
@@ -198,3 +278,4 @@ publishMods {
         requires("kotlin-for-forge")
     }
 }
+*/
