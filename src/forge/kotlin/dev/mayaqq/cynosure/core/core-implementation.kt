@@ -10,7 +10,10 @@ import net.minecraftforge.common.util.LogicalSidedProvider
 import net.minecraftforge.fml.LogicalSide
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.loading.FMLEnvironment
+import net.minecraftforge.fml.loading.FMLPaths
 import net.minecraftforge.server.ServerLifecycleHooks
+import uwu.serenity.kritter.platform.GAME_DIRECTORY
+import java.nio.file.Path
 import kotlin.jvm.optionals.getOrNull
 
 internal class PlatformHooksImpl : PlatformHooks {
@@ -22,6 +25,9 @@ internal class PlatformHooksImpl : PlatformHooks {
 
     override val devEnvironment: Boolean
         get() = !FMLEnvironment.production
+
+    override val gameDir: Path
+        get() = FMLPaths.GAMEDIR.get()
 
     override fun isModLoaded(modid: String): Boolean = ModList.get().isLoaded(modid)
 

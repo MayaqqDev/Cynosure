@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.TickTask
 import net.minecraft.util.thread.BlockableEventLoop
+import java.nio.file.Path
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -17,6 +18,9 @@ internal class PlatformHooksImpl : PlatformHooks {
         EnvType.CLIENT -> Environment.CLIENT
         EnvType.SERVER -> Environment.SERVER
     }
+
+    override val gameDir: Path
+        get() = FabricLoader.getInstance().gameDir
 
     override val devEnvironment: Boolean
         get() = FabricLoader.getInstance().isDevelopmentEnvironment
