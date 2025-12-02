@@ -1,4 +1,3 @@
-@file:EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 package dev.mayaqq.cynosure.client.keymapping
 
 import dev.mayaqq.cynosure.Cynosure
@@ -34,9 +33,12 @@ internal object KeyMappingRegistryImpl : KeyMappingRegistry {
     }
 }
 
-@SubscribeEvent
-public fun onKeyMappingRegister(event: RegisterKeyMappingsEvent) {
-    mappings.forEach(event::register)
-    mappings.clear()
-    registered = true
+@EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
+public object KeyMappingRegistryEventSubscriber {
+    @SubscribeEvent
+    public fun onKeyMappingRegister(event: RegisterKeyMappingsEvent) {
+        mappings.forEach(event::register)
+        mappings.clear()
+        registered = true
+    }
 }
