@@ -36,6 +36,7 @@ internal fun gatherEventSubscribers() {
                 val cn = ClassNode()
                 cr.accept(cn, ClassReader.SKIP_FRAMES)
                 CynosureEventLogger.warn("meow {}", cn)
+                CynosureEventLogger.info("Registered cynosure event subscriber ${cn.name} to bus $bus")
                 bus.registerClassNode(cn)
             } catch(e: Exception) {
                 CynosureEventLogger.error("Failed to subscribe to events", e)
