@@ -19,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber
 
 internal val LevelRenderer.renderBuffers get() = (this as LevelRendererAccessor).renderBuffers
-internal val RenderLevelStageEvent.bufferSource get() = this.levelRenderer.renderBuffers.bufferSource()
+internal val RenderLevelStageEvent.bufferSource get() = (this.levelRenderer as LevelRendererAccessor).renderBuffers.bufferSource()
 internal val LevelRenderer.level get() = (this as LevelRendererAccessor).level
 
 
