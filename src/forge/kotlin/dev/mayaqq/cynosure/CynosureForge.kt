@@ -16,17 +16,16 @@ import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
-import net.minecraftforge.fml.loading.moddiscovery.ModFile
 import net.minecraftforge.forgespi.locating.IModFile
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
 @Mod(MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CynosureForge {
+public object CynosureForge {
 
     init {
-        FMLJavaModLoadingContext.get().modEventBus.register(this)
-        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(FMLJavaModLoadingContext.get().modEventBus)
+        MOD_BUS.register(this)
+        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
         Cynosure.init()
     }
 

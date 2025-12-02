@@ -58,7 +58,7 @@ cloche {
 
     common {
         mixins.from(file("src/main/cynosure.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accessWidener"))
+        accessWideners.from(file("src/main/cynosure.accesswidener"))
 
         dependencies {
             compileOnly(libs.mixin)
@@ -78,7 +78,7 @@ cloche {
         minecraftVersion = libs.versions.minecraft
 
         mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accessWidener"))
+        accessWideners.from(file("src/main/cynosure.accesswidener"))
 
         includedClient()
 
@@ -131,12 +131,12 @@ cloche {
         loaderVersion = libs.versions.forge
         minecraftVersion = libs.versions.minecraft
 
-        mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.forge.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accessWidener"))
+        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
+        accessWideners.from(file("src/main/cynosure.accesswidener"))
 
         metadata {
-            modLoader = "javafml"
-            loaderVersion("47")
+            modLoader = "kotlinforforge"
+            loaderVersion("4.12.0")
             blurLogo = false
         }
 
