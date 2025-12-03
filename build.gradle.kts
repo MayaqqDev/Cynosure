@@ -219,14 +219,29 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
 }
 
 publishMods {
-    val nameFabric = "Cynosure $modVersion Fabric"
-    val nameForge = "Cynosure $modVersion Forge"
+    val loaders = arrayOf(
+        PublishMetadata(
+            "Fabric",
+            arrayOf("fabric", "quilt"),
+            arrayOf("fabric-api", "fabric-language-kotlin"),
+            cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile),
+            "-fabric"
+        ),
+        PublishMetadata(
+            "Forge",
+            arrayOf("forge"),
+            arrayOf("kotlin-for-forge"),
+            cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile),
+            "-forge"
+        )
+    )
+    val mcVersion = "1.20.1"
     changelog = file("CHANGELOG.md").readText().replace("@VERSION@", modVersion)
     type = BETA
 
     val optionsCurseforge = curseforgeOptions {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add("1.20.1")
+        minecraftVersions.add(mcVersion)
         projectId = "1259952"
         javaVersions.add(JavaVersion.VERSION_17)
         clientRequired = true
@@ -236,44 +251,30 @@ publishMods {
     val optionsModrinth = modrinthOptions {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "4JVfdODB"
-        minecraftVersions.add("1.20.1")
+        minecraftVersions.add(mcVersion)
     }
 
-    curseforge("curseforgeFabric") {
-        from(optionsCurseforge)
-        modLoaders.add("fabric")
-        modLoaders.add("quilt")
-        file = cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile)
-        displayName = nameFabric
-        version = "$modVersion-fabric"
-        requires("fabric-api", "fabric-language-kotlin")
-    }
+    loaders.forEach { loader ->
+        loader.apply {
+            curseforge("curseforge$loaderName") {
+                from(optionsCurseforge)
+                modLoaders.addAll(*modloaders)
+                file = jar
+                displayName = "$mod_name $modVersion $loaderName"
+                version = "$modVersion$suffix"
+                requires(*requires)
+            }
 
-    curseforge("curseforgeForge") {
-        from(optionsCurseforge)
-        modLoaders.add("forge")
-        file = cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile)
-        displayName = nameForge
-        version = "$modVersion-forge"
-        requires("kotlin-for-forge")
-    }
-
-    modrinth("modrinthFabric") {
-        from(optionsModrinth)
-        modLoaders.add("fabric")
-        modLoaders.add("quilt")
-        file = cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile)
-        displayName = nameFabric
-        version = "$modVersion-fabric"
-        requires("fabric-api", "fabric-language-kotlin")
-    }
-
-    modrinth("modrinthForge") {
-        from(optionsModrinth)
-        modLoaders.add("forge")
-        file = cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile)
-        displayName = nameForge
-        version = "$modVersion-forge"
-        requires("kotlin-for-forge")
+            modrinth("modrinth$loaderName") {
+                from(optionsModrinth)
+                modLoaders.addAll(*modloaders)
+                file = jar
+                displayName = "$mod_name $modVersion $loaderName"
+                version = "$modVersion$suffix"
+                requires(*requires)
+            }
+        }
     }
 }
+
+class PublishMetadata(val loaderName: String, val modloaders: Array<String>, val requires: Array<String>, val jar: Provider<RegularFile>, val suffix: String)
