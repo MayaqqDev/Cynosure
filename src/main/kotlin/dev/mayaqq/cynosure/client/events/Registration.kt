@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexFormat
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.events.api.Event
 import dev.mayaqq.cynosure.events.api.SinglePostEvent
+import net.minecraft.client.KeyMapping
 import net.minecraft.client.particle.ParticleProvider
 import net.minecraft.client.particle.ParticleRenderType
 import net.minecraft.client.particle.SpriteSet
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import org.jetbrains.annotations.ApiStatus
 import kotlin.reflect.KMutableProperty0
 
@@ -74,5 +76,29 @@ public class CoreShaderRegistrationEvent(private val context: Context) : Event {
     @CynosureInternal
     public fun interface Context {
         public fun register(id: ResourceLocation, format: VertexFormat, onLoad: (ShaderInstance) -> Unit)
+    }
+}
+
+public class KeybindRegistrationEvent(private val context: Context) : Event {
+    public fun register(mapping: KeyMapping) {
+        context.register(mapping)
+    }
+
+    @ApiStatus.Internal
+    @CynosureInternal
+    public fun interface Context {
+        public fun register(keybind: KeyMapping)
+    }
+}
+
+public class ClientReloadListenerEvent(private val context: Context) : Event {
+    public fun register(id: ResourceLocation, listener: PreparableReloadListener) {
+        context.register(id, listener)
+    }
+
+    @ApiStatus.Internal
+    @CynosureInternal
+    public fun interface Context {
+        public fun register(id: ResourceLocation, listener: PreparableReloadListener)
     }
 }

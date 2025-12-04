@@ -4,11 +4,14 @@ import com.mojang.blaze3d.systems.RenderSystem
 import dev.mayaqq.cynosure.Cynosure
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.MODID
+import dev.mayaqq.cynosure.client.events.ClientReloadListenerEvent
 import dev.mayaqq.cynosure.client.events.CoreShaderRegistrationEvent
+import dev.mayaqq.cynosure.client.events.KeybindRegistrationEvent
 import dev.mayaqq.cynosure.client.events.ParticleFactoryRegistrationEvent
 import dev.mayaqq.cynosure.client.events.entity.RenderLayerRegistrationEvent
 import dev.mayaqq.cynosure.client.render.gui.HudOverlayRegistry
 import dev.mayaqq.cynosure.client.render.gui.VanillaHud
+import dev.mayaqq.cynosure.events.api.CynosureEventLogger
 import dev.mayaqq.cynosure.events.api.post
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -25,7 +28,9 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent
 import net.minecraftforge.client.event.RegisterShadersEvent
 import net.minecraftforge.client.gui.overlay.ForgeGui
@@ -39,6 +44,16 @@ public object CynosureForgeClient {
     @SubscribeEvent
     public fun clientSetup(event: FMLClientSetupEvent) {
         CynosureClient.init()
+    }
+
+    @SubscribeEvent
+    public fun onKeybindsRegister(event: RegisterKeyMappingsEvent) {
+        KeybindRegistrationEvent(fun(mapping) = event.register(mapping)).post()
+    }
+
+    @SubscribeEvent
+    public fun onRegisterClientListeners(event: RegisterClientReloadListenersEvent) {
+        ClientReloadListenerEvent(fun(id, listener) = event.registerReloadListener(listener)).post()
     }
 
     @SubscribeEvent
