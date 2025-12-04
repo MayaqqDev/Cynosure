@@ -3,7 +3,6 @@ package dev.mayaqq.cynosure.biome
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.Dynamic
-import dev.mayaqq.cynosure.Cynosure
 import dev.mayaqq.cynosure.MODID
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
@@ -11,7 +10,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.data.registries.VanillaRegistries
 import net.minecraft.resources.RegistryOps
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.biome.MobSpawnSettings
+import net.minecraft.world.level.biome.MobSpawnSettings.*
 import net.minecraftforge.common.world.BiomeModifier
 import net.minecraftforge.common.world.ModifiableBiomeInfo
 import net.minecraftforge.registries.DeferredRegister
@@ -35,9 +34,7 @@ internal class InternalForgeCynosureBiomeModifier(val ops: RegistryOps<*>) : Bio
         info: ModifiableBiomeInfo.BiomeInfo.Builder
     ) {
         when (phase) {
-            BiomeModifier.Phase.BEFORE_EVERYTHING -> {
-                Cynosure.info("Initializing Cynosure Biome Modifiers")
-            }
+            BiomeModifier.Phase.BEFORE_EVERYTHING -> {}
             BiomeModifier.Phase.ADD -> {
                 val generationSettings = info.generationSettings
                 BiomeModifiersImpl.featureAdd.forEach { feature ->
@@ -51,18 +48,17 @@ internal class InternalForgeCynosureBiomeModifier(val ops: RegistryOps<*>) : Bio
                     }
                 }
                 val spawnSettings = info.mobSpawnSettings
-                Cynosure.info("Cynosure Adding Spawns: ${biome.unwrapKey().getOrNull()?.location()}")
                 BiomeModifiersImpl.spawnAdd.forEach { spawn ->
                     if (spawn.biome.invoke(biome)) {
-                        spawnSettings.addSpawn(spawn.category, MobSpawnSettings.SpawnerData(
+                        spawnSettings.addSpawn(spawn.category, SpawnerData(
                             spawn.type,
                             spawn.weight,
                             spawn.groupSize.first,
                             spawn.groupSize.second
-                        ))
+                        )
+                        )
                     }
                 }
-                Cynosure.info("Cynosure Adding Carvers: ${biome.unwrapKey().getOrNull()?.location()}")
                 BiomeModifiersImpl.carverAdd.forEach { carver ->
                     if (carver.biome.invoke(biome)) {
                         ops.getter(Registries.CONFIGURED_CARVER).getOrNull()?.let { registry ->
