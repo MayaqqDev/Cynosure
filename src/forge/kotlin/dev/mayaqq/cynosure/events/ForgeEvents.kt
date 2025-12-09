@@ -12,6 +12,7 @@ import dev.mayaqq.cynosure.events.entity.MountEvent
 import dev.mayaqq.cynosure.events.entity.player.PlayerConnectionEvent
 import dev.mayaqq.cynosure.events.entity.player.interaction.InteractionEvent
 import dev.mayaqq.cynosure.events.server.DataPackSyncEvent
+import dev.mayaqq.cynosure.events.server.ServerChatEvent
 import dev.mayaqq.cynosure.events.server.ServerEvent
 import dev.mayaqq.cynosure.internal.CynosureHooksImpl
 import dev.mayaqq.cynosure.items.extensions.CustomEntityItem
@@ -262,5 +263,12 @@ public object ForgeEvents {
     @SubscribeEvent
     public fun onStopTracking(event: PlayerEvent.StopTracking) {
         if (event.entity is ServerPlayer) EntityTrackingEvent.Start(event.target, event.entity as ServerPlayer).post()
+    }
+
+    @SubscribeEvent
+    public fun onChat(event: net.minecraftforge.event.ServerChatEvent) {
+        val serverChatEvent = ServerChatEvent(event.player, event.message, event.rawText)
+        serverChatEvent.post()
+        if (serverChatEvent.isCancelled) event.isCanceled = true else event.message = serverChatEvent.message
     }
 }

@@ -12,7 +12,6 @@ import dev.mayaqq.cynosure.events.server.DataPackSyncEvent
 import dev.mayaqq.cynosure.events.server.ServerEvent
 import dev.mayaqq.cynosure.events.world.LevelEvent
 import dev.mayaqq.cynosure.events.world.LoottableEvents
-import dev.mayaqq.cynosure.utils.entityTypeTag
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents

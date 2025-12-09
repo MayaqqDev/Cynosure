@@ -15,7 +15,8 @@
     "PiglinAiMixin",
     "PlayerMixin",
     "RecipeBookTypeMixin",
-    "ServerLevelMixin"
+    "ServerLevelMixin",
+    "ServerGamePacketListenerImplMixin"
   ],
   "client": [
     "client.ClientLevelMixin",
