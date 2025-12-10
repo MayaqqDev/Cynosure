@@ -1,6 +1,9 @@
 package dev.mayaqq.cynosure.mixin;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import dev.mayaqq.cynosure.effects.Effextras;
 import dev.mayaqq.cynosure.events.api.EventBus;
 import dev.mayaqq.cynosure.events.api.MainBus;
@@ -12,7 +15,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
@@ -38,20 +43,22 @@ public class LivingEntityMixin {
     private DamageSource modifyDamageSource(DamageSource source) {
         EventBus mainBus = MainBus.INSTANCE;
         EntityDamageSourceEvent event = new EntityDamageSourceEvent((LivingEntity) (Object) this, source);
-        mainBus.post(event, this, null);
+        mainBus.post(event);
         return event.getResult() == null ? source : event.getResult();
     }
 
-    @ModifyVariable(
+    @Inject(
             method = "hurt",
-            at = @At(value = "HEAD"),
-            index = 2,
-            argsOnly = true
+            at = @At("HEAD"),
+            cancellable = true
     )
-    private float modifyFallDamage(float damage, DamageSource source) {
-        EventBus mainBus = MainBus.INSTANCE;
-        EntityDamageEvent event = new EntityDamageEvent((LivingEntity) (Object) this, source, damage);
-        mainBus.post(event, null, null);
-        return event.getResult() == null ? damage : event.getResult();
+    private void modifyFallDamage(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) LocalFloatRef amount, @Local(argsOnly = true) DamageSource source) {
+        EntityDamageEvent event = new EntityDamageEvent((LivingEntity) (Object) this, source, amount.get());
+        MainBus.INSTANCE.post(event);
+        var result = event.getResult();
+        if (result != null) {
+            if (result == 0.0F) cir.setReturnValue(false);
+            else amount.set(result);
+        }
     }
 }
