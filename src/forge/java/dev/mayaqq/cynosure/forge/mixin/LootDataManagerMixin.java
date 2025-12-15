@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.events.world.LoottableEvents;
 import dev.mayaqq.cynosure.loot.LootilsKt;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.storage.loot.LootDataId;
 import net.minecraft.world.level.storage.loot.LootDataManager;
@@ -64,8 +65,13 @@ public class LootDataManagerMixin {
             LootTable.Builder builder = LootilsKt.copy(table);
             MainBus.INSTANCE.post(new LoottableEvents.Modify(resourceManager, lootManager, dataKey.location(), builder));
 
-            // Turn the builder back into a loot table and store it in the new table.
-            newTables.put(dataKey, builder.build());
+            // Turn the builder back into a loot table and store it in the new table
+            var newTable = builder.build();
+            ResourceLocation id = table.getLootTableId();
+            if (id != null) {
+                newTable.setLootTableId(id);
+            }
+            newTables.put(dataKey, newTable);
         });
 
         this.elements = newTables.build();
