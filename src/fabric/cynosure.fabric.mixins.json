@@ -16,7 +16,8 @@
     "PlayerMixin",
     "RecipeBookTypeMixin",
     "ServerLevelMixin",
-    "ServerGamePacketListenerImplMixin"
+    "ServerGamePacketListenerImplMixin",
+    "LivingEntityMixin"
   ],
   "client": [
     "client.ClientLevelMixin",

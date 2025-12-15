@@ -34,6 +34,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent
 import net.minecraftforge.event.entity.EntityMountEvent
 import net.minecraftforge.event.entity.living.LivingDeathEvent
 import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent
+import net.minecraftforge.event.entity.living.MobEffectEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
 import net.minecraftforge.event.entity.player.PlayerEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
@@ -270,5 +271,20 @@ public object ForgeEvents {
         val serverChatEvent = ServerChatEvent(event.player, event.message, event.rawText)
         serverChatEvent.post()
         if (serverChatEvent.isCancelled) event.isCanceled = true else event.message = serverChatEvent.message
+    }
+
+    @SubscribeEvent
+    public fun onEntityEffectAdded(event: MobEffectEvent.Added) {
+        LivingEntityEvent.EffectApply(event.entity, event.effectInstance, event.oldEffectInstance).post(context = event)
+    }
+
+    @SubscribeEvent
+    public fun onEntityEffectRemoved(event: MobEffectEvent.Remove) {
+        LivingEntityEvent.EffectRemove(event.entity, event.effectInstance).post(context = event)
+    }
+
+    @SubscribeEvent
+    public fun onEntityEffectExpired(event: MobEffectEvent.Expired) {
+        LivingEntityEvent.EffectExpire(event.entity, event.effectInstance).post(context = event)
     }
 }
