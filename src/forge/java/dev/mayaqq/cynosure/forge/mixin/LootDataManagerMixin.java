@@ -1,12 +1,12 @@
 package dev.mayaqq.cynosure.forge.mixin;
 
 import com.google.common.collect.ImmutableMap;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.events.world.LoottableEvents;
 import dev.mayaqq.cynosure.loot.LootilsKt;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.storage.loot.LootDataId;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -14,27 +14,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 @Mixin(LootDataManager.class)
 public class LootDataManagerMixin {
     @Shadow private Map<LootDataId<?>, ?> elements;
 
-    @Inject(method = "reload", at = @At("RETURN"), cancellable = true)
-    private void reload(
-            PreparableReloadListener.PreparationBarrier barrier,
-            ResourceManager manager,
-            ProfilerFiller prepProfiler,
-            ProfilerFiller ApplyProfiler,
-            Executor prepExecutor, Executor ApplyExecutor,
-            CallbackInfoReturnable<CompletableFuture<Void>> cir) {
-        LootDataManager lootManager = (LootDataManager) (Object) this;
-        cir.setReturnValue(cir.getReturnValue().thenRun(() -> cynosure$applyCynosureLootTables(manager, lootManager)));
+    @ModifyReturnValue(
+            method = "reload",
+            at = @At("RETURN")
+    )
+    private CompletableFuture<Void> addCynosureLootTables(CompletableFuture<Void> original, @Local(argsOnly = true) ResourceManager manager) {
+        return original.thenRun(() -> cynosure$applyCynosureLootTables(manager, (LootDataManager) (Object) this));
     }
 
 
