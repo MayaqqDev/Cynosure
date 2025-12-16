@@ -1,5 +1,7 @@
 @file:Suppress("PropertyName", "UnstableApiUsage")
 
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import net.msrandom.stubs.GenerateStubApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -110,6 +112,15 @@ cloche {
             entrypoint("server") {
                 adapter.set("kotlin")
                 value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
+            }
+        }
+
+        withMetadataJson {
+            withElement {
+                buildJsonObject {
+                    this@withElement.forEach { put(it.key, it.value) }
+                    put("accessWidener", "cynosure.accessWidener")
+                }
             }
         }
 
