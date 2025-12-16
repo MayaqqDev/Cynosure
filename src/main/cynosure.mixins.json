@@ -19,7 +19,8 @@
     "accessor.ChunkMapAccessor",
     "accessor.PoiTypeAccessor",
     "accessor.PoiTypesInvoker",
-    "accessor.TrackedEntityAccessor"
+    "accessor.TrackedEntityAccessor",
+    "PlayerListMixin"
   ],
   "client": [
     "accessor.SplashRendererAccessor",
