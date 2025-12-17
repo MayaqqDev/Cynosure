@@ -43,9 +43,13 @@ public object GlobalStorage {
             cache = possibleCache
             data = possibleData
         } catch (e: Exception) {
-            cache = gameDir.resolve(".cache").resolve(MODID)
-            data = gameDir.resolve("moddata").resolve(MODID)
+            val localCacheDir = gameDir.resolve(".cache")
+            val localDataDir = gameDir.resolve("moddata")
+            cache = localCacheDir.resolve(MODID)
+            data = localDataDir.resolve(MODID)
             try {
+                if (localCacheDir.notExists()) localCacheDir.createDirectory()
+                if (localDataDir.notExists()) localDataDir.createDirectory()
                 if (cache.notExists()) cache.createDirectory()
                 if (data.notExists()) data.createDirectory()
             } catch (e: Exception) {
