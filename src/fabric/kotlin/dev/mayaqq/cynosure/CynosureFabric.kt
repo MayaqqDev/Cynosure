@@ -1,14 +1,10 @@
 package dev.mayaqq.cynosure
 
-import dev.mayaqq.cynosure.client.events.ClientReloadListenerEvent
-import dev.mayaqq.cynosure.client.events.KeybindRegistrationEvent
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.fapiFeed
-import dev.mayaqq.cynosure.internal.CynosureHooksImpl
 import dev.mayaqq.cynosure.internal.arrayOrNull
 import dev.mayaqq.cynosure.internal.getCynosureValue
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
@@ -17,7 +13,6 @@ import net.fabricmc.loader.api.ModContainer
 import net.fabricmc.loader.api.metadata.CustomValue.CvArray
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.PackType
 import kotlin.reflect.typeOf
 
 internal object CynosureFabric {
@@ -31,11 +26,6 @@ internal object CynosureFabric {
             metadata.getCynosureValue("resourcepacks").arrayOrNull?.let { loadModPacks(mod, it) }
             metadata.getCynosureValue("datapacks").arrayOrNull?.let { loadModDatapacks(mod, it) }
         }
-
-        KeybindRegistrationEvent(fun(mapping) { KeyBindingHelper.registerKeyBinding(mapping) }).post()
-        ClientReloadListenerEvent(fun(id, listener) =
-            CynosureHooksImpl.registerReloadListener(id, PackType.CLIENT_RESOURCES, listener)
-        ).post()
     }
 
     fun lateinit() {
