@@ -17,7 +17,7 @@ plugins {
     `maven-publish`
 }
 
-val modVersion = providers.gradleProperty("version").get()
+val mod_version = providers.gradleProperty("version").get()
 val mod_name: String by project
 val mod_id = providers.gradleProperty("modid").get()
 val author: String by project
@@ -55,7 +55,7 @@ cloche {
 
     mappings {
         official()
-        parchment(libs.versions.parchment)
+        parchment(libs.versions.parchment1201)
     }
 
     common {
@@ -71,13 +71,13 @@ cloche {
             api(libs.kotlinx.coroutines)
             api(libs.bytecodecs)
             api(libs.javax.annotations)
-            modCompileOnly(libs.kritter)
+            modCompileOnly(libs.kritter1201)
         }
     }
 
     fabric {
-        loaderVersion = libs.versions.fabric
-        minecraftVersion = libs.versions.minecraft
+        loaderVersion = libs.versions.fabricx
+        minecraftVersion = libs.versions.minecraft1201
 
         mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
         accessWideners.from(file("src/main/cynosure.accesswidener"))
@@ -125,22 +125,22 @@ cloche {
         }
 
         dependencies {
-            fabricApi(libs.versions.fapi)
+            fabricApi(libs.versions.fapi1201)
             modApi(libs.fabric.kotlin)
-            modImplementation(libs.fabric.kritter)
+            modImplementation(libs.fabric.kritter1201)
             api(libs.javax.annotations)
 
             include(libs.kotlin.metadata)
             include(libs.bytecodecs)
-            include(libs.fabric.kritter)
+            include(libs.fabric.kritter1201)
 
-            modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
+            modCompileOnly(libs.fabric.iris1201) { isTransitive = false }
         }
     }
 
     forge {
-        loaderVersion = libs.versions.forge
-        minecraftVersion = libs.versions.minecraft
+        loaderVersion = libs.versions.forge1201
+        minecraftVersion = libs.versions.minecraft1201
 
         mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
         accessWideners.from(file("src/main/cynosure.accesswidener"))
@@ -152,16 +152,16 @@ cloche {
         }
 
         dependencies {
-            api(libs.forge.kotlin)
-            modImplementation(libs.forge.kritter)
+            api(libs.forge.kotlin1201)
+            modImplementation(libs.forge.kritter1201)
             api(libs.javax.annotations)
 
             include(libs.forge.mixinextras) { isTransitive = false }
-            include(libs.forge.kritter) { isTransitive = false }
+            include(libs.forge.kritter1201) { isTransitive = false }
             include(libs.bytecodecs)
             include(libs.kotlin.metadata)
 
-            modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
+            modCompileOnly(libs.forge.iris1201) { isTransitive = false }
         }
     }
 }
@@ -226,7 +226,7 @@ publishing {
 }
 
 tasks.named("createCommonApiStub", GenerateStubApi::class) {
-    excludes.add(libs.kritter.get().group)
+    excludes.add(libs.kritter1201.get().group)
 }
 
 publishMods {
@@ -247,7 +247,7 @@ publishMods {
         )
     )
     val mcVersion = "1.20.1"
-    changelog = file("CHANGELOG.md").readText().replace("@VERSION@", modVersion)
+    changelog = file("CHANGELOG.md").readText().replace("@VERSION@", mod_version)
     type = BETA
 
     val optionsCurseforge = curseforgeOptions {
@@ -271,8 +271,8 @@ publishMods {
                 from(optionsCurseforge)
                 modLoaders.addAll(*modloaders)
                 file = jar
-                displayName = "$mod_name $modVersion $loaderName"
-                version = "$modVersion$suffix"
+                displayName = "$mod_name $mod_version $loaderName"
+                version = "$mod_version$suffix"
                 requires(*requires)
             }
 
@@ -280,8 +280,8 @@ publishMods {
                 from(optionsModrinth)
                 modLoaders.addAll(*modloaders)
                 file = jar
-                displayName = "$mod_name $modVersion $loaderName"
-                version = "$modVersion$suffix"
+                displayName = "$mod_name $mod_version $loaderName"
+                version = "$mod_version$suffix"
                 requires(*requires)
             }
         }
