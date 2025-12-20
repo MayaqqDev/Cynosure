@@ -1,16 +1,14 @@
 package dev.mayaqq.cynosure.fabric.mixin.client;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.shaders.Program;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = EffectInstance.class, priority = 949)
+@Mixin(value = EffectInstance.class, priority = 0)
 public class EffectInstanceMixin {
 
 
@@ -22,10 +20,10 @@ public class EffectInstanceMixin {
         ),
         require = 0
     )
-    private ResourceLocation redirectCreateShaderLocation(String p_135809_, @Local(argsOnly = true) String string) {
+    private ResourceLocation redirectCreateShaderLocation(String originalInput, ResourceManager manager, String string) {
         String[] parts = string.split(":");
         if (parts.length > 1) return new ResourceLocation(parts[0] + ":shaders/program/" + parts[1] + ".json");
-        return new ResourceLocation(p_135809_);
+        return new ResourceLocation(originalInput);
     }
 
     @Redirect(
@@ -36,9 +34,9 @@ public class EffectInstanceMixin {
         ),
         require = 0
     )
-    private static ResourceLocation redirectCreateResourceLocation(String p_135809_, @Local(argsOnly = true) String string, @Local(argsOnly = true) Program.Type type) {
+    private static ResourceLocation redirectCreateResourceLocation(String originalInput, ResourceManager manager, Program.Type type, String string) {
         String[] parts = string.split(":");
         if (parts.length > 1) return new ResourceLocation(parts[0] + ":shaders/program/" + parts[1] + type.getExtension());
-        return new ResourceLocation(p_135809_);
+        return new ResourceLocation(originalInput);
     }
 }
