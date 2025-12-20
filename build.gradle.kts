@@ -53,12 +53,7 @@ cloche {
         contributor("serenyadev")
     }
 
-    mappings {
-        official()
-        parchment(libs.versions.parchment1201)
-    }
-
-    common {
+    val root = common {
         mixins.from(file("src/main/cynosure.mixins.json"))
         accessWideners.from(file("src/main/cynosure.accesswidener"))
 
@@ -75,14 +70,9 @@ cloche {
         }
     }
 
-    fabric {
-        loaderVersion = libs.versions.fabricx
-        minecraftVersion = libs.versions.minecraft1201
-
+    val fabricCommon = common("common:fabric") {
+        dependsOn(root)
         mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
-
-        includedClient()
 
         metadata {
             custom("modmenu", mapOf(
@@ -100,7 +90,53 @@ cloche {
                     endExclusive = false
                 }
             }
+        }
 
+        dependencies {
+            modApi(libs.fabric.kotlin)
+            api(libs.javax.annotations)
+
+            include(libs.kotlin.metadata)
+            include(libs.bytecodecs)
+
+            modCompileOnly(libs.fabric.iris1201) { isTransitive = false }
+        }
+    }
+
+    val forgeLike = common("common:forgeLike") {
+        dependsOn(root)
+        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
+
+        dependencies {
+            api(libs.javax.annotations)
+
+            include(libs.forge.mixinextras) { isTransitive = false }
+            include(libs.bytecodecs)
+            include(libs.kotlin.metadata)
+
+            modCompileOnly(libs.forge.iris1201) { isTransitive = false }
+        }
+    }
+
+    fabric("fabric:1.20.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1201)
+        }
+        dependsOn(fabricCommon)
+        loaderVersion = libs.versions.fabricx
+        minecraftVersion = libs.versions.minecraft1201
+
+        includedClient()
+
+        dependencies {
+            fabricApi(libs.versions.fapi1201)
+            modImplementation(libs.fabric.kritter1201)
+
+            include(libs.fabric.kritter1201)
+        }
+
+        metadata {
             entrypoint("preLaunch") {
                 adapter.set("kotlin")
                 value.set("dev.mayaqq.cynosure.CynosureFabricPreLaunchKt::onPreLaunch")
@@ -118,27 +154,54 @@ cloche {
                 value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
             }
         }
+    }
+
+    fabric("fabric:1.21.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1211)
+        }
+        dependsOn(fabricCommon)
+        loaderVersion = libs.versions.fabricx
+        minecraftVersion = libs.versions.minecraft1211
+
+        includedClient()
 
         dependencies {
-            fabricApi(libs.versions.fapi1201)
-            modApi(libs.fabric.kotlin)
-            modImplementation(libs.fabric.kritter1201)
-            api(libs.javax.annotations)
+            fabricApi(libs.versions.fapi1211)
+            modImplementation(libs.fabric.kritter1211)
 
-            include(libs.kotlin.metadata)
-            include(libs.bytecodecs)
-            include(libs.fabric.kritter1201)
+            include(libs.fabric.kritter1211)
+        }
 
-            modCompileOnly(libs.fabric.iris1201) { isTransitive = false }
+        metadata {
+            entrypoint("preLaunch") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabricPreLaunchKt::onPreLaunch")
+            }
+            entrypoint("main") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::init")
+            }
+            entrypoint("client") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.client.CynosureClientFabric::init")
+            }
+            entrypoint("server") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
+            }
         }
     }
 
-    forge {
+    forge("forge:1.20.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1201)
+        }
+        dependsOn(forgeLike)
         loaderVersion = libs.versions.forge1201
         minecraftVersion = libs.versions.minecraft1201
-
-        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
 
         metadata {
             modLoader = "kotlinforforge"
@@ -149,14 +212,30 @@ cloche {
         dependencies {
             api(libs.forge.kotlin1201)
             modImplementation(libs.forge.kritter1201)
-            api(libs.javax.annotations)
 
-            include(libs.forge.mixinextras) { isTransitive = false }
             include(libs.forge.kritter1201) { isTransitive = false }
-            include(libs.bytecodecs)
-            include(libs.kotlin.metadata)
+        }
+    }
 
-            modCompileOnly(libs.forge.iris1201) { isTransitive = false }
+    neoforge("neoforge:1.21.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1211)
+        }
+        loaderVersion = libs.versions.neoforge1211
+        minecraftVersion = libs.versions.minecraft1211
+
+        metadata {
+            modLoader = "kotlinforforge"
+            loaderVersion("5.10.0")
+            blurLogo = false
+        }
+
+        dependencies {
+            api(libs.forge.kotlin1211)
+            modImplementation(libs.forge.kritter1211)
+
+            include(libs.forge.kritter1211) { isTransitive = false }
         }
     }
 }
@@ -224,6 +303,7 @@ tasks.named("createCommonApiStub", GenerateStubApi::class) {
     excludes.add(libs.kritter1201.get().group)
 }
 
+/*
 publishMods {
     val loaders = arrayOf(
         PublishMetadata(
@@ -231,23 +311,31 @@ publishMods {
             arrayOf("fabric", "quilt"),
             arrayOf("fabric-api", "fabric-language-kotlin"),
             cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile),
-            "-fabric"
+            "-fabric",
+            arrayOf("1.20.1", "1.21.1")
         ),
         PublishMetadata(
             "Forge",
             arrayOf("forge"),
             arrayOf("kotlin-for-forge"),
             cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile),
-            "-forge"
+            "-forge",
+            arrayOf("1.20.1")
+        ),
+        PublishMetadata(
+            "NeoForge",
+            arrayOf("neoforge"),
+            arrayOf("kotlin-for-forge"),
+            cloche.targets["neoforge"].finalJar.flatMap(Jar::getArchiveFile),
+            "-neoforge",
+            arrayOf("1.21.1")
         )
     )
-    val mcVersion = "1.20.1"
     changelog = file("CHANGELOG.md").readText().replace("@VERSION@", mod_version)
     type = BETA
 
     val optionsCurseforge = curseforgeOptions {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-        minecraftVersions.add(mcVersion)
         projectId = "1259952"
         javaVersions.add(JavaVersion.VERSION_17)
         clientRequired = true
@@ -257,30 +345,34 @@ publishMods {
     val optionsModrinth = modrinthOptions {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "4JVfdODB"
-        minecraftVersions.add(mcVersion)
     }
 
     loaders.forEach { loader ->
-        loader.apply {
-            curseforge("curseforge$loaderName") {
-                from(optionsCurseforge)
-                modLoaders.addAll(*modloaders)
-                file = jar
-                displayName = "$mod_name $mod_version $loaderName"
-                version = "$mod_version$suffix"
-                requires(*requires)
-            }
+        loader.gameVersion.forEach { mcVersion ->
+            loader.apply {
+                curseforge("curseforge$loaderName$mcVersion") {
+                    from(optionsCurseforge)
+                    minecraftVersions.add(mcVersion)
+                    modLoaders.addAll(*modloaders)
+                    file = jar
+                    displayName = "$mod_name $mod_version $loaderName"
+                    version = "$mod_version$suffix"
+                    requires(*requires)
+                }
 
-            modrinth("modrinth$loaderName") {
-                from(optionsModrinth)
-                modLoaders.addAll(*modloaders)
-                file = jar
-                displayName = "$mod_name $mod_version $loaderName"
-                version = "$mod_version$suffix"
-                requires(*requires)
+                modrinth("modrinth$loaderName$mcVersion") {
+                    from(optionsModrinth)
+                    modLoaders.addAll(*modloaders)
+                    file = jar
+                    displayName = "$mod_name $mod_version $loaderName"
+                    version = "$mod_version$suffix"
+                    requires(*requires)
+                }
             }
         }
     }
 }
 
-class PublishMetadata(val loaderName: String, val modloaders: Array<String>, val requires: Array<String>, val jar: Provider<RegularFile>, val suffix: String)
+class PublishMetadata(val loaderName: String, val modloaders: Array<String>, val requires: Array<String>, val jar: Provider<RegularFile>, val suffix: String, val gameVersion: Array<String>)
+
+ */
