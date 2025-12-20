@@ -95,6 +95,10 @@ cloche {
             }
             dependency {
                 modId = "fabric-language-kotlin"
+                version {
+                    end = "1.13.7+kotlin.2.2.21"
+                    endExclusive = false
+                }
             }
 
             entrypoint("preLaunch") {
@@ -112,15 +116,6 @@ cloche {
             entrypoint("server") {
                 adapter.set("kotlin")
                 value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
-            }
-        }
-
-        withMetadataJson {
-            withElement {
-                buildJsonObject {
-                    this@withElement.forEach { put(it.key, it.value) }
-                    put("accessWidener", "cynosure.accessWidener")
-                }
             }
         }
 

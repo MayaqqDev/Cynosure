@@ -4,7 +4,7 @@ minecraft = "1.20.1"
 fabric = "0.16.9"
 forge = "47.3.0"
 # Common
-cloche = "0.16.22"
+cloche = "0.16.27"
 kotlin = "2.2.10"
 parchment = "2023.09.03"
 mixin = "0.8.3"
