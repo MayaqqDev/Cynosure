@@ -8,7 +8,7 @@ cloche = "0.16.27"
 kotlin = "2.2.10"
 parchment = "2023.09.03"
 mixin = "0.8.3"
-mixinextras = "0.4.1"
+mixinextras = "0.5.0"
 kotlinx-serialization = "1.8.0"
 kotlinx-coroutines = "1.10.1"
 bytecodecs = "1.0.2"
@@ -18,7 +18,7 @@ fapi = "0.92.2"
 fabrickotlin = "1.11.0+kotlin.2.0.0"
 # Forge
 klf = "2.10.5-k2.2.10-2.0+forge"
-kff = "4.11.0"
+kff = "4.12.0"
 
 [libraries]
 # Common

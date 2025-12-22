@@ -146,6 +146,10 @@ cloche {
             blurLogo = false
         }
 
+        runs {
+            client()
+        }
+
         dependencies {
             api(libs.forge.kotlin)
             modImplementation(libs.forge.kritter)
@@ -155,6 +159,8 @@ cloche {
             include(libs.forge.kritter) { isTransitive = false }
             include(libs.bytecodecs)
             include(libs.kotlin.metadata)
+
+            implementation("io.github.llamalad7:mixinextras-forge:0.5.0")
 
             modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
         }
