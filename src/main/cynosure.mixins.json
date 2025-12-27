@@ -17,10 +17,10 @@
     "ServerLevelMixin",
     "ServerPlayerMixin",
     "accessor.ChunkMapAccessor",
-    "accessor.PoiTypeAccessor",
     "accessor.PoiTypesInvoker",
     "accessor.TrackedEntityAccessor",
-    "PlayerListMixin"
+    "PlayerListMixin",
+    "PoiTypesMixin"
   ],
   "client": [
     "accessor.SplashRendererAccessor",
