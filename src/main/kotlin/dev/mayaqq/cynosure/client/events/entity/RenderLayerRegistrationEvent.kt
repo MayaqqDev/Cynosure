@@ -8,9 +8,12 @@ import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.EntityModelSet
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher
 import net.minecraft.client.renderer.entity.EntityRenderer
+import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -25,6 +28,18 @@ public class RenderLayerRegistrationEvent(
 
     public inline fun <T : LivingEntity> addLayer(entity: EntityType<T>, layer: (RenderLayerParent<T, EntityModel<T>>) -> RenderLayer<T, out EntityModel<T>>) {
         context.getEntity(entity)?.let { (it as LivingEntityRendererAccessor).invokeAddLayer(layer(it)) }
+    }
+
+    public inline fun <T : LivingEntity, reified R : EntityRenderer<T>> addLayer(layer: (RenderLayerParent<T, EntityModel<T>>) -> RenderLayer<T, out EntityModel<T>>) {
+        BuiltInRegistries.ENTITY_TYPE.forEach { entityType ->
+            (entityType as? EntityType<T>)?.let {
+                context.getEntity(it)?.let { renderer ->
+                    if (renderer is R) {
+                        (renderer as LivingEntityRendererAccessor).invokeAddLayer(layer.invoke(renderer as RenderLayerParent<T, EntityModel<T>>))
+                    }
+                }
+            }
+        }
     }
 
     public inline fun addLayer(skin: DefaultSkin, layer: (RenderLayerParent<Player, EntityModel<Player>>) -> RenderLayer<out Player, out EntityModel<out Player>>) {

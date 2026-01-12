@@ -21,6 +21,7 @@ import net.minecraft.client.particle.SpriteSet
 import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
+import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.world.entity.EntityType
@@ -97,6 +98,7 @@ public object CynosureForgeClient {
             override fun getSkin(name: String): EntityRenderer<out Player>? = event.getSkin(name)
 
             override fun <T : LivingEntity> getEntity(entity: EntityType<T>): LivingEntityRenderer<T, EntityModel<T>>? = event.getRenderer(entity)
+
         }).post(context = event) { Cynosure.error("Error registering entity layers", it) }
     }
 }
