@@ -12,6 +12,7 @@ plugins {
     kotlin("plugin.serialization") version libs.versions.kotlin
     // Need to explicitly set ksp versions cs cloche loads an old version by default
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    id("dev.isxander.secrets") version "0.1.0"
     `maven-publish`
 }
 
@@ -202,14 +203,14 @@ publishing {
     }
 
     repositories {
-        val username = "sapphoCompanyUsername".let { System.getenv(it) ?: findProperty(it) }?.toString()
-        val password = "sapphoCompanyPassword".let { System.getenv(it) ?: findProperty(it) }?.toString()
+        val username = try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/username"] } catch (_: Exception) { null }
+        val password = try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/password"] } catch (_: Exception) { null }
         if (username != null && password != null) {
             maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
                 name = "sapphoCompany"
                 credentials {
-                    this.username = username
-                    this.password = password
+                    this.username = username.get() as String?
+                    this.password = password.get()
                 }
             }
         } else {
@@ -244,7 +245,7 @@ publishMods {
     type = BETA
 
     val optionsCurseforge = curseforgeOptions {
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        accessToken = onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Curseforge/Mod Publish Api Token"]
         minecraftVersions.add(mcVersion)
         projectId = "1259952"
         javaVersions.add(JavaVersion.VERSION_17)
@@ -253,7 +254,7 @@ publishMods {
     }
 
     val optionsModrinth = modrinthOptions {
-        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        accessToken = onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Modrinth/Mod Publish Api Token"]
         projectId = "4JVfdODB"
         minecraftVersions.add(mcVersion)
     }
