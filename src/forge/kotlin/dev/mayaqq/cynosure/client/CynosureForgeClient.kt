@@ -97,7 +97,13 @@ public object CynosureForgeClient {
         RenderLayerRegistrationEvent(Minecraft.getInstance().entityRenderDispatcher, event.entityModels, object : RenderLayerRegistrationEvent.Context {
             override fun getSkin(name: String): EntityRenderer<out Player>? = event.getSkin(name)
 
-            override fun <T : LivingEntity> getEntity(entity: EntityType<T>): LivingEntityRenderer<T, EntityModel<T>>? = event.getRenderer(entity)
+            override fun <T : LivingEntity> getEntity(entity: EntityType<T>): LivingEntityRenderer<T, EntityModel<T>>? {
+                return try {
+                    event.getRenderer(entity)
+                } catch(_: Exception) {
+                    null
+                }
+            }
 
         }).post(context = event) { Cynosure.error("Error registering entity layers", it) }
     }
