@@ -96,7 +96,7 @@ cloche {
                 modId = "fabric-language-kotlin"
                 version {
                     start = "1.13.9+kotlin.2.3.10"
-                    startExclusive = false
+                    startInclusive = true
                 }
             }
 
