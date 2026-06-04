@@ -24,7 +24,7 @@ public class RenderLayerRegistrationEvent(
     public val renderers: EntityRenderDispatcher,
     public val models: EntityModelSet,
     @PublishedApi internal val context: Context
-) : Event {
+) : Event() {
 
     public inline fun <T : LivingEntity> addLayer(entity: EntityType<T>, layer: (RenderLayerParent<T, EntityModel<T>>) -> RenderLayer<T, out EntityModel<T>>) {
         context.getEntity(entity)?.let { (it as LivingEntityRendererAccessor).invokeAddLayer(layer(it)) }

@@ -26,8 +26,7 @@ public class LevelChunkMixin {
         )
     )
     private void registerUpdateListener(BlockEntity blockEntity, CallbackInfo ci) {
-        if (blockEntity instanceof BlockUpdateListener listener) {
+        if (blockEntity instanceof BlockUpdateListener listener)
             ((ILevel) level).cynosure_addUpdateListener(listener);
-        }
     }
 }

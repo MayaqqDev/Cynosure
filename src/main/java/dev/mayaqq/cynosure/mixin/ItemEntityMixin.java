@@ -23,8 +23,6 @@ public abstract class ItemEntityMixin {
     public void customItemTick(CallbackInfo ci) {
         ItemStack stack = this.getItem();
         ItemEntityTickListener listener = ItemExtension.Registry.getExtension(ItemEntityTickListener.class, stack.getItem());
-        if (listener != null) {
-            if (listener.tickItemEntity(stack, (ItemEntity) (Object) this)) ci.cancel();
-        }
+        if (listener != null) if (listener.tickItemEntity(stack, (ItemEntity) (Object) this)) ci.cancel();
     }
 }

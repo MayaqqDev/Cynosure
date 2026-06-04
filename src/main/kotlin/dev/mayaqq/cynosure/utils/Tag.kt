@@ -25,17 +25,17 @@ public inline fun fluidTag(value: ResourceLocation): TagKey<Fluid> = Registries.
 public fun <T> ResourceKey<Registry<T>>.tag(value: ResourceLocation): TagKey<T> = TagKey.create(this, value)
 
 public operator fun <T : Any> TagKey<in T>.contains(key: ResourceLocation): Boolean =
-    ResourceKey.create(this.registry as ResourceKey<out Registry<T>>, key) in this
+    ResourceKey.create(this.registry() as ResourceKey<out Registry<T>>, key) in this
 
 @Suppress("UNCHECKED_CAST")
 public operator fun <T : Any> TagKey<in T>.contains(key: ResourceKey<T>): Boolean {
-    val registry = BuiltInRegistries.REGISTRY.get(this.registry.location())!! as Registry<T>
+    val registry = BuiltInRegistries.REGISTRY.get(this.registry().location())!! as Registry<T>
     // Minecraft pls be better at type params i beg
     return (registry.getHolderOrThrow(key) as Holder<T>).`is`(this as TagKey<T>)
 }
 
 public operator fun <T : Any> TagKey<in T>.contains(value: T): Boolean {
-    val registry = BuiltInRegistries.REGISTRY.get(this.registry.location())!! as Registry<T>
+    val registry = BuiltInRegistries.REGISTRY.get(this.registry().location())!! as Registry<T>
     return (registry.getResourceKey(value).get() as ResourceKey<T>) in this
 }
 

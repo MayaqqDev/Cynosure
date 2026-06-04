@@ -4,7 +4,7 @@ minecraft = "1.20.1"
 fabric = "0.16.9"
 forge = "47.3.0"
 # Common
-cloche = "0.16.27"
+cloche = "0.18.2"
 kotlin = "2.2.10"
 parchment = "2023.09.03"
 mixin = "0.8.3"
@@ -12,7 +12,7 @@ mixinextras = "0.5.0"
 kotlinx-serialization = "1.8.0"
 kotlinx-coroutines = "1.10.1"
 bytecodecs = "1.0.2"
-kritter = "0.1.12+1.20.1"
+kritter = "2.0.0-alpha.4"
 # Fabric
 fapi = "0.92.2"
 fabrickotlin = "1.11.0+kotlin.2.0.0"
@@ -34,19 +34,19 @@ kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core",
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version = "2.1.20" }
 bytecodecs = { module = "com.teamresourceful:bytecodecs", version.ref = "bytecodecs" }
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-kritter = { module = "uwu.serenity.kritter:kritter-common", version.ref = "kritter" }
+nullevt = { module = "invoke.kitty:nullevt", version = "2.2.8" }
 
 # Fabric
 fabric = { module = "net.fabricmc:fabric-loader", version.ref = "fabric" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fapi" }
 fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabrickotlin" }
-fabric-kritter = { module = "uwu.serenity.kritter:kritter-fabric", version.ref = "kritter" }
+fabric-kritter = { module = "invoke.kitty.kritter:kritter-1.20.1-fabric", version.ref = "kritter" }
 
 # Forge
 forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
 forge-kotlin = { module = "thedarkcolour:kotlinforforge", version.ref = "kff" }
 forge-mixinextras = { module = "io.github.llamalad7:mixinextras-forge", version.ref = "mixinextras" }
-forge-kritter = { module = "uwu.serenity.kritter:kritter-forge", version.ref = "kritter" }
+forge-kritter = { module = "invoke.kitty.kritter:kritter-1.20.1-forge", version.ref = "kritter" }
 
 [bundles]
 

@@ -3,13 +3,12 @@ package dev.mayaqq.cynosure.client.particles
 import dev.mayaqq.cynosure.client.events.ParticleFactoryRegistrationEvent
 import dev.mayaqq.cynosure.events.api.MainBus
 import dev.mayaqq.cynosure.particles.ParticleTypeBuilder
+import invoke.kitty.kritter.utils.clientOnly
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.particle.Particle
 import net.minecraft.client.particle.ParticleProvider
 import net.minecraft.client.particle.SpriteSet
 import net.minecraft.core.particles.ParticleOptions
-import uwu.serenity.kritter.client.stdlib.clientOnly
-import uwu.serenity.kritter.internal.NotUsableInBuilder
 
 public typealias SafeParticleFactory<T> = (T, ClientLevel, x: Double, y: Double, z: Double, xSpeed: Double, ySpeed: Double, zSpeed: Double) -> Particle
 

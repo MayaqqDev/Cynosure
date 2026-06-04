@@ -25,7 +25,7 @@ public class ParticleEngineMixin {
     private static ImmutableList<ParticleRenderType> modifyArray(ImmutableList<ParticleRenderType> original) {
         List<ParticleRenderType> renderTypes = new ArrayList<>(original);
         ParticleRenderTypeRegistrationEvent event = new ParticleRenderTypeRegistrationEvent(renderTypes);
-        MainBus.INSTANCE.post(event, null, null);
+        MainBus.INSTANCE.post(event);
         return ImmutableList.copyOf(renderTypes);
     }
 }

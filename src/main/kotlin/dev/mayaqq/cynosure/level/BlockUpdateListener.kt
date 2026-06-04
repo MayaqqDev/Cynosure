@@ -8,6 +8,8 @@ import net.minecraft.world.level.block.state.BlockState
 
 /**
  * Interface providing the ability to listen to block updates of specific positions.
+ * Block update listeners can either be registered manually, or if implemented by a block entity
+ * its added automatically upon its creation
  */
 public interface BlockUpdateListener {
 

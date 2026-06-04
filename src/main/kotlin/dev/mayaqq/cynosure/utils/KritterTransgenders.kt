@@ -8,8 +8,8 @@ import net.minecraft.core.Holder
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
-import uwu.serenity.kritter.stdlib.EntityBuilder
-import uwu.serenity.kritter.stdlib.ItemBuilder
+import invoke.kitty.kritter.registry.entity.EntityBuilder
+import invoke.kitty.kritter.registry.item.ItemBuilder
 
 // Biome Modifiers
 public inline fun EntityBuilder<*>.addSpawn(

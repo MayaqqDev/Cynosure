@@ -14,11 +14,6 @@ import kotlin.jvm.optionals.getOrNull
 
 internal class PlatformHooksImpl : PlatformHooks {
 
-    override val environment: Environment = when (FabricLoader.getInstance().environmentType!!) {
-        EnvType.CLIENT -> Environment.CLIENT
-        EnvType.SERVER -> Environment.SERVER
-    }
-
     override val gameDir: Path
         get() = FabricLoader.getInstance().gameDir
 

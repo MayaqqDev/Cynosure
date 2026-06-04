@@ -24,10 +24,9 @@ public class CommandsMixin {
     )
     private int wrapExecute(CommandDispatcher<CommandSourceStack> instance, ParseResults<CommandSourceStack> results, Operation<Integer> original) {
         CommandExecuteEvent event = new CommandExecuteEvent(results, null);
-        if (MainBus.INSTANCE.post(event, null, null)) {
-            if (event.getException() != null) {
+        if (MainBus.INSTANCE.post(event)) {
+            if (event.getException() != null)
                 Throwables.throwIfUnchecked(event.getException());
-            }
             return 1;
         }
         return original.call(instance, event.getParseResults());

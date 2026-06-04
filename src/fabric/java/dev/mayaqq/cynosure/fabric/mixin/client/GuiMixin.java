@@ -1,5 +1,7 @@
 package dev.mayaqq.cynosure.fabric.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -11,6 +13,7 @@ import dev.mayaqq.cynosure.client.render.gui.VanillaHud;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +33,10 @@ public abstract class GuiMixin {
     @Shadow protected abstract Player getCameraPlayer();
 
     @Unique
-    private Map<VanillaHud, List<HudOverlay>> hudOverlays = null;
+    private Map<ResourceLocation, List<HudOverlay>> hudOverlays = null;
 
     @Unique
-    private void renderPhaseOverlays(VanillaHud phase, GuiGraphics guiGraphics, float partialTick) {
+    private void renderPhaseOverlays(ResourceLocation phase, GuiGraphics guiGraphics, float partialTick) {
         boolean blendEnabled = GlStateManager.BLEND.mode.enabled;
         boolean depthEnabled = GlStateManager.DEPTH.mode.enabled;
         for(HudOverlay overlay : hudOverlays.get(phase)) {
@@ -61,7 +63,7 @@ public abstract class GuiMixin {
     )
     private void onBeginRenderHud(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         var event = new BeginHudRenderEvent((Gui) (Object) this, guiGraphics, partialTick);
-        if(MainBus.INSTANCE.post(event, null, null)) ci.cancel();
+        if(MainBus.INSTANCE.post(event)) ci.cancel();
     }
 
     @Inject(
@@ -107,23 +109,13 @@ public abstract class GuiMixin {
         renderPhaseOverlays(VanillaHud.SPYGLASS, guiGraphics, partialTick);
     }
 
+    @Definition(id = "CARVED_PUMPKIN", field = "Lnet/minecraft/world/level/block/Blocks;CARVED_PUMPKIN:Lnet/minecraft/world/level/block/Block;")
+    @Definition(id = "asItem", method = "Lnet/minecraft/world/level/block/Block;asItem()Lnet/minecraft/world/item/Item;")
+    @Definition(id = "is", method = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z")
+    @Expression("?.is(CARVED_PUMPKIN.asItem())")
     @Inject(
         method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"
-            ),
-            to = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/client/gui/Gui;PUMPKIN_BLUR_LOCATION:Lnet/minecraft/resources/ResourceLocation;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
+        at = @At("MIXINEXTRAS:EXPRESSION")
     )
     private void beforePumpkinOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         renderPhaseOverlays(VanillaHud.HELMET, guiGraphics, partialTick);
@@ -140,23 +132,13 @@ public abstract class GuiMixin {
         renderPhaseOverlays(VanillaHud.FROSTBITE, guiGraphics, partialTick);
     }
 
+    @Definition(id = "lerp", method = "Lnet/minecraft/util/Mth;lerp(FFF)F")
+    @Definition(id = "oSpinningEffectIntensity", field = "Lnet/minecraft/client/player/LocalPlayer;oSpinningEffectIntensity:F")
+    @Definition(id = "spinningEffectIntensity", field = "Lnet/minecraft/client/player/LocalPlayer;spinningEffectIntensity:F")
+    @Expression("lerp(?, ?.oSpinningEffectIntensity, ?.spinningEffectIntensity)")
     @Inject(
         method = "render",
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/player/LocalPlayer;getTicksFrozen()I"
-            ),
-            to = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/Gui;renderPortalOverlay(Lnet/minecraft/client/gui/GuiGraphics;F)V"
-            )
-        ),
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/util/Mth;lerp(FFF)F",
-            shift = At.Shift.AFTER
-        )
+        at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER)
     )
     private void beforePortalOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         renderPhaseOverlays(VanillaHud.PORTAL, guiGraphics, partialTick);
@@ -349,7 +331,8 @@ public abstract class GuiMixin {
         method = "render",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/Options;renderDebug:Z"
+            target = "Lnet/minecraft/client/Options;renderDebug:Z",
+            opcode = Opcodes.GETFIELD
         )
     )
     private void beforeDebug(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
@@ -360,7 +343,8 @@ public abstract class GuiMixin {
         method = "render",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/client/Options;hideGui:Z"
+            target = "Lnet/minecraft/client/Options;hideGui:Z",
+            opcode = Opcodes.GETFIELD
         ),
         slice = @Slice(
             from = @At(
@@ -381,39 +365,21 @@ public abstract class GuiMixin {
         return original;
     }
 
+    @Definition(id = "overlayMessageString", field = "Lnet/minecraft/client/gui/Gui;overlayMessageString:Lnet/minecraft/network/chat/Component;")
+    @Expression("?.overlayMessageString != null")
     @Inject(
         method = "render",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/gui/Gui;overlayMessageString:Lnet/minecraft/network/chat/Component;",
-            opcode = Opcodes.GETFIELD
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/client/Options;hideGui:Z"
-            ),
-            to = @At(
-                value = "INVOKE_STRING",
-                target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V",
-                args = "ldc=overlayMessage")
-        )
+        at = @At("MIXINEXTRAS:EXPRESSION")
     )
     private void beforeOverlayMessageString(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         renderPhaseOverlays(VanillaHud.OVERLAY_MESSAGE, guiGraphics, partialTick);
     }
 
+    @Definition(id = "title", field = "Lnet/minecraft/client/gui/Gui;title:Lnet/minecraft/network/chat/Component;")
+    @Expression("?.title != null")
     @Inject(
         method = "render",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/gui/Gui;title:Lnet/minecraft/network/chat/Component;"
-        ),
-        slice = @Slice(
-            to = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/client/gui/Gui;titleTime:I")
-        )
+        at = @At("MIXINEXTRAS:EXPRESSION")
     )
     private void beforeTitle(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
         renderPhaseOverlays(VanillaHud.TITLE_TEXT, guiGraphics, partialTick);

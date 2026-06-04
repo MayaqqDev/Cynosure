@@ -22,9 +22,7 @@ public class EffectInstanceMixin {
             require = 0
     )
     ResourceLocation constructProgramResourceLocation(String arg, Operation<ResourceLocation> original, ResourceManager unused, String id) {
-        if (!id.contains(":")) {
-            return original.call(arg);
-        }
+        if (!id.contains(":")) return original.call(arg);
         ResourceLocation split = new ResourceLocation(id);
         return new ResourceLocation(split.getNamespace(), "shaders/program/" + split.getPath() + ".json");
     }
@@ -39,9 +37,7 @@ public class EffectInstanceMixin {
             require = 0
     )
     private static ResourceLocation constructProgramResourceLocation(String arg, Operation<ResourceLocation> original, ResourceManager unused, Program.Type type, String id) {
-        if (!arg.contains(":")) {
-            return original.call(arg);
-        }
+        if (!arg.contains(":")) return original.call(arg);
         ResourceLocation split = new ResourceLocation(id);
         return new ResourceLocation(split.getNamespace(), "shaders/program/" + split.getPath() + type.getExtension());
     }

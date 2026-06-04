@@ -26,7 +26,6 @@ import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.extension
 import kotlin.io.path.walk
 
-private const val AUTOSUB_KEY = "autosubscription"
 
 private val AUTOSUB_ANNOTATION = EventSubscriber::class.qualifiedName!!
 

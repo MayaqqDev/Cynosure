@@ -1,226 +1,102 @@
 package dev.mayaqq.cynosure.events.api
 
-import dev.mayaqq.cynosure.CynosureInternal
-import dev.mayaqq.cynosure.utils.asm.descriptorToClassName
-import dev.mayaqq.cynosure.utils.asm.mappedValues
-import org.objectweb.asm.tree.ClassNode
+import invoke.kitty.nullevt.api.CancellationStrategy
+import invoke.kitty.nullevt.api.ExperimentalContextualCancellation
+import invoke.kitty.nullevt.newEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import net.minecraft.Util
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.lang.reflect.Method
 import java.lang.reflect.Modifier
-import java.util.function.Consumer
-import kotlin.metadata.ClassKind
-import kotlin.metadata.jvm.KotlinClassMetadata
-import kotlin.metadata.jvm.Metadata
-import kotlin.metadata.kind
 import kotlin.reflect.KClass
+import kotlin.reflect.full.declaredMemberFunctions
+import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.jvm.jvmErasure
+import kotlin.reflect.jvm.kotlinFunction
+import invoke.kitty.nullevt.Event as NullEvent
 
-/**
- * Main event bus where all minecraft events are run
- */
-public object MainBus : EventBus("main")
+public val CynosureEventLogger: Logger = LoggerFactory.getLogger("cynosure/events")
 
-/**
- * Subscribe to an event bus. If the receiver is an instance or object any instance method marked with [Subscription]
- * will be added to the event bus. If the receiver is a [KClass] or [Class] instance, any static methods of the class
- * will be added to the event bus
- */
-@JvmSynthetic
-public fun Any.subscribeTo(bus: EventBus) {
-    bus.subscribe(this)
+public object MainBus : EventBus("main") {
+    init {
+        runBlocking {
+            CynosureAutoSubscriptionService.SERVICES.asFlow()
+                .flatMapConcat { withContext(Dispatchers.IO) { it.gatherEventSubscribers().buffer() } }
+                .collect { (mod, target) ->
+                    try {
+                        subscribe(target)
+                    } catch (ex: Exception) {
+                        CynosureEventLogger.error("Error subscribing class '${target.name}' of mod '$mod' to main event bus", ex)
+                    }
+                }
+        }
+    }
 }
 
-/**
- * Unsubscribe from an event bus
- */
-@JvmSynthetic
-public fun Any.unsubscribeFrom(bus: EventBus) {
-    bus.unsubscribe(this)
-}
+@OptIn(ExperimentalContextualCancellation::class)
+public open class EventBus(public val name: String) {
 
+    private val events = mutableMapOf<Class<out Event>, NullEvent<(Event) -> Unit>>()
 
-public abstract class EventBus(private val id: String) {
-
-    private val listeners: MutableMap<Class<*>, EventListeners> = mutableMapOf()
-    private val handlers: MutableMap<Class<*>, Consumer<Any>> = mutableMapOf()
-
-    public inline fun <reified E : Event> register(priority: Int = 0, receiveCancelled: Boolean = false, noinline handler: (E) -> Unit) {
-        register(E::class.java, priority, receiveCancelled, handler)
+    public fun <E : Event> register(clazz: Class<E>, priority: Int = 0, listener: (E) -> Unit): Any  {
+        return getOrCreateEvent(clazz).subscribe(priority, listener as (Event) -> Unit)
     }
 
-    @JvmOverloads
-    public fun <E : Event> register(clazz: Class<E>, priority: Int = 0, receiveCancelled: Boolean = false, handler: (E) -> Unit) {
-        unregisterHandler(clazz)
-        listeners.getOrPut(clazz, ::EventListeners).addLambdaListener(clazz, handler, priority, receiveCancelled)
-    }
+    public inline fun <reified E : Event> register(priority: Int = 0, noinline listener: (E) -> Unit): Any =
+        register(E::class.java, priority, listener)
 
     public fun subscribe(instance: Any) {
-        val thing = if(instance is KClass<*>) instance.java else instance
-        if(thing is Class<*>) {
-            thing.declaredMethods.filter { Modifier.isStatic(it.modifiers) }
-                .forEach { registerMethod(it) }
-        } else {
-            thing.javaClass.declaredMethods.filter { !Modifier.isStatic(it.modifiers) }
-                .forEach { registerMethod(it, thing) }
+        val functions = when(val i = if (instance is KClass<*>) instance.java else instance) {
+            is Class<*> -> i.declaredMethods.filter { Modifier.isStatic(it.modifiers) }
+                .mapNotNull { it.kotlinFunction }
+            else -> i::class.declaredMemberFunctions
+        }
+
+        for (function in functions) {
+            val info = function.findAnnotation<Subscription>() ?: continue
+            val eventClass = function.parameters.singleOrNull()?.type?.jvmErasure?.java ?: continue
+
+            if (!Event::class.java.isAssignableFrom(eventClass)) continue
+            val event = getOrCreateEvent(eventClass.asSubclass(Event::class.java))
+            event.addListener(
+                event.createDirectListener(instance, function, info.priority)
+                    ?: event.createListener(instance, function as (Event) -> Unit, info.priority)
+            )
         }
     }
 
-    public inline fun <reified E : Event> unregister(noinline callback: (E) -> Unit) {
-        unregister(E::class.java, callback = callback)
+    public fun unregister(ref: Any) {
+        events.values.forEach { it.unsubscribe(ref) }
     }
 
-    public fun <E : Event> unregister(type: Class<E>, callback: (E) -> Unit) {
-        unregisterHandler(type)
-        listeners.values.forEach { it.removeListener(callback) }
+    public fun post(event: Event): Boolean {
+        getOrCreateEvent(event.javaClass).dispatcher(event)
+        return (event as? CancellableEvent)?.isCancelled ?: false
     }
 
-    public fun unsubscribe(instance: Any) {
-        val thing = if(instance is KClass<*>) instance.java else instance
-        if(thing is Class<*>) {
-            thing.declaredMethods.filter { Modifier.isStatic(it.modifiers) }
-                .forEach { unregisterMethod(it) }
-        } else {
-            thing.javaClass.declaredMethods.filter { !Modifier.isStatic(it.modifiers) }
-                .forEach { unregisterMethod(it) }
-        }
-    }
+    private fun getOrCreateEvent(clazz: Class<out Event>): NullEvent<(Event) -> Unit> =
+        events.getOrPut(clazz) {
+            val event = if (CancellableEvent::class.java.isAssignableFrom(clazz)) newEvent<(Event) -> Unit, _>(Unit, CANCELLATION_STRATEGY)
+            else newEvent<(Event) -> Unit>()
 
-    @Deprecated("context and onError don't do anything anymore", replaceWith = ReplaceWith("post"))
-    public fun post(
-        event: Event,
-        context: Any? = null,
-        onError: ((Throwable) -> Unit)? = null
-    ): Boolean = post(event)
-
-    public fun post(
-        event: Event,
-    ): Boolean {
-        getHandler(event.javaClass).accept(event)
-        return event.isCancelled
-    }
-
-    @CynosureInternal
-    public fun registerClassNode(classNode: ClassNode) {
-
-        val metadata = classNode.visibleAnnotations
-            ?.find { it.desc.descriptorToClassName() == Metadata::class.qualifiedName }
-            ?.mappedValues
-            ?.let {
-                Metadata(
-                    kind = it["k"] as? Int,
-                    metadataVersion = (it["mv"] as? List<Int>)?.toIntArray(),
-                    data1 = (it["d1"] as? List<String>)?.toTypedArray(),
-                    data2 = (it["d2"] as? List<String>)?.toTypedArray(),
-                    extraString = it["xs"] as? String,
-                    packageName = it["pn"] as? String,
-                    extraInt = it["xi"] as? Int
-                )
+            val superClass = clazz.superclass
+            if (superClass != Event::class.java) {
+                val superEvent = getOrCreateEvent(superClass.asSubclass(Event::class.java))
+                event.subscribe(NullEvent.LOWEST_PRIORITY) { superEvent.dispatcher(it) }
             }
-            ?.let(KotlinClassMetadata::readLenient)
 
-        val instanceFieldName: String?
-        val instanceFieldOwner: String?
-
-        if (metadata is KotlinClassMetadata.Class) {
-            val klass = metadata.kmClass
-            when (klass.kind) {
-                ClassKind.OBJECT -> {
-                    instanceFieldOwner = classNode.name
-                    instanceFieldName = "INSTANCE"
-                }
-                ClassKind.COMPANION_OBJECT -> {
-                    instanceFieldOwner = classNode.name.substringBeforeLast('\$')
-                    instanceFieldName = classNode.name.substringAfterLast('\$')
-                }
-                else ->  {
-                    instanceFieldOwner = null
-                    instanceFieldName = null
-                }
-            }
-        } else {
-            instanceFieldName = null
-            instanceFieldOwner = null
+            return event
         }
 
-        for (method in classNode.methods) {
+    override fun toString(): String = name
 
-            if (method.parameters != null && method.parameters.size != 1) continue
-
-            val options = method.visibleAnnotations
-                ?.find { it.desc.descriptorToClassName() == Subscription::class.java.canonicalName }
-                ?.mappedValues
-                ?: continue
-
-            registerASMMethod(classNode.name, method.name, method.desc, options, instanceFieldName, instanceFieldOwner)
-        }
+    public companion object {
+        private val CANCELLATION_STRATEGY = CancellationStrategy.Contextual<Unit> { _: Unit, evt: CancellableEvent -> evt.isCancelled }
     }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun registerASMMethod(className: String, methodName: String, methodDesc: String, options: Map<String, Any?>, instanceFieldName: String?, instanceFieldOwner: String?) {
-
-        val priority = options["priority"] as? Int ?: 0
-        val receiveCancelled = options["receiveCancelled"] as? Boolean ?: false
-
-        val event = Class.forName(methodDesc.substringAfter("(").substringBefore(")").descriptorToClassName())
-        if (!Event::class.java.isAssignableFrom(event)) return
-        unregisterHandler(event)
-        listeners.getOrPut(event as Class<Event>, ::EventListeners).add(EventListener(
-            event, className, methodName, methodDesc,
-            instanceFieldName?.let { InvokerType.VirtualWithOwner(it, instanceFieldOwner!!) } ?: InvokerType.Static,
-            priority, receiveCancelled, "$className.$methodName$methodDesc"
-        ))
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun registerMethod(method: Method, instance: Any? = null) {
-        if (method.parameterCount != 1) return
-        val options = method.getAnnotation(Subscription::class.java) ?: return
-
-        val event = method.parameterTypes[0]
-        if (!Event::class.java.isAssignableFrom(event)) return
-        unregisterHandler(event)
-        listeners.getOrPut(event as Class<Event>, ::EventListeners)
-            .addMethodListener(event, method, instance, options.priority, options.receiveCancelled)
-    }
-
-    private fun unregisterMethod(method: Method) {
-        if (method.parameterCount != 1) return
-        method.getAnnotation(Subscription::class.java) ?: return
-
-        val event = method.parameterTypes[0]
-        if (!Event::class.java.isAssignableFrom(event)) return
-        unregisterHandler(event)
-        listeners.values.forEach { it.removeListener(method) }
-    }
-
-    private fun <T : Event> getHandler(event: Class<T>): Consumer<Any> = handlers[event] ?: getEventClasses(event)
-        .flatMap { listeners[it] ?: emptyList() }
-        .sortedBy(EventListener::priority)
-        .createHandler(event)
-        .also { if (!event.isAnnotationPresent(SinglePostEvent::class.java)) handlers[event] = it }
-
-    private fun unregisterHandler(clazz: Class<*>) = this.handlers.keys
-        .filter { it.isAssignableFrom(clazz) }
-        .forEach(this.handlers::remove)
-
-
-    private fun getEventClasses(clazz: Class<*>): List<Class<*>> {
-        val classes = mutableListOf<Class<*>>()
-        classes.add(clazz)
-
-        var current = clazz
-        while (current.superclass != null) {
-            val superClass = current.superclass
-            if (superClass == Any::class.java
-                || superClass.getAnnotation(RootEventClass::class.java) != null) break
-            classes.add(superClass)
-            current = superClass
-        }
-        return classes
-    }
-
-    override fun toString(): String  = id
 }
-
-@CynosureInternal
-public val CynosureEventLogger: Logger = LoggerFactory.getLogger("Cynosure Event Registration")

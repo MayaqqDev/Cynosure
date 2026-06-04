@@ -12,7 +12,7 @@ plugins {
     kotlin("plugin.serialization") version libs.versions.kotlin
     // Need to explicitly set ksp versions cs cloche loads an old version by default
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
-    id("dev.isxander.secrets") version "0.1.0"
+    //id("dev.isxander.secrets") version "0.1.0"
     `maven-publish`
 }
 
@@ -70,7 +70,7 @@ cloche {
             api(libs.kotlinx.coroutines)
             api(libs.bytecodecs)
             api(libs.javax.annotations)
-            modCompileOnly(libs.kritter)
+            implementation(libs.nullevt)
         }
     }
 
@@ -147,7 +147,7 @@ cloche {
 
         dependencies {
             api(libs.forge.kotlin)
-            modImplementation(libs.forge.kritter)
+            modImplementation(skipIncludeTransformation(libs.forge.kritter))
             api(libs.javax.annotations)
 
             include(libs.forge.mixinextras) { isTransitive = false }
@@ -203,82 +203,19 @@ publishing {
     }
 
     repositories {
-        val username = try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/username"] } catch (_: Exception) { null }
-        val password = try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/password"] } catch (_: Exception) { null }
-        if (username != null && password != null) {
-            maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
-                name = "sapphoCompany"
-                credentials {
-                    this.username = username.get() as String?
-                    this.password = password.get()
-                }
-            }
-        } else {
-            println("Sappho Company credentials not present.")
-        }
-    }
-}
-
-tasks.named("createCommonApiStub", GenerateStubApi::class) {
-    excludes.add(libs.kritter.get().group)
-}
-
-publishMods {
-    val loaders = arrayOf(
-        PublishMetadata(
-            "Fabric",
-            arrayOf("fabric", "quilt"),
-            arrayOf("fabric-api", "fabric-language-kotlin"),
-            cloche.targets["fabric"].finalJar.flatMap(Jar::getArchiveFile),
-            "-fabric"
-        ),
-        PublishMetadata(
-            "Forge",
-            arrayOf("forge"),
-            arrayOf("kotlin-for-forge"),
-            cloche.targets["forge"].finalJar.flatMap(Jar::getArchiveFile),
-            "-forge"
-        )
-    )
-    val mcVersion = "1.20.1"
-    changelog = file("CHANGELOG.md").readText().replace("@VERSION@", modVersion)
-    type = BETA
-
-    val optionsCurseforge = curseforgeOptions {
-        accessToken = onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Curseforge/Mod Publish Api Token"]
-        minecraftVersions.add(mcVersion)
-        projectId = "1259952"
-        javaVersions.add(JavaVersion.VERSION_17)
-        clientRequired = true
-        serverRequired = true
-    }
-
-    val optionsModrinth = modrinthOptions {
-        accessToken = onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Modrinth/Mod Publish Api Token"]
-        projectId = "4JVfdODB"
-        minecraftVersions.add(mcVersion)
-    }
-
-    loaders.forEach { loader ->
-        loader.apply {
-            curseforge("curseforge$loaderName") {
-                from(optionsCurseforge)
-                modLoaders.addAll(*modloaders)
-                file = jar
-                displayName = "$mod_name $modVersion $loaderName"
-                version = "$modVersion$suffix"
-                requires(*requires)
-            }
-
-            modrinth("modrinth$loaderName") {
-                from(optionsModrinth)
-                modLoaders.addAll(*modloaders)
-                file = jar
-                displayName = "$mod_name $modVersion $loaderName"
-                version = "$modVersion$suffix"
-                requires(*requires)
-            }
-        }
+        val username = null // try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/username"] } catch (_: Exception) { null }
+        val password = null // try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/password"] } catch (_: Exception) { null }
+//        if (username != null && password != null) {
+//            maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
+//                name = "sapphoCompany"
+//                credentials {
+//                    this.username = username.get() as String?
+//                    this.password = password.get()
+//                }
+//            }
+//        } else {
+//            println("Sappho Company credentials not present.")
+//        }
     }
 }
 

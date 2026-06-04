@@ -80,7 +80,7 @@ internal class InternalForgeCynosureBiomeModifier(val ops: RegistryOps<*>) : Bio
 }
 
 internal object CarverRegistry {
-    var BIOME_MODIFIER_SERIALIZERS: DeferredRegister<Codec<out BiomeModifier>> =
+    val BIOME_MODIFIER_SERIALIZERS: DeferredRegister<Codec<out BiomeModifier>> =
         DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MODID)
 
     val REGISTRY_OPS_CODEC: Codec<RegistryOps<*>> = Codec.PASSTHROUGH.comapFlatMap(
@@ -88,7 +88,7 @@ internal object CarverRegistry {
         { ops -> Dynamic(ops) },
     )
 
-    var CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register(MODID) {
+    val CYNOSURE_BIOME_MODIFIER_CODEC: RegistryObject<Codec<InternalForgeCynosureBiomeModifier>> = BIOME_MODIFIER_SERIALIZERS.register(MODID) {
         REGISTRY_OPS_CODEC.xmap(::InternalForgeCynosureBiomeModifier, InternalForgeCynosureBiomeModifier::ops)
     }
 }

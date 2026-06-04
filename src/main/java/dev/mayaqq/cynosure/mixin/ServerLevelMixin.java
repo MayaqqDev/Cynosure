@@ -4,8 +4,11 @@ import dev.mayaqq.cynosure.level.BlockUpdateListener;
 import dev.mayaqq.cynosure.level.UpdateListenerSet;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceMap;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceOpenHashMap;
+import kotlin.reflect.KDeclarationContainer;
+import kotlin.reflect.jvm.internal.KPackageImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,6 +21,7 @@ public class ServerLevelMixin extends LevelMixin {
 
     @Override
     public void cynosure_addUpdateListener(BlockUpdateListener listener) {
+        KDeclarationContainer
         if(cynosure$updateListeners == null) cynosure$updateListeners = new Long2ReferenceOpenHashMap<>();
         for(BlockPos pos : listener.getListenedPositions()) {
             long longPos = pos.asLong();
@@ -39,7 +43,9 @@ public class ServerLevelMixin extends LevelMixin {
         long longPos = pos.asLong();
         BlockUpdateListener listener = cynosure$updateListeners.get(longPos);
         if (listener != null) {
-            if (listener.shouldRemove((ServerLevel) (Object) this)) cynosure$updateListeners.remove(longPos);
+            if (listener.shouldRemove((ServerLevel) (Object) this)
+                || listener instanceof BlockEntity be && be.isRemoved())
+                cynosure$updateListeners.remove(longPos);
             else listener.onBlockUpdate((ServerLevel) (Object) this, pos, state);
         }
     }

@@ -41,7 +41,7 @@ public sealed class FallingBlockEvent(
     public val level: Level,
     public open val fallingState: BlockState,
     public val entity: FallingBlockEntity
-) : Event {
+) : Event() {
 
     public class Fall(
         level: Level,
@@ -65,11 +65,8 @@ public sealed class FallingBlockEvent(
     ) : FallingBlockEvent(level, fallingState, entity) {
 
         /**
-         * Custom block state placed by the falling block, setting this also cancels the event
+         * Custom block state placed by the falling block
          */
         public var placedState: BlockState? = null
-
-        override val isCancelled: Boolean
-            get() = placedState != null
     }
 }

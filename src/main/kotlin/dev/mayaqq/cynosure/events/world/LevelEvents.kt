@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level
 
 public sealed class LevelEvent(
     public open val level: Level
-) : Event {
+) : Event() {
     public val isClientSide: Boolean
         get() = level.isClientSide
 

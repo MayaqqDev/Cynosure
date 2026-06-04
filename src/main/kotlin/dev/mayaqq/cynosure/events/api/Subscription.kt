@@ -1,6 +1,6 @@
 package dev.mayaqq.cynosure.events.api
 
-import dev.mayaqq.cynosure.core.Environment
+import invoke.kitty.kritter.platform.Side
 import kotlin.reflect.KClass
 
 /**
@@ -14,12 +14,7 @@ public annotation class Subscription(
     /**
      * The priority of when the event will be called, lower priority will be called first, see the companion object.
      */
-    val priority: Int = 0,
-
-    /**
-     * If the event is cancelled & receiveCancelled is true, then the method will still invoke.
-     */
-    val receiveCancelled: Boolean = false,
+    val priority: Int = 0
 ) {
 
     public companion object {
@@ -46,11 +41,5 @@ public annotation class EventSubscriber(
     /**
      * Environment in which this event will be registered
      */
-    vararg val env: Environment = [Environment.SERVER, Environment.CLIENT],
-
-    /**
-     * Event bus object to add the subscriptions to. Defaults to [MainBus]
-     */
-    val bus: KClass<out EventBus> = MainBus::class
-
+    vararg val value: Side = [Side.SERVER, Side.CLIENT]
 )

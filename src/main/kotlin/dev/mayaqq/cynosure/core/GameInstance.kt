@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.core
 
 import dev.mayaqq.cynosure.internal.loadPlatform
+import invoke.kitty.kritter.platform.Side
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.TickTask
 import net.minecraft.util.thread.BlockableEventLoop
@@ -11,9 +12,9 @@ public interface GameInstance {
 
     public val currentServer: MinecraftServer?
 
-    public fun getEventLoop(side: Environment): BlockableEventLoop<in TickTask>
+    public fun getEventLoop(side: Side): BlockableEventLoop<in TickTask>
 
-    public fun execute(side: Environment, action: Runnable) {
+    public fun execute(side: Side, action: Runnable) {
         getEventLoop(side).execute(action)
     }
 

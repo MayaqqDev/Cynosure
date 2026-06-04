@@ -1,5 +1,7 @@
 package dev.mayaqq.cynosure.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mayaqq.cynosure.client.render.BufferOutputStage;
@@ -18,24 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
 public class LevelRendererMixin {
 
+    @Definition(id = "endBatch", method = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V")
+    @Definition(id = "entitySmoothCutout", method = "Lnet/minecraft/client/renderer/RenderType;entitySmoothCutout(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;")
+    @Expression("?.endBatch(entitySmoothCutout(?))")
     @Inject(
         method = "renderLevel",
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/renderer/RenderType;entitySmoothCutout(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;"),
-            to = @At(
-                value = "INVOKE_STRING",
-                target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V",
-                args = "ldc=blockentities"
-            )
-        ),
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
+        at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER)
     )
     public void flushEntitiesPhase(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci, @Local MultiBufferSource.BufferSource bufferSource) {
         for(RenderType renderType : RenderTypeRegistry.PHASES.get(BufferOutputStage.ENTITY)) {
@@ -43,50 +33,25 @@ public class LevelRendererMixin {
         }
     }
 
+    @Definition(id = "endBatch", method = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V")
+    @Definition(id = "chestSheet", method = "Lnet/minecraft/client/renderer/Sheets;chestSheet()Lnet/minecraft/client/renderer/RenderType;")
+    @Expression("?.endBatch(chestSheet())")
     @Inject(
         method = "renderLevel",
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/renderer/Sheets;chestSheet()Lnet/minecraft/client/renderer/RenderType;"
-            ),
-            to = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/renderer/OutlineBufferSource;endOutlineBatch()V")
-        ),
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
+        at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER)
     )
-
     public void flushSolidPhase(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci, @Local MultiBufferSource.BufferSource bufferSource) {
         for(RenderType renderType : RenderTypeRegistry.PHASES.get(BufferOutputStage.BLOCK_ENTITY)) {
             bufferSource.endBatch(renderType);
         }
     }
 
+    @Definition(id = "endBatch", method = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V")
+    @Definition(id = "waterMask", method = "Lnet/minecraft/client/renderer/RenderType;waterMask()Lnet/minecraft/client/renderer/RenderType;")
+    @Expression("?.endBatch(waterMask())")
     @Inject(
         method = "renderLevel",
-        slice = @Slice(
-            from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/renderer/RenderType;waterMask()Lnet/minecraft/client/renderer/RenderType;"
-            ),
-            to = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/client/renderer/LevelRenderer;transparencyChain:Lnet/minecraft/client/renderer/PostChain;",
-                opcode = Opcodes.GETFIELD
-            )
-        ),
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V",
-            shift = At.Shift.AFTER,
-            ordinal = 0
-        )
+        at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER)
     )
     public void flushTranslucentPhase(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci, @Local MultiBufferSource.BufferSource bufferSource) {
         for(RenderType renderType : RenderTypeRegistry.PHASES.get(BufferOutputStage.TRANSLUCENT)) {

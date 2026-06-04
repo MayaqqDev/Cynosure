@@ -1,13 +1,15 @@
 package dev.mayaqq.cynosure.fabric.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mayaqq.cynosure.client.events.CynosureWorldRenderEventHandler;
+import dev.mayaqq.cynosure.client.render.BufferOutputStage;
+import dev.mayaqq.cynosure.client.render.RenderTypeRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.client.renderer.*;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;

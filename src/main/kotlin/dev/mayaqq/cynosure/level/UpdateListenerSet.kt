@@ -1,13 +1,15 @@
 package dev.mayaqq.cynosure.level
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 internal class UpdateListenerSet(vararg values: BlockUpdateListener) : BlockUpdateListener {
 
-    private val listeners: MutableSet<BlockUpdateListener> = ObjectArraySet(values)
+    private val listeners: MutableSet<BlockUpdateListener> = ObjectOpenHashSet(values)
 
     override val listenedPositions: Iterable<BlockPos>
         get() = throw UnsupportedOperationException("Cant get listened positions of an update listener holder")
@@ -18,7 +20,10 @@ internal class UpdateListenerSet(vararg values: BlockUpdateListener) : BlockUpda
         var shouldRemove = true
         while (iterator.hasNext()) {
             val listener = iterator.next()
-            if (listener.shouldRemove(level)) iterator.remove() else shouldRemove = false
+            if (listener.shouldRemove(level) || listener is BlockEntity && listener.isRemoved)
+                iterator.remove()
+            else
+                shouldRemove = false
         }
         return shouldRemove
     }

@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.core
 
 import dev.mayaqq.cynosure.core.mod.Mod
 import dev.mayaqq.cynosure.internal.loadPlatform
+import invoke.kitty.kritter.platform.Side
 import java.nio.file.Path
 
 public fun isModLoaded(modid: String): Boolean = PlatformHooks.isModLoaded(modid)
@@ -21,7 +22,7 @@ public enum class Loader {
 public interface PlatformHooks {
     public companion object Impl : PlatformHooks by loadPlatform()
 
-    public val environment: Environment
+    public val environment: Side
 
     public val devEnvironment: Boolean
 

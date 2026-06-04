@@ -4,6 +4,7 @@ package dev.mayaqq.cynosure.utils
 
 import dev.mayaqq.cynosure.utils.function.and
 import dev.mayaqq.cynosure.utils.unsafe.*
+import invoke.kitty.kritter.support.ObtainTheImplLookup
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.VarHandle
 import java.lang.reflect.Constructor
@@ -65,10 +66,7 @@ public class EnumBuilder<T : Enum<T>>(private val enumClass: Class<T>, private v
     }
 
     private companion object {
-        private val TRUSTED_LOOKUP: MethodHandles.Lookup = MethodHandles.Lookup::class.java
-            .getDeclaredField("IMPL_LOOKUP")
-            .apply { isAccessible = true }
-            .get(null) as MethodHandles.Lookup
+        private val TRUSTED_LOOKUP: MethodHandles.Lookup = ObtainTheImplLookup.getImplLookup()
 
         private val ENUM_CONSTANTS: VarHandle = TRUSTED_LOOKUP.unreflectVarHandle(
             getField<Class<*>> { it.name == "enumConstants" }

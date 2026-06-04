@@ -5,7 +5,7 @@ import net.minecraft.server.MinecraftServer
 
 public sealed class ServerEvent(
     public val server: MinecraftServer
-) : Event {
+) : Event() {
 
     public class Starting(server: MinecraftServer) : ServerEvent(server)
 

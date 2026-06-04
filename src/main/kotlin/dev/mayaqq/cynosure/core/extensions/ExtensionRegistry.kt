@@ -2,11 +2,14 @@ package dev.mayaqq.cynosure.core.extensions
 
 import dev.mayaqq.cynosure.Cynosure
 import java.util.*
+import kotlin.reflect.KClass
 
 public abstract class ExtensionRegistry<T : Any, Ext : Extension<T>>(
     private val baseClass: Class<T>,
     private val baseExtension: Class<Ext>
 ) {
+
+    constructor(baseClass: KClass<T>, baseExtension: KClass<Ext>) : this(baseClass.java, baseExtension.java)
 
     // TODO: Probably switch to using AttachedRegistry here somehow
     // TODO: Add deferred registration

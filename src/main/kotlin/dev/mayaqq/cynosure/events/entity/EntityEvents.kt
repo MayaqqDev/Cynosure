@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level
 public sealed class EntityTrackingEvent(
     public val entity: Entity,
     public val player: ServerPlayer
-) : Event {
+) : Event() {
     /**
      * Invoked when an entity starts tracking the player
      */

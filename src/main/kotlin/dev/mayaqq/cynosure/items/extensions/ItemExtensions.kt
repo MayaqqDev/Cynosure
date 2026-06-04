@@ -2,7 +2,6 @@ package dev.mayaqq.cynosure.items.extensions
 
 import dev.mayaqq.cynosure.core.extensions.Extension
 import dev.mayaqq.cynosure.core.extensions.ExtensionRegistry
-import dev.mayaqq.cynosure.items.extensions.ItemExtension.Registry.register
 import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
@@ -24,7 +23,7 @@ public interface ItemExtension : Extension<Item> {
     /**
      * Companion object providing registry functionality
      */
-    public companion object Registry : ExtensionRegistry<Item, ItemExtension>(Item::class.java, ItemExtension::class.java)
+    public companion object Registry : ExtensionRegistry<Item, ItemExtension>(Item::class, ItemExtension::class)
 }
 
 public fun <E : ItemExtension> Item.registerExtension(extension: E, allowOverride: Boolean = false) {

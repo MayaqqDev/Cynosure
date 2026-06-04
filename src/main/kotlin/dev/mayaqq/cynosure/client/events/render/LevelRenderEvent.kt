@@ -20,7 +20,7 @@ public sealed class LevelRenderEvent(
     public val camera: Camera,
     public val frustum: Frustum?,
     public val bufferSource: MultiBufferSource?
-) : Event {
+) : Event() {
 
     /**
      * Fired at the beginning of [LevelRenderer.renderLevel].

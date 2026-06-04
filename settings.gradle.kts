@@ -1,6 +1,5 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "cynosure"
-
 pluginManagement {
     repositories {
         mavenLocal()
@@ -25,4 +24,11 @@ dependencyResolutionManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
+}
+
+buildscript {
+    dependencies {
+        classpath("org.ow2.asm:asm:9.8")
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
+    }
 }

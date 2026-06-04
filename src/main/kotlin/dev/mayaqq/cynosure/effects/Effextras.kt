@@ -1,7 +1,7 @@
 @file:JvmName("Effextras")
 package dev.mayaqq.cynosure.effects
 
-import dev.mayaqq.cynosure.utils.mapBacked
+import invoke.kitty.kritter.utils.mapBacked
 import net.minecraft.world.effect.MobEffect
 
 ///**

@@ -36,7 +36,7 @@ public class CommandRegistrationEvent(
     public val dispatcher: CommandDispatcher<CommandSourceStack>,
     public val context: CommandBuildContext,
     public val selection: Commands.CommandSelection
-) : Event {
+) : Event() {
     public fun register(command: LiteralArgumentBuilder<CommandSourceStack>) {
         dispatcher.register(command)
     }
