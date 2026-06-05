@@ -99,11 +99,6 @@ cloche {
                     startInclusive = true
                 }
             }
-
-            entrypoint("preLaunch") {
-                adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.CynosureFabricPreLaunchKt::onPreLaunch")
-            }
             entrypoint("main") {
                 adapter.set("kotlin")
                 value.set("dev.mayaqq.cynosure.CynosureFabric::init")
