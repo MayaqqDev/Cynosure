@@ -2,7 +2,12 @@ package dev.mayaqq.cynosure.client.models.baked
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
-import dev.mayaqq.cynosure.utils.colors.*
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.White
+import invoke.kitty.kritter.utils.color.floatAlpha
+import invoke.kitty.kritter.utils.color.floatBlue
+import invoke.kitty.kritter.utils.color.floatGreen
+import invoke.kitty.kritter.utils.color.floatRed
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.texture.OverlayTexture
 import org.joml.Vector3f

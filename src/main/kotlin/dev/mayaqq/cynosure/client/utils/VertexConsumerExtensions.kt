@@ -1,8 +1,8 @@
 package dev.mayaqq.cynosure.client.utils
 
 import com.mojang.blaze3d.vertex.VertexConsumer
-import dev.mayaqq.cynosure.utils.colors.Color
-import dev.mayaqq.cynosure.utils.colors.White
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.White
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.Direction
@@ -10,7 +10,7 @@ import net.minecraft.core.Direction.Axis
 import net.minecraft.core.Direction.AxisDirection
 
 public fun VertexConsumer.color(color: Color): VertexConsumer {
-    this.color(color.value)
+    this.color(color.toInt())
     return this
 }
 

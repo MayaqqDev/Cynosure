@@ -2,14 +2,15 @@ package dev.mayaqq.cynosure.helpers
 
 import dev.mayaqq.cynosure.client.enviroment.ClientOnly
 import dev.mayaqq.cynosure.client.enviroment.ClientOnlyException
-import dev.mayaqq.cynosure.core.isClient
+import invoke.kitty.kritter.platform.ENVIRONMENT
+import invoke.kitty.kritter.platform.Side
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import java.util.UUID
 
 @ClientOnly
-public val McPlayer: Player? get() = if (isClient) McClient.player else throw ClientOnlyException()
+public val McPlayer: Player? get() = if (ENVIRONMENT == Side.CLIENT) McClient.player else throw ClientOnlyException()
 
 public val Player.name: String get() = this.gameProfile.name
 public val Player.uuid: UUID get() = this.gameProfile.id

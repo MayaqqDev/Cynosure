@@ -23,4 +23,4 @@ public class EndHudRenderEvent(
     public val gui: Gui,
     public val graphics: GuiGraphics,
     public val partialTicks: Float
-) : Event
+) : Event()

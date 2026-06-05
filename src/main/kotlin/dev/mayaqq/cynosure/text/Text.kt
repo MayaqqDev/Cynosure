@@ -6,10 +6,10 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.StringUtil
 import dev.mayaqq.cynosure.text.Text.asComponent
 import dev.mayaqq.cynosure.text.TextStyle.color
-import dev.mayaqq.cynosure.utils.colors.Color
-import dev.mayaqq.cynosure.utils.colors.McRed
-import dev.mayaqq.cynosure.utils.colors.White
-import dev.mayaqq.cynosure.utils.colors.minecraft.toColor
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.MinecraftColors
+import invoke.kitty.kritter.utils.color.White
+import invoke.kitty.kritter.utils.color.rgb
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.Level
 import java.util.*
@@ -21,7 +21,7 @@ public object CommonText {
     public val SPACE: MutableComponent = " ".asComponent()
     public val EMPTY: MutableComponent = "".asComponent()
 
-    internal val PREFIX = Text.of("[Cynosure] ") { color = McRed }
+    internal val PREFIX = Text.of("[Cynosure] ") { color = MinecraftColors.Red }
 }
 
 public object Text {
@@ -190,7 +190,7 @@ public object TextStyle {
         }
 
     public var MutableComponent.color: Color
-        get() = this.style.color?.toColor() ?: White
+        get() = this.style.color?.value?.let { return@let rgb(it) } ?: White
         set(value) {
             this.style { withColor(value.toInt()) }
         }

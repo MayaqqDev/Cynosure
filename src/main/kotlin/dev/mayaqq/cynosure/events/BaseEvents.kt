@@ -9,7 +9,7 @@ import net.minecraft.world.InteractionResultHolder
 /**
  * Common post init event, equivalent to fabric's Client and Server entrypoints and forge's FMLCommonSetupEvent
  */
-public object PostInitEvent : Event
+public object PostInitEvent : Event()
 
 @RootEventClass
 public abstract class InteractionResultEvent : ReturningEvent<InteractionResult>() {

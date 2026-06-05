@@ -20,4 +20,4 @@ public class ModifyTooltipComponentsEvent(
     public val flag: TooltipFlag,
     public val player: Player?,
     components: MutableList<Component>
-) : Event, MutableList<Component> by components
+) : Event(), MutableList<Component> by components

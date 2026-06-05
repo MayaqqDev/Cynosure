@@ -7,7 +7,7 @@ import dev.mayaqq.cynosure.client.models.animations.AnimationDefinition
 import dev.mayaqq.cynosure.client.models.animations.animate
 import dev.mayaqq.cynosure.client.models.baked.BakedModelTree
 import dev.mayaqq.cynosure.client.models.baked.CustomBakedModel
-import dev.mayaqq.cynosure.utils.colors.Color
+import invoke.kitty.kritter.utils.color.rgba
 import net.minecraft.client.model.EntityModel
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.AnimationState
@@ -33,7 +33,7 @@ public class DataBasedModel<E : Entity>(
         poseStack: PoseStack, buffer: VertexConsumer, light: Int, overlay: Int, r: Float, g: Float, b: Float, a: Float
     ) {
         poseStack.pushPose()
-        innerModel.render(buffer, poseStack, Color(r, g, b, a), light, overlay)
+        innerModel.render(buffer, poseStack, rgba(r, g, b, a), light, overlay)
         poseStack.popPose()
     }
 

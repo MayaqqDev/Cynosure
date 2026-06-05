@@ -1,7 +1,7 @@
 package dev.mayaqq.cynosure.events.world
 
-import dev.mayaqq.cynosure.core.Environment
 import dev.mayaqq.cynosure.events.api.Event
+import invoke.kitty.kritter.platform.Side
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 
@@ -11,8 +11,8 @@ public sealed class LevelEvent(
     public val isClientSide: Boolean
         get() = level.isClientSide
 
-    public val side: Environment
-        get() = if(level.isClientSide) Environment.CLIENT else Environment.SERVER
+    public val side: Side
+        get() = if(level.isClientSide) Side.CLIENT else Side.SERVER
 
     public class Load(level: Level) : LevelEvent(level)
 

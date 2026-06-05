@@ -5,12 +5,11 @@ import com.mojang.serialization.*
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.teamresourceful.bytecodecs.base.ByteCodec
 import com.teamresourceful.bytecodecs.base.ObjectEntryByteCodec
-import dev.mayaqq.cynosure.utils.Either
-import dev.mayaqq.cynosure.utils.dfu.DFUPair
-import dev.mayaqq.cynosure.utils.dfu.toDFU
-import dev.mayaqq.cynosure.utils.dfu.toKt
-import dev.mayaqq.cynosure.utils.foldToLeft
 import dev.mayaqq.cynosure.utils.result.toDataResult
+import invoke.kitty.kritter.utils.Either
+import invoke.kitty.kritter.utils.dfu.DFUPair
+import invoke.kitty.kritter.utils.dfu.toDFU
+import invoke.kitty.kritter.utils.dfu.toKt
 import net.minecraft.core.Registry
 import kotlin.reflect.KProperty1
 

@@ -1,8 +1,8 @@
 package dev.mayaqq.cynosure.utils.result
 
-import dev.mayaqq.cynosure.utils.Either
-import dev.mayaqq.cynosure.utils.Either.Left
-import dev.mayaqq.cynosure.utils.Either.Right
+import invoke.kitty.kritter.utils.Either
+import invoke.kitty.kritter.utils.Either.Left
+import invoke.kitty.kritter.utils.Either.Right
 
 public val Result.Companion.UNIT: Result<Unit> get() = success(Unit)
 

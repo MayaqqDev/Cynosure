@@ -29,5 +29,5 @@ public sealed class LoottableEvents(
     public class AllLoaded(
         public val resourceManager: ResourceManager,
         public val lootManager: LootDataManager
-    ) : Event
+    ) : Event()
 }

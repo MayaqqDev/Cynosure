@@ -18,6 +18,6 @@ public sealed class PlayerConnectionEvent(public val player: ServerPlayer) : Eve
     public class Leave(player: ServerPlayer) : PlayerConnectionEvent(player)
 }
 
-public class PlayerRestoreEvent(public val player: Player, public val alive: Boolean) : Event
+public class PlayerRestoreEvent(public val player: Player, public val alive: Boolean) : Event()
 
-public class PlayerRespawnEvent(public val newPlayer: ServerPlayer, public val oldPlayer: ServerPlayer, public val alive: Boolean) : Event
+public class PlayerRespawnEvent(public val newPlayer: ServerPlayer, public val oldPlayer: ServerPlayer, public val alive: Boolean) : Event()

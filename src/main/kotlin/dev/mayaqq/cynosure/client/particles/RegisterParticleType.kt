@@ -12,7 +12,6 @@ import net.minecraft.core.particles.ParticleOptions
 
 public typealias SafeParticleFactory<T> = (T, ClientLevel, x: Double, y: Double, z: Double, xSpeed: Double, ySpeed: Double, zSpeed: Double) -> Particle
 
-@OptIn(NotUsableInBuilder::class)
 public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinline factory: SafeParticleFactory<T>) {
     clientOnly {
         MainBus.register<ParticleFactoryRegistrationEvent> {
@@ -23,7 +22,6 @@ public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinl
     }
 }
 
-@OptIn(NotUsableInBuilder::class)
 public inline fun <T : ParticleOptions> ParticleTypeBuilder<T>.provider(crossinline factory: (SpriteSet) -> ParticleProvider<T>) {
     clientOnly {
         MainBus.register<ParticleFactoryRegistrationEvent> {

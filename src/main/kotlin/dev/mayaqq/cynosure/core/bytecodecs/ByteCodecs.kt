@@ -7,11 +7,10 @@ import com.teamresourceful.bytecodecs.utils.ByteBufUtils
 import dev.mayaqq.cynosure.core.bytecodecs.item.ItemStackByteCodec
 import dev.mayaqq.cynosure.core.codecs.IngredientCodec
 import dev.mayaqq.cynosure.core.codecs.fieldOf
-import dev.mayaqq.cynosure.utils.Either
-import dev.mayaqq.cynosure.utils.Either.Left
-import dev.mayaqq.cynosure.utils.Either.Right
-import dev.mayaqq.cynosure.utils.isLeft
-import dev.mayaqq.cynosure.utils.isRight
+import invoke.kitty.kritter.utils.Either
+import invoke.kitty.kritter.utils.Either.Left
+import invoke.kitty.kritter.utils.Either.Right
+import invoke.kitty.kritter.utils.isRight
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream

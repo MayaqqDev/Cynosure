@@ -3,10 +3,9 @@ package dev.mayaqq.cynosure.client.models
 import dev.mayaqq.cynosure.client.models.baked.*
 import dev.mayaqq.cynosure.client.utils.grow
 import dev.mayaqq.cynosure.client.utils.shrink
-import dev.mayaqq.cynosure.utils.getValue
-import dev.mayaqq.cynosure.utils.into
 import dev.mayaqq.cynosure.utils.normalized
 import dev.mayaqq.cynosure.utils.radians
+import invoke.kitty.kritter.utils.getValue
 import it.unimi.dsi.fastutil.ints.IntArraySet
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
@@ -16,10 +15,10 @@ import net.minecraft.core.Direction.Axis
 import net.minecraft.util.Mth
 import org.joml.*
 
-private val BAKERY: ModelBakery by ThreadLocal.withInitial(::ModelBakery)
+private val BAKERY: ModelBakery? by ThreadLocal.withInitial(::ModelBakery)
 
 public fun ModelData.bake(): Result<CustomBakedModel> = runCatching {
-    if (groups.isEmpty()) BAKERY.bakeSimple(this) else BAKERY.bakeAnimatable(this)
+    if (groups.isEmpty()) BAKERY!!.bakeSimple(this) else BAKERY!!.bakeAnimatable(this)
 }
 
 private const val RESCALE_22_5 = 0.08239221f
@@ -43,7 +42,7 @@ private class ModelBakery {
     }
 
     fun bakeAnimatable(data: ModelData): BakedModelTree {
-        val ungrouped = 0..<data.elements.size into intSetOf(data.elements.size)
+        val ungrouped = intSetOf(data.elements.size).apply { addAll(data.elements.indices) }
 
         resetBounds()
         val rootGroups = data.groups.associate {

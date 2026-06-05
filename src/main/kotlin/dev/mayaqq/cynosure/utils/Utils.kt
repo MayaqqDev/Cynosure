@@ -1,16 +1,12 @@
 package dev.mayaqq.cynosure.utils
 
-import com.google.common.collect.MapMaker
 import com.google.common.collect.Table
-import dev.mayaqq.cynosure.core.Environment
+import invoke.kitty.kritter.platform.Side
 import net.minecraft.world.level.Level
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.properties.ReadOnlyProperty
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
 
 @OptIn(ExperimentalContracts::class)
@@ -22,8 +18,8 @@ public inline fun <T> make(thing: T, maker: T.() -> Unit): T {
     return thing
 }
 
-public val Level.side: Environment
-    get() = if (isClientSide) Environment.CLIENT else Environment.SERVER
+public val Level.side: Side
+    get() = if (isClientSide) Side.CLIENT else Side.SERVER
 
 internal inline fun <reified S> loadService(loader: ClassLoader = S::class.java.classLoader): ServiceLoader<S> = ServiceLoader.load(S::class.java, S::class.java.classLoader)
 

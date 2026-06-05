@@ -1,10 +1,10 @@
 package dev.mayaqq.cynosure.utils.coroutines
 
-import dev.mayaqq.cynosure.core.Environment
 import dev.mayaqq.cynosure.core.GameInstance
-import dev.mayaqq.cynosure.core.PlatformHooks
-import dev.mayaqq.cynosure.utils.constant
-import dev.mayaqq.cynosure.utils.mapBacked
+import invoke.kitty.kritter.platform.ENVIRONMENT
+import invoke.kitty.kritter.platform.Side
+import invoke.kitty.kritter.utils.constant
+import invoke.kitty.kritter.utils.mapBacked
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
@@ -16,7 +16,7 @@ import java.util.concurrent.Executor
 import kotlin.coroutines.CoroutineContext
 
 public val Dispatchers.MinecraftClient: CoroutineDispatcher by lazy {
-    if(PlatformHooks.environment == Environment.CLIENT)
+    if(ENVIRONMENT == Side.CLIENT)
         MinecraftCoroutineDispatcher(Minecraft.getInstance())
     else error("Tried to access minecraft client dispatcher from server environment")
 }

@@ -1,3 +1,4 @@
+
 package dev.mayaqq.cynosure.client.entity
 
 import dev.mayaqq.cynosure.internal.loadPlatform

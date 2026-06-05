@@ -4,11 +4,12 @@ import dev.mayaqq.cynosure.helpers.McFont
 import dev.mayaqq.cynosure.injection.client.javaLocale
 import dev.mayaqq.cynosure.items.extensions.CustomTooltip
 import dev.mayaqq.cynosure.utils.Couple
-import dev.mayaqq.cynosure.utils.colors.Color
-import dev.mayaqq.cynosure.utils.colors.DarkGray
-import dev.mayaqq.cynosure.utils.colors.LightGray
 import dev.mayaqq.cynosure.utils.get
 import dev.mayaqq.cynosure.utils.language.words
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.DarkGray
+import invoke.kitty.kritter.utils.color.LightGray
+import invoke.kitty.kritter.utils.color.rgb
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -68,7 +69,7 @@ public class DescriptionTooltip(
             public val Default: Theme = Theme(
                 DarkGray,
                 LightGray,
-                Color(0x84597Eu),
+                rgb(0x84597E),
                 0
             )
         }

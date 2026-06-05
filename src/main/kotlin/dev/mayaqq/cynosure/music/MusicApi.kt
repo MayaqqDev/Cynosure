@@ -13,6 +13,6 @@ public object MusicApi {
 }
 
 public fun Music.register(musicWhen: (player: LocalPlayer, manager: MusicManager, biome: Holder<Biome>) -> Boolean): Music {
-    musics.put(this, musicWhen)
+    musics[this] = musicWhen
     return this
 }
