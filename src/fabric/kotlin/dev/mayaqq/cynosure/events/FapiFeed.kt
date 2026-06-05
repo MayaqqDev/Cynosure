@@ -50,12 +50,12 @@ internal fun fapiFeed() {
     ServerPlayConnectionEvents.JOIN.register { handler, _, _ -> PlayerConnectionEvent.Join(handler.player).post() }
     ServerPlayConnectionEvents.DISCONNECT.register { handler, _ -> PlayerConnectionEvent.Leave(handler.player).post() }
     ServerLivingEntityEvents.ALLOW_DEATH.register { entity, source, _ -> !LivingEntityEvent.Death(entity, source).post() }
-    ServerWorldEvents.LOAD.register { _, level -> LevelEvent.Load(level).post(context = "server") }
-    ServerWorldEvents.UNLOAD.register { _, level -> LevelEvent.Unload(level).post(context = "server") }
+    ServerWorldEvents.LOAD.register { _, level -> LevelEvent.Load(level).post() }
+    ServerWorldEvents.UNLOAD.register { _, level -> LevelEvent.Unload(level).post() }
 
     // Tick events
-    ServerTickEvents.START_WORLD_TICK.register { LevelEvent.BeginTick(it).post(context = "server") }
-    ServerTickEvents.END_WORLD_TICK.register { LevelEvent.EndTick(it).post(context = "server") }
+    ServerTickEvents.START_WORLD_TICK.register { LevelEvent.BeginTick(it).post() }
+    ServerTickEvents.END_WORLD_TICK.register { LevelEvent.EndTick(it).post() }
     ServerTickEvents.START_SERVER_TICK.register { ServerEvent.BeginTick(it).post() }
     ServerTickEvents.END_SERVER_TICK.register { ServerEvent.EndTick(it).post() }
 

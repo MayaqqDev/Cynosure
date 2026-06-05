@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.core
 
 import dev.mayaqq.cynosure.core.mod.Mod
+import invoke.kitty.kritter.platform.Side
 import net.fabricmc.api.EnvType
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.impl.launch.FabricLauncherBase
@@ -19,6 +20,12 @@ internal class PlatformHooksImpl : PlatformHooks {
 
     override val devEnvironment: Boolean
         get() = FabricLoader.getInstance().isDevelopmentEnvironment
+
+    override val environment: Side
+        get() = when (FabricLoader.getInstance().environmentType) {
+            EnvType.CLIENT -> Side.CLIENT
+            EnvType.SERVER -> Side.SERVER
+        }
 
     override fun isModLoaded(modid: String): Boolean {
         return FabricLoader.getInstance().isModLoaded(modid)
@@ -60,8 +67,8 @@ internal object GameInstanceImpl : GameInstance {
         currentServer = null
     }
 
-    override fun getEventLoop(side: Environment): BlockableEventLoop<in TickTask> {
-        return if (side == Environment.CLIENT) Minecraft.getInstance()
+    override fun getEventLoop(side: Side): BlockableEventLoop<in TickTask> {
+        return if (side == Side.CLIENT) Minecraft.getInstance()
         else currentServer ?: error("Cannot get server executor before server is loaded")
     }
 

@@ -19,8 +19,7 @@ internal object ClientFapiFeed {
 
         // Registration
         CoreShaderRegistrationCallback.EVENT.register {
-            CoreShaderRegistrationEvent(fun(id, format, callback) = it.register(id, format, callback))
-                .post { Cynosure.error("Error registering shaders", it) }
+            CoreShaderRegistrationEvent(fun(id, format, callback) = it.register(id, format, callback)).post()
         }
 
         ClientCommandRegistrationCallback.EVENT.register { commandDispatcher, commandBuildContext ->
@@ -30,8 +29,8 @@ internal object ClientFapiFeed {
         // Tick
         ClientTickEvents.START_CLIENT_TICK.register { ClientTickEvent.Begin.post() }
         ClientTickEvents.END_CLIENT_TICK.register { ClientTickEvent.End.post() }
-        ClientTickEvents.START_WORLD_TICK.register { LevelEvent.BeginTick(it).post(context = "client") }
-        ClientTickEvents.END_WORLD_TICK.register { LevelEvent.EndTick(it).post(context = "client") }
+        ClientTickEvents.START_WORLD_TICK.register { LevelEvent.BeginTick(it).post() }
+        ClientTickEvents.END_WORLD_TICK.register { LevelEvent.EndTick(it).post() }
 
         // Rendering
         HudRenderCallback.EVENT.register { graphics, float ->
