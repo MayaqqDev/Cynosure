@@ -53,9 +53,6 @@ public class EntityRenderersMixin {
             }
         });
 
-        MainBus.INSTANCE.post(event, null, (errer) -> {
-            Cynosure.INSTANCE.error("Error registering entity layers", errer);
-            return Unit.INSTANCE;
-        });
+        MainBus.INSTANCE.post(event);
     }
 }

@@ -22,7 +22,7 @@ public class MinecraftMixin {
         at = @At("HEAD")
     )
     private void onChangeLevel(ClientLevel clientLevel, CallbackInfo ci) {
-        if (level != null) MainBus.INSTANCE.post(new LevelEvent.Unload(level), null, null);
+        if (level != null) MainBus.INSTANCE.post(new LevelEvent.Unload(level));
     }
 
     @Inject(
@@ -30,7 +30,7 @@ public class MinecraftMixin {
         at = @At("HEAD")
     )
     private void onClearLevel(CallbackInfo ci) {
-        if (level != null) MainBus.INSTANCE.post(new LevelEvent.Unload(level), null, null);
+        if (level != null) MainBus.INSTANCE.post(new LevelEvent.Unload(level));
     }
 
 }

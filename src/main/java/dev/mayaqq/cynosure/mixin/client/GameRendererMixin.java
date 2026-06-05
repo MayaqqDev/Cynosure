@@ -17,7 +17,7 @@ public abstract class GameRendererMixin {
         at = @At("RETURN")
     )
     private void onResizeRenderer(int width, int height, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new ResizeRendererEvent(width, height), null, null);
+        MainBus.INSTANCE.post(new ResizeRendererEvent(width, height));
     }
 
     @Inject(
@@ -25,6 +25,6 @@ public abstract class GameRendererMixin {
             at = @At("HEAD")
     )
     private void onRenderStart(float partialTick, long nanos, boolean bl, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new GameRenderEvent(partialTick, nanos), null, null);
+        MainBus.INSTANCE.post(new GameRenderEvent(partialTick, nanos));
     }
 }

@@ -37,7 +37,7 @@ public class LevelRendererMixin {
     )
     private void onBeginWorldRender(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci) {
         var event = new LevelRenderEvent.Start(Objects.requireNonNull(level), (LevelRenderer) (Object) this, poseStack, partialTick, camera, null, null);
-        MainBus.INSTANCE.post(event, null, null);
+        MainBus.INSTANCE.post(event);
     }
 
     @Inject(
@@ -50,7 +50,7 @@ public class LevelRendererMixin {
     )
     private void onSetupRender(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci, @Local Frustum frustum) {
         var event = new LevelRenderEvent.BeforeTerrain(Objects.requireNonNull(level), (LevelRenderer) (Object) this, poseStack, partialTick, camera, frustum, renderBuffers.bufferSource());
-        MainBus.INSTANCE.post(event, null, null);
+        MainBus.INSTANCE.post(event);
         CynosureForgeClientEventsKt.setCapturedFrustum(frustum);
     }
 
@@ -59,6 +59,6 @@ public class LevelRendererMixin {
         at = @At("HEAD")
     )
     private void onChanged(CallbackInfo ci) {
-        MainBus.INSTANCE.post(ReloadLevelRendererEvent.INSTANCE, null, null);
+        MainBus.INSTANCE.post(ReloadLevelRendererEvent.INSTANCE);
     }
 }

@@ -35,6 +35,6 @@ public abstract class ItemStackMixin {
         }
 
         ModifyTooltipComponentsEvent event = new ModifyTooltipComponentsEvent((ItemStack) (Object) this, flag, player, list);
-        MainBus.INSTANCE.post(event, null, null);
+        MainBus.INSTANCE.post(event);
     }
 }

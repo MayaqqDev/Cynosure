@@ -21,7 +21,6 @@ public class ServerLevelMixin extends LevelMixin {
 
     @Override
     public void cynosure_addUpdateListener(BlockUpdateListener listener) {
-        KDeclarationContainer
         if(cynosure$updateListeners == null) cynosure$updateListeners = new Long2ReferenceOpenHashMap<>();
         for(BlockPos pos : listener.getListenedPositions()) {
             long longPos = pos.asLong();

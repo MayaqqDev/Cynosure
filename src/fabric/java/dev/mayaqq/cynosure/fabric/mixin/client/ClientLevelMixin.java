@@ -25,7 +25,7 @@ public abstract class ClientLevelMixin {
         at = @At("RETURN")
     )
     public void onLoadClientLevel(ClientPacketListener clientPacketListener, ClientLevel.ClientLevelData clientLevelData, ResourceKey resourceKey, Holder holder, int i, int j, Supplier supplier, LevelRenderer levelRenderer, boolean bl, long l, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new LevelEvent.Load((Level) (Object) this), null, null);
+        MainBus.INSTANCE.post(new LevelEvent.Load((Level) (Object) this));
     }
 
     @Inject(

@@ -19,7 +19,7 @@ public class ServerLevelMixin {
         at = @At("HEAD")
     )
     private void onSave(ProgressListener progressListener, boolean bl, boolean bl2, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new LevelEvent.Save((ServerLevel) (Object) this), "server", null);
+        MainBus.INSTANCE.post(new LevelEvent.Save((ServerLevel) (Object) this));
     }
 
     @Inject(
