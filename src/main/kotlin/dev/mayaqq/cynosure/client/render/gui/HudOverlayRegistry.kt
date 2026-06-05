@@ -79,7 +79,7 @@ public object VanillaHud {
     @JvmField public val CHAT: ResourceLocation = create("chat_panel")
     @JvmField public val PLAYER_LIST: ResourceLocation = create("player_list")
 
-    internal val ids: LinkedHashSet<ResourceLocation> = linkedSetOf()
+    public val ids: LinkedHashSet<ResourceLocation> = linkedSetOf()
 
 
     private fun create(id: String) = identifierOf("minecraft", id).also { ids.add(it) }

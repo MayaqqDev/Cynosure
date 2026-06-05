@@ -1,3 +1,4 @@
+
 package dev.mayaqq.cynosure.client.events
 
 import dev.mayaqq.cynosure.MODID

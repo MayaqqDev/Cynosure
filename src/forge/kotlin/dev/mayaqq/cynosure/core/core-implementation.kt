@@ -2,6 +2,7 @@
 package dev.mayaqq.cynosure.core
 
 import dev.mayaqq.cynosure.core.mod.Mod
+import invoke.kitty.kritter.platform.Side
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.TickTask
 import net.minecraft.util.thread.BlockableEventLoop
@@ -12,15 +13,14 @@ import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.loading.FMLEnvironment
 import net.minecraftforge.fml.loading.FMLPaths
 import net.minecraftforge.server.ServerLifecycleHooks
-import uwu.serenity.kritter.platform.GAME_DIRECTORY
 import java.nio.file.Path
 import kotlin.jvm.optionals.getOrNull
 
 internal class PlatformHooksImpl : PlatformHooks {
 
-    override val environment: Environment = when (FMLEnvironment.dist!!) {
-        Dist.CLIENT -> Environment.CLIENT
-        Dist.DEDICATED_SERVER -> Environment.SERVER
+    override val environment: Side = when (FMLEnvironment.dist!!) {
+        Dist.CLIENT -> Side.CLIENT
+        Dist.DEDICATED_SERVER -> Side.SERVER
     }
 
     override val devEnvironment: Boolean
@@ -53,7 +53,7 @@ internal class GameInstanceImpl : GameInstance {
     override val currentServer: MinecraftServer?
         get() = ServerLifecycleHooks.getCurrentServer()
 
-    override fun getEventLoop(side: Environment): BlockableEventLoop<in TickTask> {
+    override fun getEventLoop(side: Side): BlockableEventLoop<in TickTask> {
         return LogicalSidedProvider.WORKQUEUE.get(side.toForge())
     }
 
@@ -61,8 +61,8 @@ internal class GameInstanceImpl : GameInstance {
         TODO("Not yet implemented")
     }
 
-    private fun Environment.toForge(): LogicalSide = when (this) {
-        Environment.CLIENT -> LogicalSide.CLIENT
-        Environment.SERVER -> LogicalSide.SERVER
+    private fun Side.toForge(): LogicalSide = when (this) {
+        Side.CLIENT -> LogicalSide.CLIENT
+        Side.SERVER -> LogicalSide.SERVER
     }
 }

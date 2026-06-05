@@ -73,8 +73,8 @@ public object ForgeEvents {
     @SubscribeEvent
     public fun onBlockEvent(event: ForgeBlockEvent) {
         when (event) {
-            is ForgeBlockEvent.BreakEvent -> BlockEvent.Break(event.level, event.state, event.pos, event.player).post(context = event)
-            is ForgeBlockEvent.EntityPlaceEvent -> BlockEvent.Place(event.level, event.state, event.pos, event.entity).post(context = event)
+            is ForgeBlockEvent.BreakEvent -> BlockEvent.Break(event.level, event.state, event.pos, event.player).post()
+            is ForgeBlockEvent.EntityPlaceEvent -> BlockEvent.Place(event.level, event.state, event.pos, event.entity).post()
             is ForgeBlockEvent.FluidPlaceBlockEvent -> {}
         }
     }
@@ -84,19 +84,19 @@ public object ForgeEvents {
         val result: InteractionResult? = when (event) {
             is PlayerInteractEvent.RightClickBlock -> InteractionEvent.UseBlock(
                 event.level, event.entity, event.hand, event.hitVec
-            ).post(context = event)
+            ).post()
             is PlayerInteractEvent.LeftClickBlock -> InteractionEvent.AttackBlock(
                 event.level, event.entity, event.hand, event.pos, event.face!!
-            ).post(context = event)
+            ).post()
             is PlayerInteractEvent.EntityInteractSpecific -> InteractionEvent.UseEntity(
                 event.level, event.entity, event.hand, event.target, event.localPos, InteractionEvent.UseEntity.Phase.SPECIFIC
-            ).post(context = event)
+            ).post()
             is PlayerInteractEvent.EntityInteract -> InteractionEvent.UseEntity(
                 event.level, event.entity, event.hand, event.target, null, InteractionEvent.UseEntity.Phase.GENERAL
-            ).post(context = event)
+            ).post()
             is PlayerInteractEvent.RightClickItem -> InteractionEvent.UseItem(
                 event.level, event.entity, event.hand
-            ).post(context = event)
+            ).post()
             else -> null
         }
 
@@ -109,22 +109,22 @@ public object ForgeEvents {
     @SubscribeEvent
     public fun onAttackEntity(event: AttackEntityEvent) {
         event.isCanceled = InteractionEvent.AttackEntity(event.entity.level(), event.entity, event.entity.usedItemHand, event.target)
-            .post(context = event)
+            .post()
             ?.consumesAction() ?: false
     }
 
     @SubscribeEvent
     public fun onEntityTick(event: LivingTickEvent) {
-        event.isCanceled = LivingEntityEvent.Tick(event.entity).post(context = event)
+        event.isCanceled = LivingEntityEvent.Tick(event.entity).post()
     }
 
     @SubscribeEvent
     public fun onSyncDatapack(event: OnDatapackSyncEvent) {
         if (event.player != null) {
-            DataPackSyncEvent(event.player!!, true).post(context = event)
+            DataPackSyncEvent(event.player!!, true).post()
         } else {
             for (player in event.playerList.players) {
-                DataPackSyncEvent(player, false).post(context = event)
+                DataPackSyncEvent(player, false).post()
             }
         }
     }
@@ -156,13 +156,13 @@ public object ForgeEvents {
     @SubscribeEvent
     public fun onLoadWorld(event: LevelEvent.Load) {
         dev.mayaqq.cynosure.events.world.LevelEvent.Load(event.level as Level)
-            .post(context = distContext)
+            .post()
     }
 
     @SubscribeEvent
     public fun onUnloadWorld(event: LevelEvent.Unload) {
         dev.mayaqq.cynosure.events.world.LevelEvent.Unload(event.level as Level)
-            .post(context = distContext)
+            .post()
     }
 
     @SubscribeEvent
@@ -176,7 +176,7 @@ public object ForgeEvents {
             Phase.START -> dev.mayaqq.cynosure.events.world.LevelEvent.BeginTick(event.level)
             Phase.END -> dev.mayaqq.cynosure.events.world.LevelEvent.EndTick(event.level)
         }
-        e.post(context = distContext)
+        e.post()
     }
 
 
@@ -209,29 +209,29 @@ public object ForgeEvents {
 
     @SubscribeEvent
     public fun onServerStarting(event: ServerAboutToStartEvent) {
-        ServerEvent.Starting(event.server).post(context = event)
+        ServerEvent.Starting(event.server).post()
     }
 
     @SubscribeEvent
     public fun onServerStarted(event: ServerStartedEvent) {
-        ServerEvent.Started(event.server).post(context = event)
+        ServerEvent.Started(event.server).post()
     }
 
     @SubscribeEvent
     public fun onServerStopping(event: ServerStoppingEvent) {
-        ServerEvent.Stopping(event.server).post(context = event)
+        ServerEvent.Stopping(event.server).post()
     }
 
     @SubscribeEvent
     public fun onServerStopped(event: ServerStoppedEvent) {
-        ServerEvent.Stopped(event.server).post(context = event)
+        ServerEvent.Stopped(event.server).post()
     }
 
     @SubscribeEvent
     public fun onServerTick(event: ServerTickEvent) {
         when (event.phase!!) {
-            Phase.START -> ServerEvent.BeginTick(event.server).post(context = event)
-            Phase.END -> ServerEvent.EndTick(event.server).post(context = event)
+            Phase.START -> ServerEvent.BeginTick(event.server).post()
+            Phase.END -> ServerEvent.EndTick(event.server).post()
         }
     }
 
@@ -251,8 +251,8 @@ public object ForgeEvents {
     @SubscribeEvent
     public fun onPlayerTick(event: PlayerTickEvent) {
         when (event.phase) {
-            Phase.START -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.Begin(event.player).post(context = event)
-            Phase.END -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.End(event.player).post(context = event)
+            Phase.START -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.Begin(event.player).post()
+            Phase.END -> dev.mayaqq.cynosure.events.entity.player.PlayerTickEvent.End(event.player).post()
         }
     }
 
@@ -275,16 +275,16 @@ public object ForgeEvents {
 
     @SubscribeEvent
     public fun onEntityEffectAdded(event: MobEffectEvent.Added) {
-        LivingEntityEvent.EffectApply(event.entity, event.effectInstance, event.oldEffectInstance).post(context = event)
+        LivingEntityEvent.EffectApply(event.entity, event.effectInstance, event.oldEffectInstance).post()
     }
 
     @SubscribeEvent
     public fun onEntityEffectRemoved(event: MobEffectEvent.Remove) {
-        LivingEntityEvent.EffectRemove(event.entity, event.effectInstance).post(context = event)
+        LivingEntityEvent.EffectRemove(event.entity, event.effectInstance).post()
     }
 
     @SubscribeEvent
     public fun onEntityEffectExpired(event: MobEffectEvent.Expired) {
-        LivingEntityEvent.EffectExpire(event.entity, event.effectInstance).post(context = event)
+        LivingEntityEvent.EffectExpire(event.entity, event.effectInstance).post()
     }
 }
