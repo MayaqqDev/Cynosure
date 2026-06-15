@@ -1,30 +1,32 @@
 package dev.mayaqq.cynosure
 
-import dev.mayaqq.cynosure.biome.CarverRegistry
+import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackLocationInfo
+import net.minecraft.server.packs.PackSelectionConfig
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.PathPackResources
+import net.minecraft.server.packs.repository.BuiltInPackSource
+import net.minecraft.server.packs.repository.KnownPack
 import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.PackSource
-import net.minecraftforge.event.AddPackFindersEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.ModList
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import net.minecraftforge.forgespi.locating.IModFile
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.ModList
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.fml.common.Mod
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.neoforge.event.AddPackFindersEvent
+import net.neoforged.neoforgespi.locating.IModFile
+import java.util.Optional
 
 @Mod(MODID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public object CynosureForge {
-
+@EventBusSubscriber
+public object CynosureNeoforge {
     init {
-        MOD_BUS.register(this)
-        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
-        Cynosure.init()
+        CynosureForgeLike.init()
     }
 
     @SubscribeEvent
@@ -34,6 +36,7 @@ public object CynosureForge {
 
     @SubscribeEvent
     public fun addPackFinders(event: AddPackFindersEvent) {
+        //TODO: test this whole thing.
         for (mod in ModList.get().mods) {
             val resourcemetadata = mod.modProperties.getCynosureValue("resourcepacks") as? List<*> ?: continue
             val datametadata = mod.modProperties.getCynosureValue("datapacks") as? List<*> ?: continue
@@ -41,13 +44,13 @@ public object CynosureForge {
                 if (event.packType == PackType.CLIENT_RESOURCES)
                     for (pack in resourcemetadata) {
                         when (pack) {
-                            is String -> event.createPack(mod.owningFile.file, ResourceLocation(mod.modId, pack))
+                            is String -> event.createPack(mod.owningFile.file, identifier(mod.modId, pack))
                         }
                     }
                 if (event.packType == PackType.SERVER_DATA)
                     for (pack in datametadata) {
                         when (pack) {
-                            is String -> event.createDataPack(mod.owningFile.file, ResourceLocation(mod.modId, pack))
+                            is String -> event.createDataPack(mod.owningFile.file, identifier(mod.modId, pack))
                         }
                     }
             } catch (ex: Exception) {
@@ -58,25 +61,33 @@ public object CynosureForge {
 
     private fun AddPackFindersEvent.createPack(modFile: IModFile, id: ResourceLocation) {
         val resourcePath = modFile.findResource("resourcepacks/$id")
-
-        Pack.readMetaAndCreate(
+        val locationInfo = PackLocationInfo(
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("resourcepack")),
-            false,
-            { path -> PathPackResources(path, resourcePath, true) },
-            packType, Pack.Position.TOP, PackSource.BUILT_IN
-        )?.let { addRepositorySource { consumer -> consumer.accept(it) } }
+            PackSource.BUILT_IN,
+            Optional.of(KnownPack(id.namespace, id.path, modFile.modInfos[0].version.toString()))
+        )
+
+        Pack.readMetaAndCreate(
+            locationInfo,
+            BuiltInPackSource.fixedResources(PathPackResources(locationInfo, resourcePath)),
+            packType, PackSelectionConfig(false, Pack.Position.TOP, false)
+        ).let { addRepositorySource { consumer -> consumer.accept(it) } }
     }
 
     private fun AddPackFindersEvent.createDataPack(modFile: IModFile, id: ResourceLocation) {
         val resourcePath = modFile.findResource("datapacks/$id")
-
-        Pack.readMetaAndCreate(
+        val locationInfo = PackLocationInfo(
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("datapack")),
-            false,
-            { path -> PathPackResources(path, resourcePath, true) },
-            packType, Pack.Position.TOP, PackSource.BUILT_IN
+            PackSource.BUILT_IN,
+            Optional.of(KnownPack(id.namespace, id.path, modFile.modInfos[0].version.toString()))
+        )
+
+        Pack.readMetaAndCreate(
+            locationInfo,
+            BuiltInPackSource.fixedResources(PathPackResources(locationInfo, resourcePath)),
+            packType, PackSelectionConfig(false, Pack.Position.TOP, false)
         )?.let { addRepositorySource { consumer -> consumer.accept(it) } }
     }
 

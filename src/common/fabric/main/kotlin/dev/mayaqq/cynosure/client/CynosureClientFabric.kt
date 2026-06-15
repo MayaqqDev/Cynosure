@@ -1,6 +1,6 @@
 package dev.mayaqq.cynosure.client
 
-import dev.mayaqq.cynosure.CynosureFabric
+import dev.mayaqq.cynosure.CommonCynosureFabric
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.client.events.ClientReloadListenerEvent
 import dev.mayaqq.cynosure.client.events.CynosureWorldRenderEventHandler
@@ -20,7 +20,7 @@ import net.minecraft.server.packs.PackType
 public object CynosureClientFabric {
     @CynosureInternal
     public fun init() {
-        CynosureFabric.lateinit()
+        CommonCynosureFabric.lateinit()
         CynosureWorldRenderEventHandler.init()
         ClientFapiFeed.feed()
 

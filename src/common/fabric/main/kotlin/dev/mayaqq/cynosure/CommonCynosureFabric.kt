@@ -15,8 +15,8 @@ import net.fabricmc.loader.api.metadata.CustomValue.CvArray
 import net.minecraft.network.chat.Component
 import kotlin.reflect.typeOf
 
-internal object CynosureFabric {
-    fun init() {
+public object CommonCynosureFabric {
+    public fun init() {
         Cynosure.init()
         // Didnt put these in fapi feed cs they're more for internal stuff
         fapiFeed()
@@ -28,7 +28,7 @@ internal object CynosureFabric {
         }
     }
 
-    fun lateinit() {
+    internal fun lateinit() {
         val a = typeOf<MutableMap<out String, Int>>()
         PostInitEvent.post()
     }
