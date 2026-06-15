@@ -87,15 +87,6 @@ internal fun fapiFeed() {
         if (player.isSpectator) return@register InteractionResult.PASS
         InteractionEvent.AttackEntity(level, player, interactionHand, entity).post() ?: InteractionResult.PASS
     }
-    LootTableEvents.REPLACE.register { resourceManager, lootManager, id, original, source ->
-        LoottableEvents.Replace(resourceManager, lootManager, id, original).post()
-    }
-    LootTableEvents.MODIFY.register { resourceManager, lootManager, id, builder, source ->
-        LoottableEvents.Modify(resourceManager, lootManager, id, builder).post()
-    }
-    LootTableEvents.ALL_LOADED.register { resourceManager, lootManager ->
-        LoottableEvents.AllLoaded(resourceManager, lootManager).post()
-    }
     EntityTrackingEvents.START_TRACKING.register { entity, player ->
         EntityTrackingEvent.Start(entity, player).post()
     }
