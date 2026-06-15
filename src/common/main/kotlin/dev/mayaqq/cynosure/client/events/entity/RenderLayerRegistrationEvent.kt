@@ -8,12 +8,10 @@ import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.EntityModelSet
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher
 import net.minecraft.client.renderer.entity.EntityRenderer
-import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player

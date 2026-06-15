@@ -59,8 +59,8 @@ cloche {
     }
 
     val root = common {
-        mixins.from(file("src/main/cynosure.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
+        mixins.from(file("src/common/main/cynosure.mixins.json"))
+        accessWideners.from(file("src/common/main/cynosure.accesswidener"))
 
         dependencies {
             compileOnly(libs.mixin)
@@ -78,8 +78,8 @@ cloche {
     val fabricCommon = common("common:fabric") {
         dependsOn(root)
 
-        mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
+        mixins.from(file("src/common/main/cynosure.mixins.json"), file("src/common/fabric/main/cynosure.fabric.mixins.json"))
+        accessWideners.from(file("src/common/main/cynosure.accesswidener"))
 
         metadata {
             custom(
@@ -114,8 +114,8 @@ cloche {
 
     val forgeLike = common("common:forgeLike") {
         dependsOn(root)
-        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
+        mixins.from(file("src/common/main/cynosure.mixins.json"), file("src/common/forgeLike/main/cynosure.forge.mixins.json"))
+        accessWideners.from(file("src/common/main/cynosure.accesswidener"))
 
         dependencies {
             api(libs.javax.annotations)

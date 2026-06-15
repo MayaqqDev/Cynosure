@@ -4,8 +4,6 @@ import dev.mayaqq.cynosure.level.BlockUpdateListener;
 import dev.mayaqq.cynosure.level.UpdateListenerSet;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceMap;
 import it.unimi.dsi.fastutil.longs.Long2ReferenceOpenHashMap;
-import kotlin.reflect.KDeclarationContainer;
-import kotlin.reflect.jvm.internal.KPackageImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
