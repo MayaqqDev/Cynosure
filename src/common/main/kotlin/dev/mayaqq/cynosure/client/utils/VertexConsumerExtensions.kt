@@ -9,6 +9,8 @@ import net.minecraft.core.Direction
 import net.minecraft.core.Direction.Axis
 import net.minecraft.core.Direction.AxisDirection
 
+//TODO: this mess
+
 public fun VertexConsumer.color(color: Color): VertexConsumer {
     this.color(color.toInt())
     return this

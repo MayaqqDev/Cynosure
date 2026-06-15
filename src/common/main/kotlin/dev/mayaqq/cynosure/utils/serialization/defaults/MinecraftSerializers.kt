@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure.utils.serialization.defaults
 
+import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.utils.serialization.buildClassSerializer
 import dev.mayaqq.cynosure.utils.serialization.fieldOf
 import dev.mayaqq.cynosure.utils.serialization.map
@@ -15,7 +16,7 @@ import net.minecraft.resources.ResourceLocation
 import org.joml.Vector3f
 import org.joml.Vector3fc
 
-public object ResourceLocationSerializer : KSerializer<ResourceLocation> by String.serializer().map(::ResourceLocation, ResourceLocation::toString)
+public object ResourceLocationSerializer : KSerializer<ResourceLocation> by String.serializer().map(::identifier, ResourceLocation::toString)
 
 public object Vector3fSerializer : KSerializer<Vector3f> by buildClassSerializer("",
     Float.serializer().fieldOf("x", Vector3fc::x),

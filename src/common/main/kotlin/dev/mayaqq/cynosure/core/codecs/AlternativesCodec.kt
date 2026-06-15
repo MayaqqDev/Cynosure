@@ -5,7 +5,8 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.DynamicOps
 
-public class AlternativesCodec<A>(
+public class
+AlternativesCodec<A>(
     private val codecs: List<Codec<A>>
 ) : Codec<A> {
 

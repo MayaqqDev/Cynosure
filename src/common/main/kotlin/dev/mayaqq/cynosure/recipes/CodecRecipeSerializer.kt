@@ -11,6 +11,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+//TODO: this is a direct port from 1.21.1 basically, what do we do here when we are already on the said version lol
+
 public class CodecRecipeSerializer<T : Recipe<*>>(
     private val codec: (ResourceLocation) -> Codec<T>,
     private val networkCodec: (ResourceLocation) -> ByteCodec<T>

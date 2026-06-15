@@ -1,8 +1,10 @@
 @file:JvmName("Effextras")
 package dev.mayaqq.cynosure.effects
 
+import dev.mayaqq.cynosure.core.VersionHooks
 import invoke.kitty.kritter.utils.mapBacked
 import net.minecraft.world.effect.MobEffect
+import net.minecraft.world.effect.MobEffectInstance
 
 ///**
 // * A collection of extra properties for MobEffects.
@@ -19,3 +21,5 @@ import net.minecraft.world.effect.MobEffect
 //}
 
 public var MobEffect.updateless: Boolean by mapBacked(false)
+
+public fun MobEffectInstance.effect(): MobEffect = VersionHooks.getStatusEffect(this)

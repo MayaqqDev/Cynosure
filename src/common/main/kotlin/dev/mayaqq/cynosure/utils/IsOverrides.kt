@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure.utils
 
+import dev.mayaqq.cynosure.effects.effect
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
 import net.minecraft.resources.ResourceKey
@@ -30,6 +31,6 @@ public infix fun Holder<*>.of(id: ResourceLocation): Boolean = this.`is`(id)
 public infix fun <T> Holder<T>.of(key: ResourceKey<T>): Boolean = this.`is`(key)
 public infix fun <T> Holder<T>.of(predicate: Predicate<ResourceKey<T>>): Boolean = this.`is`(predicate)
 
-public infix fun MobEffectInstance.of(effect: MobEffect): Boolean = this.effect == effect
+public infix fun MobEffectInstance.of(effect: MobEffect): Boolean = this.effect() == effect
 
 public infix fun DamageSource.of(key: ResourceKey<DamageType>): Boolean = this.`is`(key)

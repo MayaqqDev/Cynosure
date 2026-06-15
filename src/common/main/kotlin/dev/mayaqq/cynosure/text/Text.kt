@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure.text
 
+import dev.mayaqq.cynosure.core.VersionHooks
 import dev.mayaqq.cynosure.helpers.McFont
 import net.minecraft.network.chat.*
 import net.minecraft.resources.ResourceLocation
@@ -30,6 +31,8 @@ public object Text {
     public fun of(init: MutableComponent.() -> Unit = {}): MutableComponent = "".asComponent(init)
     public fun translatable(text: String, init: MutableComponent.() -> Unit = {}): MutableComponent = Component.translatable(text).also(init)
     public fun String.asComponent(init: MutableComponent.() -> Unit = {}): MutableComponent = Component.literal(this).also(init)
+
+    public fun fromJsonLenient(json: String): MutableComponent? = VersionHooks.componentFromJsonLenient(json)
 
     @JvmOverloads
     public fun multiline(vararg lines: Any?, init: MutableComponent.() -> Unit = {}): MutableComponent = join(*lines, separator = CommonText.NEWLINE, init = init)

@@ -219,6 +219,7 @@ cloche {
     }
 
     neoforge("neoforge:1.21.1") {
+        dependsOn(forgeLike)
         mappings {
             official()
             parchment(libs.versions.parchment1211)

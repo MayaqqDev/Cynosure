@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.core.identifier
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -13,7 +14,7 @@ internal val DEBUG_DIR: File = File(".cynosure_debug")
 public annotation class CynosureInternal
 
 @Suppress("NOTHING_TO_INLINE")
-public inline fun modId(path: String): ResourceLocation = ResourceLocation(MODID, path)
+public inline fun modId(path: String): ResourceLocation = identifier(MODID, path)
 
 public object Cynosure : Logger by LoggerFactory.getLogger(NAME) {
     public fun init() {

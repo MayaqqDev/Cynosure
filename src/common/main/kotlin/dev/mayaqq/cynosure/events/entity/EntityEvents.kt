@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure.events.entity
 
+import dev.mayaqq.cynosure.effects.effect
 import dev.mayaqq.cynosure.events.api.CancellableEvent
 import dev.mayaqq.cynosure.events.api.Event
 import dev.mayaqq.cynosure.events.api.ReturningEvent
@@ -34,9 +35,9 @@ public sealed class LivingEntityEvent(public val entity: LivingEntity) : Cancell
 
     public class Death(entity: LivingEntity, public val source: DamageSource) : LivingEntityEvent(entity)
 
-    public class EffectApply(entity: LivingEntity, public val newInstance: MobEffectInstance, public val oldInstance: MobEffectInstance?, public val effect: MobEffect = newInstance.effect): LivingEntityEvent(entity)
-    public class EffectRemove(public val entity: LivingEntity, public val instance: MobEffectInstance?, public val effect: MobEffect? = instance?.effect): CancellableEvent()
-    public class EffectExpire(entity: LivingEntity, public val instance: MobEffectInstance?, public val effect: MobEffect? = instance?.effect) : LivingEntityEvent(entity)
+    public class EffectApply(entity: LivingEntity, public val newInstance: MobEffectInstance, public val oldInstance: MobEffectInstance?, public val effect: MobEffect = newInstance.effect()): LivingEntityEvent(entity)
+    public class EffectRemove(public val entity: LivingEntity, public val instance: MobEffectInstance?, public val effect: MobEffect? = instance?.effect()): CancellableEvent()
+    public class EffectExpire(entity: LivingEntity, public val instance: MobEffectInstance?, public val effect: MobEffect? = instance?.effect()) : LivingEntityEvent(entity)
 }
 
 public class MountEvent(public val entity: Entity, public val mount: Entity?, public val isMounting: Boolean) : CancellableEvent()

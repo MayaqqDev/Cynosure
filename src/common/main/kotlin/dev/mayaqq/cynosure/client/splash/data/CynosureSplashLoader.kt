@@ -3,6 +3,7 @@ package dev.mayaqq.cynosure.client.splash.data
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import dev.mayaqq.cynosure.Cynosure
+import dev.mayaqq.cynosure.text.Text
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -32,11 +33,11 @@ public object CynosureSplashLoader : SimpleJsonResourceReloadListener(Gson(), "s
         this.splashes.clear()
         items.forEach { (key, value) ->
             if (key.path.equals("splashes")) {
-                value.getAsJsonObject().getAsJsonArray("splashes").forEach { element ->
+                value.asJsonObject.getAsJsonArray("splashes").forEach { element ->
                     if (element.isJsonObject) {
                         try {
-                            val formatted = parse(element.getAsJsonObject().toString())
-                            Component.Serializer.fromJsonLenient(formatted)?.let { this.splashes.add(it) }
+                            val formatted = parse(element.asJsonObject.toString())
+                            Text.fromJsonLenient(formatted)?.let { this.splashes.add(it) }
                         } catch (e: Exception) {
                             Cynosure.warn("Failed to parse splash text", e)
                         }
