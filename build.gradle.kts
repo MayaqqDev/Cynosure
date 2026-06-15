@@ -24,6 +24,7 @@ val mod_description = providers.gradleProperty("description").get()
 val mod_license = providers.gradleProperty("license").get()
 
 repositories {
+    maven(url = "https://libraries.minecraft.net/")
     mavenCentral()
     maven(url = "https://maven.msrandom.net/repository/root") { name = "Ashley" }
     maven(url = "https://maven.parchmentmc.org") { name = "Parchment" }
@@ -36,6 +37,11 @@ repositories {
     maven(url = "https://maven.is-immensely.gay/releases")
     maven(url = "https://maven.is-immensely.gay/nightly")
     maven(url = "https://api.modrinth.com/maven")
+    maven(url = "https://maven.neoforged.net/releases")
+    cloche {
+        mavenNeoforged()
+        mavenNeoforgedMeta()
+    }
     mavenLocal()
 }
 
@@ -52,12 +58,7 @@ cloche {
         contributor("serenyadev")
     }
 
-    mappings {
-        official()
-        parchment(libs.versions.parchment)
-    }
-
-    common {
+    val root = common {
         mixins.from(file("src/main/cynosure.mixins.json"))
         accessWideners.from(file("src/main/cynosure.accesswidener"))
 
@@ -74,20 +75,19 @@ cloche {
         }
     }
 
-    fabric {
-        loaderVersion = libs.versions.fabric
-        minecraftVersion = libs.versions.minecraft
+    val fabricCommon = common("common:fabric") {
+        dependsOn(root)
 
         mixins.from(file("src/main/cynosure.mixins.json"), file("src/fabric/cynosure.fabric.mixins.json"))
         accessWideners.from(file("src/main/cynosure.accesswidener"))
 
-        includedClient()
-
         metadata {
-            custom("modmenu", mapOf(
-                "badges" to listOf("library"),
-                "updateChecker" to false
-            ))
+            custom(
+                "modmenu", mapOf(
+                    "badges" to listOf("library"),
+                    "updateChecker" to false
+                )
+            )
 
             dependency {
                 modId = "fabric-api"
@@ -99,6 +99,53 @@ cloche {
                     startInclusive = true
                 }
             }
+        }
+
+        dependencies {
+            modApi(libs.fabric.kotlin)
+            api(libs.javax.annotations)
+
+            include(libs.kotlin.metadata)
+            include(libs.bytecodecs)
+
+            modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
+        }
+    }
+
+    val forgeLike = common("common:forgeLike") {
+        dependsOn(root)
+        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
+        accessWideners.from(file("src/main/cynosure.accesswidener"))
+
+        dependencies {
+            api(libs.javax.annotations)
+
+            include(libs.forge.mixinextras) { isTransitive = false }
+            include(libs.bytecodecs)
+            include(libs.kotlin.metadata)
+
+            modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
+        }
+    }
+
+    fabric("fabric:1.20.1") {
+        dependsOn(fabricCommon)
+        mappings {
+            official()
+            parchment(libs.versions.parchment1201)
+        }
+        loaderVersion = libs.versions.fabric
+        minecraftVersion = libs.versions.minecraft1201
+
+        includedClient()
+
+        dependencies {
+            fabricApi(libs.versions.fapi1201)
+            modImplementation(libs.fabric.kritter1201)
+            include(libs.fabric.kritter1201)
+        }
+
+        metadata {
             entrypoint("main") {
                 adapter.set("kotlin")
                 value.set("dev.mayaqq.cynosure.CynosureFabric::init")
@@ -112,27 +159,50 @@ cloche {
                 value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
             }
         }
+    }
+
+    fabric("fabric:1.21.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1211)
+        }
+        dependsOn(fabricCommon)
+        loaderVersion = libs.versions.fabric
+        minecraftVersion = libs.versions.minecraft1211
+
+        includedClient()
 
         dependencies {
-            fabricApi(libs.versions.fapi)
-            modApi(libs.fabric.kotlin)
-            modImplementation(libs.fabric.kritter)
-            api(libs.javax.annotations)
+            fabricApi(libs.versions.fapi1211)
+            modImplementation(libs.fabric.kritter1211)
 
-            include(libs.kotlin.metadata)
-            include(libs.bytecodecs)
-            include(libs.fabric.kritter)
+            include(libs.fabric.kritter1211)
+        }
 
-            modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
+        metadata {
+            entrypoint("main") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::init")
+            }
+            entrypoint("client") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.client.CynosureClientFabric::init")
+            }
+            entrypoint("server") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
+            }
         }
     }
 
-    forge {
-        loaderVersion = libs.versions.forge
-        minecraftVersion = libs.versions.minecraft
-
-        mixins.from(file("src/main/cynosure.mixins.json"), file("src/forge/cynosure.forge.mixins.json"))
-        accessWideners.from(file("src/main/cynosure.accesswidener"))
+    forge("forge:1.20.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1201)
+        }
+        dependsOn(forgeLike)
+        loaderVersion = libs.versions.forge1201
+        minecraftVersion = libs.versions.minecraft1201
 
         metadata {
             modLoader = "kotlinforforge"
@@ -141,16 +211,32 @@ cloche {
         }
 
         dependencies {
-            api(libs.forge.kotlin)
-            modImplementation(skipIncludeTransformation(libs.forge.kritter))
-            api(libs.javax.annotations)
+            api(libs.forge.kotlin1201)
+            modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
 
-            include(libs.forge.mixinextras) { isTransitive = false }
-            include(libs.forge.kritter) { isTransitive = false }
-            include(libs.bytecodecs)
-            include(libs.kotlin.metadata)
+            include(libs.forge.kritter1201) { isTransitive = false }
+        }
+    }
 
-            modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
+    neoforge("neoforge:1.21.1") {
+        mappings {
+            official()
+            parchment(libs.versions.parchment1211)
+        }
+        loaderVersion = libs.versions.neoforge1211
+        minecraftVersion = libs.versions.minecraft1211
+
+        metadata {
+            modLoader = "kotlinforforge"
+            loaderVersion("5.10.0")
+            blurLogo = false
+        }
+
+        dependencies {
+            api(libs.forge.kotlin1211)
+            modImplementation(skipIncludeTransformation(libs.forge.kritter1211))
+
+            include(libs.forge.kritter1211) { isTransitive = false }
         }
     }
 }
