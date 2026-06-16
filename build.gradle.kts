@@ -128,8 +128,16 @@ cloche {
         }
     }
 
+    val common1201 = common("common:1.20.1") {
+        dependsOn(root)
+    }
+
+    val common1211 = common("common:1.21.1") {
+        dependsOn(root)
+    }
+
     fabric("fabric:1.20.1") {
-        dependsOn(fabricCommon)
+        dependsOn(fabricCommon, common1201)
         mappings {
             official()
             parchment(libs.versions.parchment1201)
@@ -166,7 +174,7 @@ cloche {
             official()
             parchment(libs.versions.parchment1211)
         }
-        dependsOn(fabricCommon)
+        dependsOn(fabricCommon, common1211)
         loaderVersion = libs.versions.fabric
         minecraftVersion = libs.versions.minecraft1211
 
@@ -200,7 +208,7 @@ cloche {
             official()
             parchment(libs.versions.parchment1201)
         }
-        dependsOn(forgeLike)
+        dependsOn(forgeLike, common1201)
         loaderVersion = libs.versions.forge1201
         minecraftVersion = libs.versions.minecraft1201
 
@@ -219,7 +227,7 @@ cloche {
     }
 
     neoforge("neoforge:1.21.1") {
-        dependsOn(forgeLike)
+        dependsOn(forgeLike, common1211)
         mappings {
             official()
             parchment(libs.versions.parchment1211)
