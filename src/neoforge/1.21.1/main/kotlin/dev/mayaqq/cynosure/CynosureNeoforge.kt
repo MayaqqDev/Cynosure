@@ -4,7 +4,6 @@ import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.PackLocationInfo
 import net.minecraft.server.packs.PackSelectionConfig
 import net.minecraft.server.packs.PackType
@@ -13,11 +12,11 @@ import net.minecraft.server.packs.repository.BuiltInPackSource
 import net.minecraft.server.packs.repository.KnownPack
 import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.PackSource
-import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.ModList
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraft.resources.ResourceLocation
 import net.neoforged.neoforge.event.AddPackFindersEvent
 import net.neoforged.neoforgespi.locating.IModFile
 import java.util.Optional
@@ -29,12 +28,12 @@ public object CynosureNeoforge {
         CynosureForgeLike.init()
     }
 
-    @SubscribeEvent
+    @net.neoforged.bus.api.SubscribeEvent
     public fun lateInit(event: FMLCommonSetupEvent) {
         event.enqueueWork(PostInitEvent::post)
     }
 
-    @SubscribeEvent
+    @net.neoforged.bus.api.SubscribeEvent
     public fun addPackFinders(event: AddPackFindersEvent) {
         //TODO: test this whole thing.
         for (mod in ModList.get().mods) {
@@ -44,13 +43,17 @@ public object CynosureNeoforge {
                 if (event.packType == PackType.CLIENT_RESOURCES)
                     for (pack in resourcemetadata) {
                         when (pack) {
-                            is String -> event.createPack(mod.owningFile.file, identifier(mod.modId, pack))
+                            is String -> event.createPack(mod.owningFile.file,
+                                identifier(mod.modId, pack)
+                            )
                         }
                     }
                 if (event.packType == PackType.SERVER_DATA)
                     for (pack in datametadata) {
                         when (pack) {
-                            is String -> event.createDataPack(mod.owningFile.file, identifier(mod.modId, pack))
+                            is String -> event.createDataPack(mod.owningFile.file,
+                                identifier(mod.modId, pack)
+                            )
                         }
                     }
             } catch (ex: Exception) {
@@ -65,13 +68,29 @@ public object CynosureNeoforge {
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("resourcepack")),
             PackSource.BUILT_IN,
-            Optional.of(KnownPack(id.namespace, id.path, modFile.modInfos[0].version.toString()))
+            Optional.of(
+                KnownPack(
+                    id.namespace,
+                    id.path,
+                    modFile.modInfos[0].version.toString()
+                )
+            )
         )
 
         Pack.readMetaAndCreate(
             locationInfo,
-            BuiltInPackSource.fixedResources(PathPackResources(locationInfo, resourcePath)),
-            packType, PackSelectionConfig(false, Pack.Position.TOP, false)
+            BuiltInPackSource.fixedResources(
+                PathPackResources(
+                    locationInfo,
+                    resourcePath
+                )
+            ),
+            packType,
+            PackSelectionConfig(
+                false,
+                Pack.Position.TOP,
+                false
+            )
         ).let { addRepositorySource { consumer -> consumer.accept(it) } }
     }
 
@@ -81,13 +100,29 @@ public object CynosureNeoforge {
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("datapack")),
             PackSource.BUILT_IN,
-            Optional.of(KnownPack(id.namespace, id.path, modFile.modInfos[0].version.toString()))
+            Optional.of(
+                KnownPack(
+                    id.namespace,
+                    id.path,
+                    modFile.modInfos[0].version.toString()
+                )
+            )
         )
 
         Pack.readMetaAndCreate(
             locationInfo,
-            BuiltInPackSource.fixedResources(PathPackResources(locationInfo, resourcePath)),
-            packType, PackSelectionConfig(false, Pack.Position.TOP, false)
+            BuiltInPackSource.fixedResources(
+                PathPackResources(
+                    locationInfo,
+                    resourcePath
+                )
+            ),
+            packType,
+            PackSelectionConfig(
+                false,
+                Pack.Position.TOP,
+                false
+            )
         )?.let { addRepositorySource { consumer -> consumer.accept(it) } }
     }
 

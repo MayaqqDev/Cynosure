@@ -42,7 +42,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 public object CynosureForgeClient {
     @SubscribeEvent
     public fun clientSetup(event: FMLClientSetupEvent) {
-        CynosureClient.init()
+        CynosureForgeLikeClient.init()
     }
 
     @SubscribeEvent
