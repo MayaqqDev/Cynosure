@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.biome.CarverRegistry
 import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
@@ -17,8 +18,10 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraft.resources.ResourceLocation
+import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.neoforge.event.AddPackFindersEvent
 import net.neoforged.neoforgespi.locating.IModFile
+import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.Optional
 
 @Mod(MODID)
@@ -26,14 +29,15 @@ import java.util.Optional
 public object CynosureNeoforge {
     init {
         CynosureForgeLike.init()
+        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
     }
 
-    @net.neoforged.bus.api.SubscribeEvent
+    @SubscribeEvent
     public fun lateInit(event: FMLCommonSetupEvent) {
         event.enqueueWork(PostInitEvent::post)
     }
 
-    @net.neoforged.bus.api.SubscribeEvent
+    @SubscribeEvent
     public fun addPackFinders(event: AddPackFindersEvent) {
         //TODO: test this whole thing.
         for (mod in ModList.get().mods) {

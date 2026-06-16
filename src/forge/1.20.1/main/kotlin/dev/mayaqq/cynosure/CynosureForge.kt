@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.biome.CarverRegistry
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
 import net.minecraft.network.chat.Component
@@ -21,6 +22,7 @@ import thedarkcolour.kotlinforforge.forge.MOD_BUS
 public object CynosureForge {
     init {
         CynosureForgeLike.init()
+        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
         MOD_BUS.register(this)
     }
 

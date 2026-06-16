@@ -11,9 +11,9 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature
 
 public object BiomeModifiersImpl : BiomeModifiers {
 
-    internal val featureAdd = mutableListOf<FeatureAddBiomeModification>()
-    internal val spawnAdd = mutableListOf<SpawnAddBiomeModification>()
-    internal val carverAdd = mutableListOf<CarverAddBiomeModification>()
+    public val featureAdd: MutableList<FeatureAddBiomeModification> = mutableListOf()
+    public val spawnAdd: MutableList<SpawnAddBiomeModification> = mutableListOf()
+    public val carverAdd: MutableList<CarverAddBiomeModification> = mutableListOf()
 
     override fun addFeature(
         biome: (Holder<Biome>) -> Boolean,
