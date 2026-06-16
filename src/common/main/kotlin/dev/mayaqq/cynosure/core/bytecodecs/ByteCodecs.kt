@@ -7,6 +7,7 @@ import com.teamresourceful.bytecodecs.utils.ByteBufUtils
 import dev.mayaqq.cynosure.core.bytecodecs.item.ItemStackByteCodec
 import dev.mayaqq.cynosure.core.codecs.IngredientCodec
 import dev.mayaqq.cynosure.core.codecs.fieldOf
+import dev.mayaqq.cynosure.core.identifier
 import invoke.kitty.kritter.utils.Either
 import invoke.kitty.kritter.utils.Either.Left
 import invoke.kitty.kritter.utils.Either.Right
@@ -42,7 +43,7 @@ public object ByteCodecs {
 
     @JvmField
     public val RESOURCE_LOCATION: ByteCodec<ResourceLocation> =
-        ByteCodec.STRING.map(::ResourceLocation, ResourceLocation::toString)
+        ByteCodec.STRING.map(::identifier, ResourceLocation::toString)
 
     @JvmField
     public val DIMENSION: ByteCodec<ResourceKey<Level>> = resourceKey(Registries.DIMENSION)

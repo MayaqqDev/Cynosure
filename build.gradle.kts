@@ -268,15 +268,6 @@ kotlin {
     explicitApiWarning()
 }
 
-tasks.withType<KotlinCompile> {
-    explicitApiMode = org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Warning
-    compilerOptions {
-        languageVersion = KotlinVersion.KOTLIN_2_0
-        optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
-        freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers", "-Xmulti-platform", "-Xno-check-actual", "-Xexpect-actual-classes")
-    }
-}
-
 //Lemme just disable compiling java to fix issues
 tasks.compileJava {
     enabled = false
