@@ -3,7 +3,6 @@ package dev.mayaqq.cynosure.client
 import dev.mayaqq.cynosure.CommonCynosureFabric
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.client.events.ClientReloadListenerEvent
-import dev.mayaqq.cynosure.client.events.CynosureWorldRenderEventHandler
 import dev.mayaqq.cynosure.client.events.KeybindRegistrationEvent
 import dev.mayaqq.cynosure.client.events.ParticleFactoryRegistrationEvent
 import dev.mayaqq.cynosure.events.api.post
@@ -17,11 +16,10 @@ import net.minecraft.core.particles.ParticleType
 import net.minecraft.server.packs.PackType
 
 
-public object CynosureClientFabric {
+public object CommonCynosureClientFabric {
     @CynosureInternal
     public fun init() {
         CommonCynosureFabric.lateinit()
-        CynosureWorldRenderEventHandler.init()
         ClientFapiFeed.feed()
 
         ParticleFactoryRegistrationEvent(object : ParticleFactoryRegistrationEvent.Context {

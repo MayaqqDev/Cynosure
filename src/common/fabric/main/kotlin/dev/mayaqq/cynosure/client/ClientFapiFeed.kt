@@ -1,17 +1,13 @@
 package dev.mayaqq.cynosure.client
 
-import dev.mayaqq.cynosure.Cynosure
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.client.events.ClientTickEvent
 import dev.mayaqq.cynosure.client.events.CoreShaderRegistrationEvent
-import dev.mayaqq.cynosure.client.events.render.EndHudRenderEvent
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.world.LevelEvent
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.CoreShaderRegistrationCallback
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.minecraft.client.Minecraft
 
 internal object ClientFapiFeed {
     @CynosureInternal
@@ -31,10 +27,5 @@ internal object ClientFapiFeed {
         ClientTickEvents.END_CLIENT_TICK.register { ClientTickEvent.End.post() }
         ClientTickEvents.START_WORLD_TICK.register { LevelEvent.BeginTick(it).post() }
         ClientTickEvents.END_WORLD_TICK.register { LevelEvent.EndTick(it).post() }
-
-        // Rendering
-        HudRenderCallback.EVENT.register { graphics, float ->
-            EndHudRenderEvent(Minecraft.getInstance().gui, graphics, float).post()
-        }
     }
 }

@@ -15,7 +15,7 @@ import net.minecraft.world.phys.HitResult
 public sealed class LevelRenderEvent(
     public val level: ClientLevel,
     public val renderer: LevelRenderer,
-    public val poseStack: PoseStack,
+    public val poseStack: PoseStack?,
     public val partialTick: Float,
     public val camera: Camera,
     public val frustum: Frustum?,
@@ -29,7 +29,7 @@ public sealed class LevelRenderEvent(
     public class Start(
         level: ClientLevel,
         renderer: LevelRenderer,
-        poseStack: PoseStack,
+        poseStack: PoseStack?,
         partialTick: Float,
         camera: Camera,
         frustum: Frustum?,
@@ -42,7 +42,7 @@ public sealed class LevelRenderEvent(
     public class BeforeTerrain(
         level: ClientLevel,
         renderer: LevelRenderer,
-        poseStack: PoseStack,
+        poseStack: PoseStack?,
         partialTick: Float,
         camera: Camera,
         frustum: Frustum?,
@@ -55,7 +55,7 @@ public sealed class LevelRenderEvent(
     public class AfterTerrain(
         level: ClientLevel,
         renderer: LevelRenderer,
-        poseStack: PoseStack,
+        poseStack: PoseStack?,
         partialTick: Float,
         camera: Camera,
         frustum: Frustum?,
