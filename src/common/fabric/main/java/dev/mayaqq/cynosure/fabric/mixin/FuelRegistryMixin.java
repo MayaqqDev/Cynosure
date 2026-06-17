@@ -9,6 +9,8 @@ import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+// Mixin check: should work
+
 @Mixin(FuelRegistryImpl.class)
 public class FuelRegistryMixin {
 

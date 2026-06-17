@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// Mixin check: should work
+
 @Mixin(ServerLevel.class)
 public class ServerLevelMixin {
 
@@ -18,7 +20,7 @@ public class ServerLevelMixin {
         method = "save",
         at = @At("HEAD")
     )
-    private void onSave(ProgressListener progressListener, boolean bl, boolean bl2, CallbackInfo ci) {
+    private void onSave(ProgressListener progressListener, boolean flush, boolean skipSave, CallbackInfo ci) {
         MainBus.INSTANCE.post(new LevelEvent.Save((ServerLevel) (Object) this));
     }
 

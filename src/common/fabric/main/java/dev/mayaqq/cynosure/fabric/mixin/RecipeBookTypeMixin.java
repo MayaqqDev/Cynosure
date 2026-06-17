@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Arrays;
 
+// Mixin check: should work
+
 @Mixin(RecipeBookType.class)
 public class RecipeBookTypeMixin implements IRecipeBookTypes {
 

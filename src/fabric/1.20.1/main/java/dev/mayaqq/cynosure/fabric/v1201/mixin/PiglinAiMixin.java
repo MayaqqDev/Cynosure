@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin;
+package dev.mayaqq.cynosure.fabric.v1201.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;

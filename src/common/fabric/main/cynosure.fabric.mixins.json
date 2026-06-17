@@ -7,16 +7,13 @@
     "AbstractFurnaceBlockEntityMixin",
     "AttributeSupplierBuilderAccessor",
     "AttributeSupplierMixin",
-    "CommandsMixin",
     "EntityMixin",
     "FuelRegistryMixin",
     "LootTableMixin",
     "PersistentEntitySectionManagerMixin",
-    "PiglinAiMixin",
     "PlayerMixin",
     "RecipeBookTypeMixin",
     "ServerLevelMixin",
-    "ServerGamePacketListenerImplMixin",
     "LivingEntityMixin"
   ],
   "client": [

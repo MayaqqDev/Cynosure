@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Map;
 
+// Mixin check: probably works
+
 @Mixin(AttributeSupplier.class)
 public class AttributeSupplierMixin implements IAttributeSupplier {
     @Shadow @Final private Map<Attribute, AttributeInstance> instances;
