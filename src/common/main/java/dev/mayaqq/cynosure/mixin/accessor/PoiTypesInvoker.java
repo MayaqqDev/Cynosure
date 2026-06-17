@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Set;
 
+// Mixin check: should work
+
 @Mixin(PoiTypes.class)
 public interface PoiTypesInvoker {
     @Invoker("registerBlockStates")

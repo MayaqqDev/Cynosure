@@ -5,6 +5,8 @@ import net.minecraft.server.level.ChunkMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+// Mixin check: should work
+
 @Mixin(value = ChunkMap.class)
 public interface ChunkMapAccessor {
     @Accessor

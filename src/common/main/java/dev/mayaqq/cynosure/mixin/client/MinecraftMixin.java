@@ -20,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Locale;
 
+// Mixin check: should work
+
 @Mixin(Minecraft.class)
 public class MinecraftMixin implements IMinecraft {
     @Shadow public LocalPlayer player;

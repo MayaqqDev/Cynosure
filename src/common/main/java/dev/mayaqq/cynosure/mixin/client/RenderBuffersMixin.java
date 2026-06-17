@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.SortedMap;
 
+// Mixin check: should work
+
 @Mixin(RenderBuffers.class)
 public class RenderBuffersMixin {
 

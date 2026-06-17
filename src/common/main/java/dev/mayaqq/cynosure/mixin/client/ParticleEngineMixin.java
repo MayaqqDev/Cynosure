@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.ArrayList;
 import java.util.List;
 
+// Mixin check: should work
+
 @Mixin(value = ParticleEngine.class, priority = 1200)
 public class ParticleEngineMixin {
 

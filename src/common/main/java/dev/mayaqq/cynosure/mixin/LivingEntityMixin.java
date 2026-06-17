@@ -1,39 +1,23 @@
 package dev.mayaqq.cynosure.mixin;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import dev.mayaqq.cynosure.effects.Effextras;
 import dev.mayaqq.cynosure.events.api.EventBus;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.events.entity.EntityDamageEvent;
 import dev.mayaqq.cynosure.events.entity.EntityDamageSourceEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Mixin check: should work
+
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
-
-    @WrapWithCondition(
-            method = "onEffectUpdated",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/effect/MobEffect;removeAttributeModifiers(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/attributes/AttributeMap;I)V"
-            )
-    )
-    public boolean onEffectUpdated(MobEffect effect, LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
-        // Mojang calls remove and then add when updating an effect we do not want this for the Girl Power effect.r
-        return !Effextras.getUpdateless(effect);
-    }
-
     @ModifyVariable(
             method = "hurt",
             at = @At(value = "HEAD"),

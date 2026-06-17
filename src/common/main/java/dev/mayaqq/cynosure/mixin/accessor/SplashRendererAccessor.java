@@ -4,6 +4,8 @@ import net.minecraft.client.gui.components.SplashRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+// Mixin check: should work
+
 @Mixin(SplashRenderer.class)
 public interface SplashRendererAccessor {
     @Accessor

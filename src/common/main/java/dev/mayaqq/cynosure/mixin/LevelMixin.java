@@ -7,6 +7,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 
+// Mixin check: should work
+
 @Mixin(Level.class)
 public abstract class LevelMixin implements ILevel {
 

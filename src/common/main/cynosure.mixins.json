@@ -19,14 +19,12 @@
     "accessor.ChunkMapAccessor",
     "accessor.PoiTypesInvoker",
     "accessor.TrackedEntityAccessor",
-    "PlayerListMixin",
     "PoiTypesMixin"
   ],
   "client": [
     "accessor.SplashRendererAccessor",
     "client.CapeLayerMixin",
     "client.GameRendererMixin",
-    "client.ItemStackMixin",
     "client.LevelRendererMixin",
     "client.MinecraftMixin",
     "client.ParticleEngineMixin",

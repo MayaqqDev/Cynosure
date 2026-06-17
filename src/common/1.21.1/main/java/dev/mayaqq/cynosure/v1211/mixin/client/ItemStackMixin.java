@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.mixin.client;
+package dev.mayaqq.cynosure.v1211.mixin.client;
 
 import dev.mayaqq.cynosure.client.events.tooltip.ModifyTooltipComponentsEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
@@ -20,14 +20,14 @@ import java.util.List;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-
-    @Shadow public abstract Item getItem();
+    @Shadow
+    public abstract Item getItem();
 
     @Inject(
-        method = "getTooltipLines",
-        at = @At("RETURN")
+            method = "getTooltipLines",
+            at = @At("RETURN")
     )
-    private void addCustomLines(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
+    private void addCustomLines(Item.TooltipContext context, Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
         CustomTooltip extension = ItemExtension.Registry.getExtension(CustomTooltip.class, this.getItem());
         List<Component> list = cir.getReturnValue();
         if (extension != null) {

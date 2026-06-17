@@ -6,6 +6,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Set;
 
+// Mixin check: should work
+
 @Mixin(targets = "net.minecraft.server.level.ChunkMap$TrackedEntity")
 public interface TrackedEntityAccessor {
     @Accessor("seenBy")

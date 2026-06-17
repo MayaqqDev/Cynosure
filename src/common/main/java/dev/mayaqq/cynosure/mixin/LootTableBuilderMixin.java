@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
+// Mixin check: doesn't work
+
 @Mixin(LootTable.Builder.class)
 public class LootTableBuilderMixin implements ILootTableBuilder {
     @Shadow

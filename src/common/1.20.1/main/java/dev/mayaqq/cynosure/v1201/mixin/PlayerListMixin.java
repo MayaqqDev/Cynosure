@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.mixin;
+package dev.mayaqq.cynosure.v1201.mixin;
 
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.events.entity.player.PlayerRespawnEvent;

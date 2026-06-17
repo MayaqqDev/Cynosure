@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 
+// Mixin check: should work
+
 @Mixin(SplashManager.class)
 public class SplashManagerMixin {
 

@@ -1,6 +1,5 @@
 package dev.mayaqq.cynosure.mixin.client;
 
-import dev.mayaqq.cynosure.client.events.render.GameRenderEvent;
 import dev.mayaqq.cynosure.client.events.render.ResizeRendererEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import net.minecraft.client.renderer.GameRenderer;
@@ -14,17 +13,9 @@ public abstract class GameRendererMixin {
 
     @Inject(
         method = "resize",
-        at = @At("RETURN")
+        at = @At("TAIL")
     )
     private void onResizeRenderer(int width, int height, CallbackInfo ci) {
         MainBus.INSTANCE.post(new ResizeRendererEvent(width, height));
-    }
-
-    @Inject(
-            method = "render",
-            at = @At("HEAD")
-    )
-    private void onRenderStart(float partialTick, long nanos, boolean bl, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new GameRenderEvent(partialTick, nanos));
     }
 }

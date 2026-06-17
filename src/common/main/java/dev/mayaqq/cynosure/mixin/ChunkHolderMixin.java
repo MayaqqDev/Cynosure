@@ -12,6 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+// Mixin check: should work
+
 @Mixin(ChunkHolder.class)
 @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
 public class ChunkHolderMixin {
