@@ -1,8 +1,9 @@
-package dev.mayaqq.cynosure.fabric.mixin.client;
+package dev.mayaqq.cynosure.fabric.v1211.mixin.client;
 
 import dev.mayaqq.cynosure.events.api.MainBus;
 import dev.mayaqq.cynosure.events.world.LevelEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,12 +22,12 @@ public class MinecraftMixin {
         method = "setLevel",
         at = @At("HEAD")
     )
-    private void onChangeLevel(ClientLevel clientLevel, CallbackInfo ci) {
+    private void onChangeLevel(ClientLevel level, ReceivingLevelScreen.Reason reason, CallbackInfo ci) {
         if (level != null) MainBus.INSTANCE.post(new LevelEvent.Unload(level));
     }
 
     @Inject(
-        method = "clearLevel(Lnet/minecraft/client/gui/screens/Screen;)V",
+        method = "clearClientLevel",
         at = @At("HEAD")
     )
     private void onClearLevel(CallbackInfo ci) {

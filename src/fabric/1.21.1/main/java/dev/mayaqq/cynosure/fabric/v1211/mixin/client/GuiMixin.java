@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin.client;
+package dev.mayaqq.cynosure.fabric.v1211.mixin.client;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -11,6 +11,7 @@ import dev.mayaqq.cynosure.client.render.gui.HudOverlay;
 import dev.mayaqq.cynosure.client.render.gui.HudOverlayRegistry;
 import dev.mayaqq.cynosure.client.render.gui.VanillaHud;
 import dev.mayaqq.cynosure.events.api.MainBus;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -61,13 +62,13 @@ public abstract class GuiMixin {
         at = @At("HEAD"),
         cancellable = true
     )
-    private void onBeginRenderHud(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        var event = new BeginHudRenderEvent((Gui) (Object) this, guiGraphics, partialTick);
+    private void onBeginRenderHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        var event = new BeginHudRenderEvent((Gui) (Object) this, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
         if(MainBus.INSTANCE.post(event)) ci.cancel();
     }
 
     @Inject(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/Minecraft;useFancyGraphics()Z"
@@ -79,34 +80,34 @@ public abstract class GuiMixin {
             )
         )
     )
-    private void beforeRenderVignette(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.VIGNETTE, guiGraphics, partialTick);
+    private void beforeRenderVignette(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.VIGNETTE, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @ModifyExpressionValue(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"
         )
     )
-    private boolean renderLayersIfNotFirstPerson(boolean original, @Local(argsOnly = true) GuiGraphics graphics, @Local(argsOnly = true) float partialTick) {
+    private boolean renderLayersIfNotFirstPerson(boolean original, @Local(argsOnly = true) GuiGraphics graphics, @Local(argsOnly = true) DeltaTracker delta) {
         if(!original) {
-            renderPhaseOverlays(VanillaHud.SPYGLASS, graphics, partialTick);
-            renderPhaseOverlays(VanillaHud.HELMET, graphics, partialTick);
+            renderPhaseOverlays(VanillaHud.SPYGLASS, graphics, delta.getGameTimeDeltaPartialTick(false));
+            renderPhaseOverlays(VanillaHud.HELMET, graphics, delta.getGameTimeDeltaPartialTick(false));
         }
         return original;
     }
 
     @Inject(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;isScoping()Z"
         )
     )
-    private void beforeRenderSpyGlass(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.SPYGLASS, guiGraphics, partialTick);
+    private void beforeRenderSpyGlass(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.SPYGLASS, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Definition(id = "CARVED_PUMPKIN", field = "Lnet/minecraft/world/level/block/Blocks;CARVED_PUMPKIN:Lnet/minecraft/world/level/block/Block;")
@@ -114,22 +115,22 @@ public abstract class GuiMixin {
     @Definition(id = "is", method = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z")
     @Expression("?.is(CARVED_PUMPKIN.asItem())")
     @Inject(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At("MIXINEXTRAS:EXPRESSION")
     )
-    private void beforePumpkinOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.HELMET, guiGraphics, partialTick);
+    private void beforePumpkinOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.HELMET, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;getTicksFrozen()I"
         )
     )
-    private void beforeFreezingOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.FROSTBITE, guiGraphics, partialTick);
+    private void beforeFreezingOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.FROSTBITE, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Definition(id = "lerp", method = "Lnet/minecraft/util/Mth;lerp(FFF)F")
@@ -137,30 +138,25 @@ public abstract class GuiMixin {
     @Definition(id = "spinningEffectIntensity", field = "Lnet/minecraft/client/player/LocalPlayer;spinningEffectIntensity:F")
     @Expression("lerp(?, ?.oSpinningEffectIntensity, ?.spinningEffectIntensity)")
     @Inject(
-        method = "render",
+        method = "renderCameraOverlays",
         at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER)
     )
-    private void beforePortalOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.PORTAL, guiGraphics, partialTick);
+    private void beforePortalOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.PORTAL, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;getPlayerMode()Lnet/minecraft/world/level/GameType;"
-        ),
-        slice = @Slice(
-            to = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/Gui;renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V"
-            )
         )
     )
-    private void beforeHotbar(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.HOTBAR, guiGraphics, partialTick);
+    private void beforeHotbar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.HOTBAR, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
+    /* TODO: This jsut does not work with the current system
     @ModifyExpressionValue(
         method = "render",
         at = @At(
@@ -192,55 +188,56 @@ public abstract class GuiMixin {
         }
         return original;
     }
+     */
 
     @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/Gui;renderCrosshair(Lnet/minecraft/client/gui/GuiGraphics;)V"
-        )
+        method = "renderCrosshair",
+        at = @At("HEAD")
     )
-    private void beforeRenderCrosshair(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.CROSSHAIR, guiGraphics, partialTick);
+    private void beforeRenderCrosshair(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.CROSSHAIR, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "lambda$new$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V"
         )
     )
-    private void beforeBossOverlay(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.BOSS_BAR, guiGraphics, partialTick);
+    private void beforeBossOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.BOSS_BAR, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @ModifyExpressionValue(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;canHurtPlayer()Z"
         )
     )
-    private boolean ifHealthAndFoodHidden(boolean original, @Local(argsOnly = true) GuiGraphics graphics, @Local(argsOnly = true) float partialTick) {
+    private boolean ifHealthAndFoodHidden(boolean original, @Local(argsOnly = true) GuiGraphics graphics, @Local(argsOnly = true) DeltaTracker delta) {
         if (!original) {
-            renderPhaseOverlays(VanillaHud.PLAYER_HEALTH, graphics, partialTick);
-            renderPhaseOverlays(VanillaHud.FOOD_LEVEL, graphics, partialTick);
+            renderPhaseOverlays(VanillaHud.PLAYER_HEALTH, graphics, delta.getGameTimeDeltaPartialTick(false));
+            renderPhaseOverlays(VanillaHud.FOOD_LEVEL, graphics, delta.getGameTimeDeltaPartialTick(false));
         }
-        capturedPartialTick = partialTick;
+        capturedPartialTick = delta;
         return original;
     }
 
     @Unique
-    private float capturedPartialTick = 0f;
+    DeltaTracker capturedPartialTick;
 
     @Inject(
-        method = "renderPlayerHealth",
-        at = @At("HEAD")
+        method = "renderHotbarAndDecorations",
+        at = @At(
+                value = "INVOKE",
+                target = "Lnet/minecraft/client/gui/Gui;renderPlayerHealth(Lnet/minecraft/client/gui/GuiGraphics;)V"
+        )
     )
-    private void beforePlayerHealth(GuiGraphics guiGraphics, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.PLAYER_HEALTH, guiGraphics, capturedPartialTick);
-        if(getCameraPlayer() == null) renderPhaseOverlays(VanillaHud.FOOD_LEVEL, guiGraphics, capturedPartialTick);
+    private void beforePlayerHealth(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.PLAYER_HEALTH, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+        if(getCameraPlayer() == null) renderPhaseOverlays(VanillaHud.FOOD_LEVEL, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
@@ -252,43 +249,43 @@ public abstract class GuiMixin {
         )
     )
     private void beforeFoodLevel(GuiGraphics guiGraphics, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.FOOD_LEVEL, guiGraphics, capturedPartialTick);
+        renderPhaseOverlays(VanillaHud.FOOD_LEVEL, guiGraphics, capturedPartialTick.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/Gui;renderVehicleHealth(Lnet/minecraft/client/gui/GuiGraphics;)V")
     )
-    private void beforeVehicleHealth(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.MOUNT_HEALTH, guiGraphics, partialTick);
+    private void beforeVehicleHealth(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.MOUNT_HEALTH, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/LocalPlayer;jumpableVehicle()Lnet/minecraft/world/entity/PlayerRideableJumping;"
         )
     )
-    private void beforeJumpBar(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.JUMP_BAR, guiGraphics, partialTick);
+    private void beforeJumpBar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.JUMP_BAR, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;hasExperience()Z"
+            target = "Lnet/minecraft/client/gui/Gui;isExperienceBarVisible()Z"
         )
     )
-    private void beforeXpBar(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.XP_BAR, guiGraphics, partialTick);
+    private void beforeXpBar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.XP_BAR, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderHotbarAndDecorations",
         at = {
             @At(
                 value = "INVOKE",
@@ -300,45 +297,38 @@ public abstract class GuiMixin {
             )
         }
     )
-    private void beforeSpectatorTooltip(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.ITEM_NAME, guiGraphics, partialTick);
+    private void beforeSpectatorTooltip(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.ITEM_NAME, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderSleepOverlay",
+        at = @At("HEAD")
+    )
+    private void beforeSleep(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.SLEEP_FADE, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+    }
+
+    @Inject(
+        method = "renderEffects",
+        at = @At("HEAD")
+    )
+    private void beforeEffects(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.EFFECTS, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+    }
+
+    @Inject(
+        method = "lambda$new$1",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;getSleepTimer()I",
-            ordinal = 0
+            target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;showDebugScreen()Z"
         )
     )
-    private void beforeSleep(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.SLEEP_FADE, guiGraphics, partialTick);
+    private void beforeDebug(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.DEBUG, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
-    @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"
-        )
-    )
-    private void beforeEffects(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.EFFECTS, guiGraphics, partialTick);
-    }
-
-    @Inject(
-        method = "render",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/client/Options;renderDebug:Z",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    private void beforeDebug(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.DEBUG, guiGraphics, partialTick);
-    }
-
+    /* TODO: Again, it doesnt wokr this way anymore :(
     @ModifyExpressionValue(
         method = "render",
         at = @At(
@@ -364,68 +354,55 @@ public abstract class GuiMixin {
         }
         return original;
     }
+     */
 
-    @Definition(id = "overlayMessageString", field = "Lnet/minecraft/client/gui/Gui;overlayMessageString:Lnet/minecraft/network/chat/Component;")
-    @Expression("?.overlayMessageString != null")
     @Inject(
-        method = "render",
-        at = @At("MIXINEXTRAS:EXPRESSION")
+        method = "renderOverlayMessage",
+        at = @At("HEAD")
     )
-    private void beforeOverlayMessageString(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.OVERLAY_MESSAGE, guiGraphics, partialTick);
-    }
-
-    @Definition(id = "title", field = "Lnet/minecraft/client/gui/Gui;title:Lnet/minecraft/network/chat/Component;")
-    @Expression("?.title != null")
-    @Inject(
-        method = "render",
-        at = @At("MIXINEXTRAS:EXPRESSION")
-    )
-    private void beforeTitle(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.TITLE_TEXT, guiGraphics, partialTick);
+    private void beforeOverlayMessageString(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.OVERLAY_MESSAGE, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
+        method = "renderTitle",
+        at = @At("HEAD")
+    )
+    private void beforeTitle(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.TITLE_TEXT, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+    }
+
+    @Inject(
+        method = "lambda$new$2",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/components/SubtitleOverlay;render(Lnet/minecraft/client/gui/GuiGraphics;)V")
     )
-    private void beforeSubtitle(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.SUBTITLES, guiGraphics, partialTick);
+    private void beforeSubtitle(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.SUBTITLES, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/multiplayer/ClientLevel;getScoreboard()Lnet/minecraft/world/scores/Scoreboard;"
-        )
+        method = "renderScoreboardSidebar",
+        at = @At("HEAD")
     )
-    private void beforeScoreboard(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.SCOREBOARD, guiGraphics, partialTick);
+    private void beforeScoreboard(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.SCOREBOARD, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE_STRING",
-            target = "Lnet/minecraft/util/profiling/ProfilerFiller;push(Ljava/lang/String;)V",
-            args = "ldc=chat"
-        )
+        method = "renderChat",
+        at = @At("HEAD")
     )
-    private void beforeChat(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.CHAT, guiGraphics, partialTick);
+    private void beforeChat(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.CHAT, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
     @Inject(
-        method = "render",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/KeyMapping;isDown()Z"
-        )
+        method = "renderTabList",
+        at = @At("HEAD")
     )
-    private void beforePlayerList(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
-        renderPhaseOverlays(VanillaHud.PLAYER_LIST, guiGraphics, partialTick);
+    private void beforePlayerList(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+        renderPhaseOverlays(VanillaHud.PLAYER_LIST, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 }

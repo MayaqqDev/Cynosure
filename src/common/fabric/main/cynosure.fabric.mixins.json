@@ -4,9 +4,6 @@
   "package": "dev.mayaqq.cynosure.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "AbstractFurnaceBlockEntityMixin",
-    "AttributeSupplierBuilderAccessor",
-    "AttributeSupplierMixin",
     "EntityMixin",
     "FuelRegistryMixin",
     "LootTableMixin",
@@ -17,13 +14,8 @@
     "LivingEntityMixin"
   ],
   "client": [
-    "client.ClientLevelMixin",
-    "client.EffectInstanceMixin",
     "client.EntityRenderersMixin",
-    "client.GuiMixin",
-    "client.LanguageManagerMixin",
-    "client.LevelRendererMixin",
-    "client.MinecraftMixin"
+    "client.LanguageManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

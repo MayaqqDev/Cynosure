@@ -15,7 +15,7 @@ public object CynosureClientFabric {
         CynosureWorldRenderEventHandler.init()
 
         HudRenderCallback.EVENT.register { graphics, delta ->
-            EndHudRenderEvent(Minecraft.getInstance().gui, graphics, delta.realtimeDeltaTicks).post()
+            EndHudRenderEvent(Minecraft.getInstance().gui, graphics, delta.getGameTimeDeltaPartialTick(false)).post()
         }
     }
 }

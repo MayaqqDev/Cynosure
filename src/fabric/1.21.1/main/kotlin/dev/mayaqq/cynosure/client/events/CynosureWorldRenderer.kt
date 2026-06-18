@@ -38,28 +38,28 @@ internal object CynosureWorldRenderEventHandler : WorldRenderEvents.Start, World
 
     override fun onStart(context: WorldRenderContext) {
         LevelRenderEvent.Start(context.world(), context.worldRenderer(), context.matrixStack(),
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun afterSetup(context: WorldRenderContext) {
         LevelRenderEvent.BeforeTerrain(context.world(), context.worldRenderer(), context.matrixStack(),
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
         this.frustum = context.frustum()
     }
 
     override fun beforeEntities(context: WorldRenderContext) {
         LevelRenderEvent.AfterTerrain(context.world(), context.worldRenderer(), context.matrixStack(),
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun afterEntities(context: WorldRenderContext) {
         LevelRenderEvent.AfterEntities(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun beforeBlockOutline(context: WorldRenderContext, hitResult: HitResult?): Boolean {
         val event = LevelRenderEvent.BeforeBlockOutline(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers(), hitResult)
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers(), hitResult)
         event.post()
         return event.renderOutline
     }
@@ -69,7 +69,7 @@ internal object CynosureWorldRenderEventHandler : WorldRenderEvents.Start, World
         blockOutlineContext: WorldRenderContext.BlockOutlineContext
     ): Boolean {
         val event = LevelRenderEvent.BlockOutline(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers(),
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers(),
             blockOutlineContext.entity(), blockOutlineContext.blockPos(), blockOutlineContext.blockState())
         event.post()
         return event.renderVanillaOutline
@@ -77,7 +77,7 @@ internal object CynosureWorldRenderEventHandler : WorldRenderEvents.Start, World
 
     override fun beforeDebugRender(context: WorldRenderContext) {
         LevelRenderEvent.DebugRender(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     fun afterTranslucentTerrain(level: ClientLevel, renderer: LevelRenderer, poseStack: PoseStack, partialTicks: Float, camera: Camera, bufferSoure: MultiBufferSource) {
@@ -86,17 +86,17 @@ internal object CynosureWorldRenderEventHandler : WorldRenderEvents.Start, World
 
     override fun afterTranslucent(context: WorldRenderContext) {
         LevelRenderEvent.AfterParticles(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun onLast(context: WorldRenderContext) {
         LevelRenderEvent.Last(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun onEnd(context: WorldRenderContext) {
         LevelRenderEvent.End(context.world(), context.worldRenderer(), context.matrixStack()!!,
-            context.tickCounter().realtimeDeltaTicks, context.camera(), context.frustum(), context.consumers()).post()
+            context.tickCounter().getGameTimeDeltaPartialTick(false), context.camera(), context.frustum(), context.consumers()).post()
     }
 
     override fun onInvalidate() {

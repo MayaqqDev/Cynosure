@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Locale;
 
+// Mixin check: should work
+
 @Mixin(LanguageManager.class)
 public class LanguageManagerMixin implements ILanguageManager {
 

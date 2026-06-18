@@ -32,41 +32,41 @@ public object CynosureForgeClientEvents {
         when(event.stage) {
             RenderLevelStageEvent.Stage.AFTER_CUTOUT_BLOCKS -> LevelRenderEvent.AfterTerrain(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, event.frustum, event.bufferSource
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, event.frustum, event.bufferSource
             ).post()
             RenderLevelStageEvent.Stage.AFTER_ENTITIES -> LevelRenderEvent.AfterEntities(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, event.frustum, event.bufferSource
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, event.frustum, event.bufferSource
             ).post()
             RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS -> LevelRenderEvent.AfterTranslucentTerrain(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, event.frustum, event.bufferSource
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, event.frustum, event.bufferSource
             ).post()
             RenderLevelStageEvent.Stage.AFTER_PARTICLES -> LevelRenderEvent.AfterParticles(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, event.frustum, event.bufferSource
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, event.frustum, event.bufferSource
             ).post()
             RenderLevelStageEvent.Stage.AFTER_WEATHER -> LevelRenderEvent.Last(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, event.frustum, event.bufferSource
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, event.frustum, event.bufferSource
             ).post()
             RenderLevelStageEvent.Stage.AFTER_LEVEL -> LevelRenderEvent.End(
                 event.levelRenderer.level, event.levelRenderer, event.poseStack,
-                event.partialTick.realtimeDeltaTicks, event.camera, null, null
+                event.partialTick.getGameTimeDeltaPartialTick(false), event.camera, null, null
             ).post()
         }
     }
 
     @SubscribeEvent
     public fun onDrawHiglight(event: RenderHighlightEvent.Block) {
-        val ev = LevelRenderEvent.BeforeBlockOutline(event.levelRenderer.level, event.levelRenderer, event.poseStack, event.deltaTracker.realtimeDeltaTicks,
+        val ev = LevelRenderEvent.BeforeBlockOutline(event.levelRenderer.level, event.levelRenderer, event.poseStack, event.deltaTracker.getGameTimeDeltaPartialTick(false),
             event.camera, capturedFrustum, event.multiBufferSource, event.target)
         ev.post()
         if(ev.renderOutline) {
             val entity = Minecraft.getInstance().cameraEntity
             val pos = event.target.blockPos
             val state = Minecraft.getInstance().level?.getBlockState(pos) ?: Blocks.AIR.defaultBlockState()
-            val ev2 = LevelRenderEvent.BlockOutline(event.levelRenderer.level, event.levelRenderer, event.poseStack, event.deltaTracker.realtimeDeltaTicks,
+            val ev2 = LevelRenderEvent.BlockOutline(event.levelRenderer.level, event.levelRenderer, event.poseStack, event.deltaTracker.getGameTimeDeltaPartialTick(false),
                 event.camera, capturedFrustum, event.multiBufferSource, entity!!, pos, state)
             ev2.post()
             event.isCanceled = !ev2.renderVanillaOutline
@@ -75,12 +75,12 @@ public object CynosureForgeClientEvents {
 
     @SubscribeEvent
     public fun onBeginRenderHud(event: RenderGuiEvent.Pre) {
-        event.isCanceled = BeginHudRenderEvent(Minecraft.getInstance().gui, event.guiGraphics, event.partialTick.realtimeDeltaTicks).post()
+        event.isCanceled = BeginHudRenderEvent(Minecraft.getInstance().gui, event.guiGraphics, event.partialTick.getGameTimeDeltaPartialTick(false)).post()
     }
 
     @SubscribeEvent
     public fun onEndRenderHud(event: RenderGuiEvent.Post) {
-        EndHudRenderEvent(Minecraft.getInstance().gui, event.guiGraphics, event.partialTick.realtimeDeltaTicks).post()
+        EndHudRenderEvent(Minecraft.getInstance().gui, event.guiGraphics, event.partialTick.getGameTimeDeltaPartialTick(false)).post()
     }
 
     @SubscribeEvent

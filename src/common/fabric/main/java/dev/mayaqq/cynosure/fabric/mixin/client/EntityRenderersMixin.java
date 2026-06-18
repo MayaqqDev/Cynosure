@@ -1,9 +1,7 @@
 package dev.mayaqq.cynosure.fabric.mixin.client;
 
-import dev.mayaqq.cynosure.Cynosure;
 import dev.mayaqq.cynosure.client.events.entity.RenderLayerRegistrationEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
-import kotlin.Unit;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -23,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
+
+// Mixin check: should work
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderersMixin {

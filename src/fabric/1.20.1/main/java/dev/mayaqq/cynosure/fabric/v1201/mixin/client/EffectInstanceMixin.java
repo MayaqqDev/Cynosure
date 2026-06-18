@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin.client;
+package dev.mayaqq.cynosure.fabric.v1201.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

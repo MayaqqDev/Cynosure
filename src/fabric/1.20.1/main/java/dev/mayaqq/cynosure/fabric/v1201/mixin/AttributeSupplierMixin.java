@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin;
+package dev.mayaqq.cynosure.fabric.v1201.mixin;
 
 import dev.mayaqq.cynosure.injection.IAttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attribute;

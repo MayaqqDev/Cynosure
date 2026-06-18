@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin.client;
+package dev.mayaqq.cynosure.fabric.v1201.mixin.client;
 
 import dev.mayaqq.cynosure.events.ExtraEventHandling;
 import dev.mayaqq.cynosure.events.api.MainBus;
