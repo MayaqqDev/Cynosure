@@ -12,8 +12,6 @@
     "LevelChunkMixin",
     "LevelMixin",
     "LivingEntityMixin",
-    "LootPoolBuilderMixin",
-    "LootTableBuilderMixin",
     "ServerLevelMixin",
     "ServerPlayerMixin",
     "accessor.ChunkMapAccessor",

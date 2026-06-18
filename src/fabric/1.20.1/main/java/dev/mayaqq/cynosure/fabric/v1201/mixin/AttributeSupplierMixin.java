@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.fabric.v1201.mixin;
 
 import dev.mayaqq.cynosure.injection.IAttributeSupplier;
+import dev.mayaqq.cynosure.v1211.mixin.mixin.AttributeSupplierBuilderAccessor;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;

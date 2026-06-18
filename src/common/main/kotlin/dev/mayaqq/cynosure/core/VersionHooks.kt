@@ -7,11 +7,12 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.level.block.Block
 
 public fun identifier(namespace: String, path: String): ResourceLocation = VersionHooks.makeIdentifier(namespace, path)
 public fun identifier(parsable: String): ResourceLocation = VersionHooks.parseIdentifier(parsable)
 
-
+public fun Block.lootTableId(): ResourceLocation = VersionHooks.getLootTableId(this)
 
 public interface VersionHooks {
     public companion object Impl : VersionHooks by loadPlatform()
@@ -24,4 +25,6 @@ public interface VersionHooks {
     public fun <R> DataResult<R>.toKtResult(allowPartial: Boolean = false): Result<R>
 
     public fun componentFromJsonLenient(json: String): MutableComponent?
+
+    public fun getLootTableId(block: Block): ResourceLocation
 }

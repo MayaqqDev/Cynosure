@@ -4,6 +4,8 @@
   "package": "dev.mayaqq.cynosure.forge.v1211.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ReloadableServerRegistries",
+    "LootTableMixin"
   ],
   "client": [
     "client.LevelRendrerMixin"

@@ -6,7 +6,9 @@
   "refmap": "cynosure.refmap.json",
   "mixins": [
     "PlayerListMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "LootPoolBuilderMixin",
+    "LootTableBuilderMixin"
   ],
   "client": [
     "client.ItemStackMixin",

@@ -134,6 +134,7 @@ cloche {
     val common1211 = common("common:1.21.1") {
         dependsOn(root)
         mixins.from(file("src/common/1.21.1/main/cynosure-1.21.1.mixins.json"))
+        accessWideners.from(file("src/common/1.21.1/main/cynosure-1211.accesswidener"))
     }
 
     fabric("fabric:1.20.1") {

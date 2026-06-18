@@ -8,6 +8,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.level.block.Block
 
 internal object VersionHooksImpl : VersionHooks {
     override fun makeIdentifier(namespace: String, path: String): ResourceLocation = ResourceLocation(namespace, path)
@@ -28,4 +29,6 @@ internal object VersionHooksImpl : VersionHooks {
         )
 
     override fun componentFromJsonLenient(json: String): MutableComponent? = Component.Serializer.fromJsonLenient(json)
+
+    override fun getLootTableId(block: Block): ResourceLocation = block.lootTable
 }

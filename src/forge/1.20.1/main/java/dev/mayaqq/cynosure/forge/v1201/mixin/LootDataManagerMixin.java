@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.mixin;
+package dev.mayaqq.cynosure.forge.v1201.mixin;
 
 import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -53,7 +53,7 @@ public class LootDataManagerMixin {
             }
 
             // Invoke the Replace event for the current loot table.
-            var replace = new LoottableEvents.Replace(resourceManager, lootManager, dataKey.location(), table);
+            var replace = new LoottableEvents.Replace(dataKey.location(), table);
             MainBus.INSTANCE.post(replace);
             var replacement = replace.getResult();
 
@@ -63,7 +63,7 @@ public class LootDataManagerMixin {
 
             // Turn the current table into a modifiable builder and invoke the MODIFY event.
             LootTable.Builder builder = LootilsKt.copy(table);
-            MainBus.INSTANCE.post(new LoottableEvents.Modify(resourceManager, lootManager, dataKey.location(), builder));
+            MainBus.INSTANCE.post(new LoottableEvents.Modify(dataKey.location(), builder));
 
             // Turn the builder back into a loot table and store it in the new table
             var newTable = builder.build();
@@ -76,6 +76,6 @@ public class LootDataManagerMixin {
 
         this.elements = newTables.build();
 
-        MainBus.INSTANCE.post(new LoottableEvents.AllLoaded(resourceManager, lootManager));
+        MainBus.INSTANCE.post(new LoottableEvents.AllLoaded(resourceManager));
     }
 }

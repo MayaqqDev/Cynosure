@@ -4,13 +4,11 @@
   "package": "dev.mayaqq.cynosure.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "LootDataManagerMixin",
-    "LootTableMixin",
     "PiglinAiMixin"
   ],
   "client": [
     "client.LanguageManagerMixin",
-    "client.LevelRendererAccessor",
+    "client.LevelRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

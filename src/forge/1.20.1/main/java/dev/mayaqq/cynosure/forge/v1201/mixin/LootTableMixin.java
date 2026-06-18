@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.mixin;
+package dev.mayaqq.cynosure.forge.v1201.mixin;
 
 import dev.mayaqq.cynosure.injection.ILootTable;
 import net.minecraft.resources.ResourceLocation;

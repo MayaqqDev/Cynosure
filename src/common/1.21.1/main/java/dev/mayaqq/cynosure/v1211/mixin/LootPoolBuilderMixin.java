@@ -1,5 +1,6 @@
-package dev.mayaqq.cynosure.mixin;
+package dev.mayaqq.cynosure.v1211.mixin;
 
+import com.google.common.collect.ImmutableList;
 import dev.mayaqq.cynosure.injection.ILootPoolBuilder;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -18,19 +19,19 @@ public class LootPoolBuilderMixin implements ILootPoolBuilder {
 
     @Shadow
     @Final
-    private List<LootItemCondition> conditions;
+    private ImmutableList.Builder<LootItemCondition> conditions;
 
     @Shadow
     @Final
-    private List<LootPoolEntryContainer> entries;
+    private ImmutableList.Builder<LootPoolEntryContainer> entries;
 
     @Override
-    public @NotNull List<@NotNull LootItemCondition> cynosure_getConditions() {
-        return this.conditions;
+    public void cynosure_addConditions(@NotNull List<? extends @NotNull LootItemCondition> conditionList) {
+        conditions.addAll(conditionList);
     }
 
     @Override
-    public @NotNull List<@NotNull LootPoolEntryContainer> cynosure_getEntries() {
-        return this.entries;
+    public void cynosure_addEntries(@NotNull List<? extends @NotNull LootPoolEntryContainer> entryList) {
+        entries.addAll(entryList);
     }
 }

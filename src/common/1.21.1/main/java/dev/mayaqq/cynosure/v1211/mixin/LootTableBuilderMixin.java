@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.mixin;
+package dev.mayaqq.cynosure.v1211.mixin;
 
 import dev.mayaqq.cynosure.injection.ILootTableBuilder;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
-// Mixin check: doesn't work
+// Mixin check: should work
 
 @Mixin(LootTable.Builder.class)
 public class LootTableBuilderMixin implements ILootTableBuilder {
@@ -24,17 +24,17 @@ public class LootTableBuilderMixin implements ILootTableBuilder {
     private List<LootItemFunction> functions;
 
     @Override
-    public @NotNull List<@NotNull LootPool> cynosure_getPools() {
-        return this.pools;
-    }
-
-    @Override
-    public @NotNull List<@NotNull LootItemFunction> cynosure_getFunctions() {
-        return this.functions;
-    }
-
-    @Override
     public void cynosure_apply(@NotNull List<@NotNull LootItemFunction> functions) {
         this.functions.addAll(functions);
+    }
+
+    @Override
+    public void cynosure_addPools(@NotNull List<? extends @NotNull LootPool> poolList) {
+        pools.addAll(poolList);
+    }
+
+    @Override
+    public void cynosure_addFunctions(@NotNull List<? extends @NotNull LootItemFunction> functionList) {
+        functions.addAll(functionList);
     }
 }

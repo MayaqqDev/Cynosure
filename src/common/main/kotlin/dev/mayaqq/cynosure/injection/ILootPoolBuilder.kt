@@ -5,19 +5,16 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 
 public interface ILootPoolBuilder {
-    public fun cynosure_getConditions(): MutableList<LootItemCondition>
-    public fun cynosure_getEntries(): MutableList<LootPoolEntryContainer>
+    public fun cynosure_addConditions(conditions: List<LootItemCondition>)
+    public fun cynosure_addEntries(entries: List<LootPoolEntryContainer>)
 }
 
-public val LootPool.Builder.conditions: MutableList<LootItemCondition> get() = (this as ILootPoolBuilder).cynosure_getConditions()
-public val LootPool.Builder.entries: MutableList<LootPoolEntryContainer> get() = (this as ILootPoolBuilder).cynosure_getEntries()
-
 public fun LootPool.Builder.conditionally(condition: LootItemCondition): LootPool.Builder {
-    conditions.add(condition)
+    (this as ILootPoolBuilder).cynosure_addConditions(listOf(condition))
     return this
 }
 
 public fun LootPool.Builder.with(container: LootPoolEntryContainer): LootPool.Builder {
-    entries.add(container)
+    (this as ILootPoolBuilder).cynosure_addEntries(listOf(container))
     return this
 }
