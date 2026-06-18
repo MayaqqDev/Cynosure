@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+// Mixin check: should work
+
 @Mixin(PiglinAi.class)
 public class PiglinAiMixin {
     @ModifyExpressionValue(

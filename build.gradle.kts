@@ -212,6 +212,8 @@ cloche {
         loaderVersion = libs.versions.forge1201
         minecraftVersion = libs.versions.minecraft1201
 
+        mixins.from(file("src/forge/1.20.1/main/cynosure-1.20.1.neoforge.mixins.json"))
+
         metadata {
             modLoader = "kotlinforforge"
             loaderVersion("4.12.0")
@@ -234,6 +236,8 @@ cloche {
         }
         loaderVersion = libs.versions.neoforge1211
         minecraftVersion = libs.versions.minecraft1211
+
+        mixins.from(file("src/neoforge/1.21.1/main/cynosure-1.21.1.neoforge.mixins.json"))
 
         metadata {
             modLoader = "kotlinforforge"

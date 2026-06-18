@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.mixin.client;
+package dev.mayaqq.cynosure.forge.v1211.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -7,6 +7,7 @@ import dev.mayaqq.cynosure.client.events.render.LevelRenderEvent;
 import dev.mayaqq.cynosure.client.events.render.ReloadLevelRendererEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -35,8 +36,8 @@ public class LevelRendererMixin {
         method = "renderLevel",
         at = @At("HEAD")
     )
-    private void onBeginWorldRender(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci) {
-        var event = new LevelRenderEvent.Start(Objects.requireNonNull(level), (LevelRenderer) (Object) this, poseStack, partialTick, camera, null, null);
+    private void onBeginWorldRender(DeltaTracker deltaTracker, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f frustumMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        var event = new LevelRenderEvent.Start(Objects.requireNonNull(level), (LevelRenderer) (Object) this, null, deltaTracker.getGameTimeDeltaPartialTick(false), camera, null, null);
         MainBus.INSTANCE.post(event);
     }
 
@@ -48,8 +49,8 @@ public class LevelRendererMixin {
             shift = At.Shift.AFTER
         )
     )
-    private void onSetupRender(PoseStack poseStack, float partialTick, long finishNanoTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projectionMatrix, CallbackInfo ci, @Local Frustum frustum) {
-        var event = new LevelRenderEvent.BeforeTerrain(Objects.requireNonNull(level), (LevelRenderer) (Object) this, poseStack, partialTick, camera, frustum, renderBuffers.bufferSource());
+    private void onSetupRender(DeltaTracker deltaTracker, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f frustumMatrix, Matrix4f projectionMatrix, CallbackInfo ci, @Local Frustum frustum) {
+        var event = new LevelRenderEvent.BeforeTerrain(Objects.requireNonNull(level), (LevelRenderer) (Object) this, null, deltaTracker.getGameTimeDeltaPartialTick(false), camera, frustum, renderBuffers.bufferSource());
         MainBus.INSTANCE.post(event);
         CynosureForgeClientEventsKt.setCapturedFrustum(frustum);
     }
