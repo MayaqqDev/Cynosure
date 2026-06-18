@@ -4,6 +4,7 @@ import com.mojang.serialization.DataResult
 import invoke.kitty.kritter.utils.result.failure
 import invoke.kitty.kritter.utils.result.success
 import net.minecraft.core.RegistryAccess
+import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -31,5 +32,11 @@ internal object VersionHooksImpl : VersionHooks {
 
     override fun componentFromJsonLenient(json: String): MutableComponent? = Component.Serializer.fromJsonLenient(json, RegistryAccess.EMPTY)
 
+    override fun componentFromJson(json: String): MutableComponent? = Component.Serializer.fromJson(json, RegistryAccess.EMPTY)
+
+    override fun componentToJson(component: Component): String = Component.Serializer.toJson(component, RegistryAccess.EMPTY)
+
     override fun getLootTableId(block: Block): ResourceLocation = block.lootTable.location()
+
+    override fun makeNbtAccounter(quota: Long): NbtAccounter = NbtAccounter.create(quota)
 }

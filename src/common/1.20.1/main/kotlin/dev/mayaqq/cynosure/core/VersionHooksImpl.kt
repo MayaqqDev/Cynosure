@@ -3,6 +3,7 @@ package dev.mayaqq.cynosure.core
 import com.mojang.serialization.DataResult
 import invoke.kitty.kritter.utils.result.failure
 import invoke.kitty.kritter.utils.result.success
+import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -30,5 +31,11 @@ internal object VersionHooksImpl : VersionHooks {
 
     override fun componentFromJsonLenient(json: String): MutableComponent? = Component.Serializer.fromJsonLenient(json)
 
+    override fun componentFromJson(json: String): MutableComponent? = Component.Serializer.fromJson(json)
+
+    override fun componentToJson(component: Component): String = Component.Serializer.toJson(component)
+
     override fun getLootTableId(block: Block): ResourceLocation = block.lootTable
+
+    override fun makeNbtAccounter(quota: Long): NbtAccounter = NbtAccounter(quota)
 }

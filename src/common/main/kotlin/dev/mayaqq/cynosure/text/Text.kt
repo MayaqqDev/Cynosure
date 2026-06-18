@@ -33,6 +33,8 @@ public object Text {
     public fun String.asComponent(init: MutableComponent.() -> Unit = {}): MutableComponent = Component.literal(this).also(init)
 
     public fun fromJsonLenient(json: String): MutableComponent? = VersionHooks.componentFromJsonLenient(json)
+    public fun fromJson(json: String): MutableComponent? = VersionHooks.componentFromJson(json)
+    public fun toJson(component: Component): String = VersionHooks.componentToJson(component)
 
     @JvmOverloads
     public fun multiline(vararg lines: Any?, init: MutableComponent.() -> Unit = {}): MutableComponent = join(*lines, separator = CommonText.NEWLINE, init = init)

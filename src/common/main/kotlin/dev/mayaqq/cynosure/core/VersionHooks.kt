@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.core
 
 import com.mojang.serialization.DataResult
 import dev.mayaqq.cynosure.internal.loadPlatform
+import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
@@ -25,6 +26,10 @@ public interface VersionHooks {
     public fun <R> DataResult<R>.toKtResult(allowPartial: Boolean = false): Result<R>
 
     public fun componentFromJsonLenient(json: String): MutableComponent?
+    public fun componentFromJson(json: String): MutableComponent?
+    public fun componentToJson(component: Component): String
+
+    public fun makeNbtAccounter(quota: Long): NbtAccounter
 
     public fun getLootTableId(block: Block): ResourceLocation
 }

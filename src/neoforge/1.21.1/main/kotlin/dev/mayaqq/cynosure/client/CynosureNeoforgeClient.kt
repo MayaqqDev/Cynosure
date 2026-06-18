@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.resources.PlayerSkin
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
 import net.minecraft.world.entity.EntityType
@@ -40,6 +41,7 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
 import net.neoforged.neoforge.client.event.RegisterShadersEvent
+import java.util.Objects
 
 @EventBusSubscriber(modid = MODID, value = [Dist.CLIENT])
 internal object CynosureNeoforgeClient {
@@ -109,5 +111,10 @@ internal object CynosureNeoforgeClient {
             }
 
         }).post()
+    }
+
+    fun getRegistryAccess(): RegistryAccess {
+        Objects.requireNonNull(McClient.connection, "Client is not connected to a server")
+        return McClient.connection!!.registryAccess()
     }
 }

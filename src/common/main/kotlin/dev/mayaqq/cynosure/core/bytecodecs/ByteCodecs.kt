@@ -4,10 +4,12 @@ import com.teamresourceful.bytecodecs.base.ByteCodec
 import com.teamresourceful.bytecodecs.base.ObjectEntryByteCodec
 import com.teamresourceful.bytecodecs.base.`object`.ObjectByteCodec
 import com.teamresourceful.bytecodecs.utils.ByteBufUtils
+import dev.mayaqq.cynosure.core.VersionHooks
 import dev.mayaqq.cynosure.core.bytecodecs.item.ItemStackByteCodec
 import dev.mayaqq.cynosure.core.codecs.IngredientCodec
 import dev.mayaqq.cynosure.core.codecs.fieldOf
 import dev.mayaqq.cynosure.core.identifier
+import dev.mayaqq.cynosure.text.Text
 import invoke.kitty.kritter.utils.Either
 import invoke.kitty.kritter.utils.Either.Left
 import invoke.kitty.kritter.utils.Either.Right
@@ -93,7 +95,7 @@ public object ByteCodecs {
 
     @JvmField
     public val COMPONENT: ByteCodec<Component> = ByteCodec.STRING_COMPONENT
-        .map(Component.Serializer::fromJson, Component.Serializer::toJson)
+        .map(Text::fromJson, Text::toJson)
 
     @JvmField
     public val ITEM: ByteCodec<Item> = registry(BuiltInRegistries.ITEM)
@@ -165,7 +167,7 @@ public object CompoundTagByteCodec : ByteCodec<Optional<CompoundTag>> {
             buffer.readerIndex(i)
 
             try {
-                Optional.of(NbtIo.read(ByteBufInputStream(buffer), NbtAccounter(2097152L)))
+                Optional.of(NbtIo.read(ByteBufInputStream(buffer), VersionHooks.makeNbtAccounter(2097152L)))
             } catch (exception: IOException) {
                 throw RuntimeException(exception)
             }
