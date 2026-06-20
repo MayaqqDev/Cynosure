@@ -19,7 +19,7 @@ public class DataFixersMixin {
         at = @At("RETURN")
     )
     private static void onCreateDatafixers(DataFixerBuilder $$0, CallbackInfo ci) {
-        MainBus.INSTANCE.post(new DataFixerRegistrationEvent($$0), null, null);
+        MainBus.INSTANCE.post(new DataFixerRegistrationEvent($$0));
     }
 
 }

@@ -14,18 +14,18 @@ fun <B : ByteBuf, T> StreamCodec<B, T>.toByteCodec(mapper: Function<ByteBuf, B>)
     )
 }
 
-private fun <B : ByteBuf, T> ByteCodec<T>.toStreamCodec(mapper: Function<B, ByteBuf>): StreamCodec<B, T> {
+private fun <B : ByteBuf, T> ByteCodec<T>.toStreamCodec(mapper: Function<B, RegistryFriendlyByteBuf>): StreamCodec<B, T> {
     return StreamCodec.of<B, T>(
         { buf: B, value: T -> this.encode(value, mapper.apply(buf)) },
         { buf: B -> this.decode(mapper.apply(buf)) }
     )
 }
 
-fun <T> StreamCodec<ByteBuf, T>.toByteCodec(): ByteCodec<T> {
+fun <T> StreamCodec<ByteBuf, T>.toByteBufCodec(): ByteCodec<T> {
     return this.toByteCodec(Function.identity())
 }
 
-fun <T> ByteCodec<T>.toStreamCodec(): StreamCodec<ByteBuf, T> {
+fun <T> ByteCodec<T>.toStreamCodec(): StreamCodec<RegistryFriendlyByteBuf, T> {
     return this.toStreamCodec(Function.identity())
 }
 

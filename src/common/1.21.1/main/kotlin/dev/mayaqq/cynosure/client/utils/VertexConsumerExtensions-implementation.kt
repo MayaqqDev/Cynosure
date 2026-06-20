@@ -36,14 +36,14 @@ public fun VertexConsumer.normal(x: Float, y: Float, z: Float): VertexConsumer =
 public actual fun VertexConsumer.square(
     start: Double,
     end: Double,
-    direction: Direction = Direction.NORTH,
-    minU: Float = 0f,
-    maxU: Float = 1f,
-    minV: Float = 0f,
-    maxV: Float = 1f,
-    color: Color = White,
-    overlay: Int = OverlayTexture.NO_OVERLAY,
-    light: Int = LightTexture.FULL_BRIGHT
+    direction: Direction,
+    minU: Float,
+    maxU: Float,
+    minV: Float,
+    maxV: Float,
+    color: Color,
+    overlay: Int,
+    light: Int
 ) {
 
     val axis = direction.axis

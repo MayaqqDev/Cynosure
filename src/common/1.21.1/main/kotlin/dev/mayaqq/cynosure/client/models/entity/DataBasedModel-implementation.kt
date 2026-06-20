@@ -13,12 +13,12 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.AnimationState
 import net.minecraft.world.entity.Entity
 
-public actual class DataBasedModel<E : Entity>(
+public actual class DataBasedModel<E : Entity> actual constructor(
     val innerModel: CustomBakedModel,
     val animations: List<Pair<(E) -> AnimationState, AnimationDefinition>>?
 ) : EntityModel<E>(innerModel.renderType::apply) {
 
-    public constructor(id: ResourceLocation, vararg animations: Pair<(E) -> AnimationState, ResourceLocation>) : this(
+    public actual constructor(id: ResourceLocation, vararg animations: Pair<(E) -> AnimationState, ResourceLocation>) : this(
         ModelDataLoader.loadAndBakeModel(id),
         animations.mapNotNull {
             AnimationDataLoader.getAnimation(it.second)?.let { anim -> it.first to anim }

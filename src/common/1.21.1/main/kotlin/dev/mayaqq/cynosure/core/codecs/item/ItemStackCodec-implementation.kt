@@ -4,4 +4,4 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.Decoder
 import net.minecraft.world.item.ItemStack
 
-public actual object ItemStackCodec : Codec<ItemStack>, Decoder<ItemStack> by ItemStack.CODEC
+public actual object ItemStackCodec : Codec<ItemStack> by ItemStack.CODEC

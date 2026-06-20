@@ -16,5 +16,5 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import java.util.*
 
-public expect object ItemStackCodec : Codec<ItemStack>, Decoder<ItemStack>
+public expect object ItemStackCodec : Codec<ItemStack>
 

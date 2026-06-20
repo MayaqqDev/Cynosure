@@ -5,6 +5,5 @@ import com.teamresourceful.bytecodecs.base.ByteCodec
 import net.minecraft.world.item.crafting.Ingredient
 
 public expect object IngredientCodec : Codec<Ingredient> {
-    //TODO: is this how it works?
     public val NETWORK: ByteCodec<Ingredient>
 }

@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.internal
 
 import dev.mayaqq.cynosure.CynosureInternal
+import dev.mayaqq.cynosure.forge.ForgeHooks
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import net.minecraft.resources.ResourceLocation
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ItemLike
-import net.minecraftforge.common.ForgeHooks
 
 @CynosureInternal
 internal object CynosureHooksImpl : CynosureHooks {
@@ -38,6 +38,6 @@ internal object CynosureHooksImpl : CynosureHooks {
         BURN_TIME_BY_TAG[tag] = time
     }
 
-    override fun getItemBurnTime(stack: ItemStack): Int = ForgeHooks.getBurnTime(stack, null)
+    override fun getItemBurnTime(stack: ItemStack): Int = ForgeHooks.getItemBurnTime(stack)
 
 }

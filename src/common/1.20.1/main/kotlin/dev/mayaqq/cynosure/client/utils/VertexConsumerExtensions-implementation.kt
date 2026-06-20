@@ -11,27 +11,27 @@ import net.minecraft.core.Direction.AxisDirection
 
 //TODO: this mess
 
-public expect fun VertexConsumer.color(color: Color): VertexConsumer {
+public actual fun VertexConsumer.color(color: Color): VertexConsumer {
     this.color(color.toInt())
     return this
 }
 
-public expect fun VertexConsumer.color(color: UInt): VertexConsumer {
+public actual fun VertexConsumer.color(color: UInt): VertexConsumer {
     this.color(color.toInt())
     return this
 }
 
-public expect fun VertexConsumer.square(
+public actual fun VertexConsumer.square(
     start: Double,
     end: Double,
-    direction: Direction = Direction.NORTH,
-    minU: Float = 0f,
-    maxU: Float = 1f,
-    minV: Float = 0f,
-    maxV: Float = 1f,
-    color: Color = White,
-    overlay: Int = OverlayTexture.NO_OVERLAY,
-    light: Int = LightTexture.FULL_BRIGHT
+    direction: Direction,
+    minU: Float,
+    maxU: Float,
+    minV: Float,
+    maxV: Float,
+    color: Color,
+    overlay: Int,
+    light: Int
 ) {
 
     val axis = direction.axis

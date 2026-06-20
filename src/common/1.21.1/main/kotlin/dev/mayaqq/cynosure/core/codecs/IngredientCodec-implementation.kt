@@ -8,5 +8,5 @@ import net.minecraft.world.item.crafting.Ingredient
 
 //TODO: is this error real or not
 public actual object IngredientCodec : Codec<Ingredient> by Ingredient.CODEC {
-    val NETWORK: ByteCodec<Ingredient> = Ingredient.CONTENTS_STREAM_CODEC.toByteCodec()
+    actual val NETWORK: ByteCodec<Ingredient> = Ingredient.CONTENTS_STREAM_CODEC.toByteCodec()
 }

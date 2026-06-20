@@ -9,7 +9,7 @@ public actual fun RenderType.fixed(phase: BufferOutputStage): RenderType {
     return this
 }
 
-public expect fun registerFixedBuffer(phase: BufferOutputStage, renderType: RenderType, builder: BufferBuilder) {
+public actual fun registerFixedBuffer(phase: BufferOutputStage, renderType: RenderType, builder: BufferBuilder) {
     require(!frozen) { "Render type registry already frozon" }
     if(RenderTypeRegistry.TYPES.containsKey(renderType)) {
         throw IllegalArgumentException("RenderType $renderType has already been registered")

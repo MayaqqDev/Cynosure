@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapMerge
 import net.fabricmc.loader.api.FabricLoader
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.extension
 import kotlin.io.path.name
 import kotlin.io.path.walk
 
 private const val AUTOSUB_KEY = "autosubscription"
 
+@ExperimentalPathApi
 internal class FabricAutoSubscriptionProvider : CynosureAutoSubscriptionService {
     override fun gatherEventSubscribers(): Flow<CynosureAutoSubscriptionService.SubscriberData> =
         FabricLoader.getInstance()

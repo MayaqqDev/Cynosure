@@ -6,7 +6,7 @@ fabric = "0.16.9"
 forge1201 = "47.3.0"
 neoforge1211 = "21.1.233"
 # Common
-cloche = "0.18.2"
+cloche = "0.18.14"
 kotlin = "2.2.10"
 parchment1201 = "2023.09.03"
 parchment1211 = "2024.11.17"

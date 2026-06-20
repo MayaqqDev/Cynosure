@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient
     actual object IngredientCodec : Codec<Ingredient> by Codecs.lazy({
     Codec.PASSTHROUGH.comapFlatMap(IngredientCodec::decodeIngredient, IngredientCodec::encodeIngredient)
 }) {
-    val NETWORK: ByteCodec<Ingredient> = FriendlyByteCodec(Ingredient::toNetwork, Ingredient::fromNetwork)
+    actual val NETWORK: ByteCodec<Ingredient> = FriendlyByteCodec(Ingredient::toNetwork, Ingredient::fromNetwork)
 
     private fun decodeIngredient(dynamic: Dynamic<*>): DataResult<Ingredient> {
         val thing = dynamic.convert(JsonOps.INSTANCE).value

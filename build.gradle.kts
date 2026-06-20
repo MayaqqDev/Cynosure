@@ -259,7 +259,7 @@ cloche {
 java {
     withSourcesJar()
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -267,9 +267,16 @@ kotlin {
     compilerOptions {
         languageVersion = KotlinVersion.KOTLIN_2_0
         optIn.addAll("dev.mayaqq.cynosure.CynosureInternal", "kotlin.contracts.ExperimentalContracts")
-        freeCompilerArgs.addAll("-Xjvm-default=all-compatibility", "-Xcontext-receivers", "-Xmulti-platform", "-Xno-check-actual", "-Xexpect-actual-classes")
+        freeCompilerArgs.addAll(
+            "-Xjvm-default=all-compatibility",
+            "-Xcontext-receivers",
+            "-Xmulti-platform",
+            "-Xno-check-actual",
+            "-Xexpect-actual-classes",
+            "-XXLanguage:+ExpectRefinement"
+        )
     }
-    jvmToolchain(17)
+    jvmToolchain(21)
     explicitApiWarning()
 }
 
