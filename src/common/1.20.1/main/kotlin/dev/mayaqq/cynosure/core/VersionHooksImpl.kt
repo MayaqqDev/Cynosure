@@ -1,12 +1,19 @@
 package dev.mayaqq.cynosure.core
 
+import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.serialization.DataResult
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.floatAlpha
+import invoke.kitty.kritter.utils.color.floatBlue
+import invoke.kitty.kritter.utils.color.floatGreen
+import invoke.kitty.kritter.utils.color.floatRed
 import invoke.kitty.kritter.utils.result.failure
 import invoke.kitty.kritter.utils.result.success
 import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.FastColor
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.level.block.Block
@@ -38,4 +45,14 @@ internal object VersionHooksImpl : VersionHooks {
     override fun getLootTableId(block: Block): ResourceLocation = block.lootTable
 
     override fun makeNbtAccounter(quota: Long): NbtAccounter = NbtAccounter(quota)
+
+    override fun addVertex(consumer: VertexConsumer, x: Double, y: Double, z: Double): VertexConsumer {
+        return consumer.vertex(x, y, z)
+    }
+
+    override fun addVertex(consumer: VertexConsumer, x: Float, y: Float, z: Float, color: Color, u: Float, v: Float, packedOverlay: Int, packedLight: Int, normalX: Float, normalY: Float, normalZ: Float): VertexConsumer {
+        consumer.vertex(x, y, z, color.floatRed, color.floatGreen, color.floatBlue, color.floatAlpha, u, v, packedOverlay, packedLight, normalX, normalY, normalZ)
+        return consumer
+    }
+
 }

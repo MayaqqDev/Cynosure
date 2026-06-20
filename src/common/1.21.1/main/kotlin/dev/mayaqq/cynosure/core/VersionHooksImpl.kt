@@ -1,6 +1,9 @@
 package dev.mayaqq.cynosure.core
 
+import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.serialization.DataResult
+import invoke.kitty.kritter.utils.color.Color
+import invoke.kitty.kritter.utils.color.toUInt
 import invoke.kitty.kritter.utils.result.failure
 import invoke.kitty.kritter.utils.result.success
 import net.minecraft.core.RegistryAccess
@@ -39,4 +42,15 @@ internal object VersionHooksImpl : VersionHooks {
     override fun getLootTableId(block: Block): ResourceLocation = block.lootTable.location()
 
     override fun makeNbtAccounter(quota: Long): NbtAccounter = NbtAccounter.create(quota)
+
+    override fun addVertex(consumer: VertexConsumer, x: Double, y: Double, z: Double): VertexConsumer {
+        return consumer.addVertex(x.toFloat(), y.toFloat(), z.toFloat())
+    }
+
+    override fun addVertex(consumer: VertexConsumer, x: Float, y: Float, z: Float, color: Color, u: Float, v: Float, packedOverlay: Int, packedLight: Int, normalX: Float, normalY: Float, normalZ: Float): VertexConsumer {
+        //TODO: does the toInt include the alpha or not?
+        consumer.addVertex(x, y, z,color.toInt(), u, v, packedOverlay, packedLight, normalX, normalY, normalZ)
+        return consumer
+    }
+
 }

@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.client.models.animations
 
 import dev.mayaqq.cynosure.client.models.animations.registry.VectorType
 import dev.mayaqq.cynosure.client.models.animations.registry.VectorTypes
+import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.utils.serialization.defaults.Vector3fSerializer
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -18,23 +19,30 @@ import org.joml.Vector3f
 internal object ConfiguredVecSerializer : KSerializer<Vector3f> {
     override fun deserialize(decoder: Decoder): Vector3f {
         if (decoder !is JsonDecoder) return Vector3fSerializer.deserialize(decoder)
-        val element = decoder.decodeJsonElement()
-        if (element is JsonObject) {
-            return VectorType.ConfiguredVec(
-                VectorTypes.REGISTRY[ResourceLocation(element["type"]!!.jsonPrimitive.content)]!!,
-                element["value"]!!.jsonArray.let { Vector3f(
-                    it[0].jsonPrimitive.float,
-                    it[1].jsonPrimitive.float,
-                    it[2].jsonPrimitive.float
-                ) }
-            ).apply()
-        } else if (element is JsonArray) {
-            return Vector3f(
-                element[0].jsonPrimitive.float,
-                element[1].jsonPrimitive.float,
-                element[2].jsonPrimitive.float
-            )
-        } else error("Invalid vector format")
+        when (val element = decoder.decodeJsonElement()) {
+            is JsonObject -> {
+                return VectorType.ConfiguredVec(
+                    VectorTypes.REGISTRY[identifier(element["type"]!!.jsonPrimitive.content)]!!,
+                    element["value"]!!.jsonArray.let {
+                        Vector3f(
+                            it[0].jsonPrimitive.float,
+                            it[1].jsonPrimitive.float,
+                            it[2].jsonPrimitive.float
+                        )
+                    }
+                ).apply()
+            }
+
+            is JsonArray -> {
+                return Vector3f(
+                    element[0].jsonPrimitive.float,
+                    element[1].jsonPrimitive.float,
+                    element[2].jsonPrimitive.float
+                )
+            }
+
+            else -> error("Invalid vector format")
+        }
     }
 
     @OptIn(InternalSerializationApi::class)

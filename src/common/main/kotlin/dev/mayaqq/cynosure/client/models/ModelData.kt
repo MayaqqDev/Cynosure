@@ -5,6 +5,7 @@ import com.mojang.serialization.Keyable
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.mayaqq.cynosure.client.models.baked.ModelRenderType
 import dev.mayaqq.cynosure.core.codecs.Codecs
+import dev.mayaqq.cynosure.core.codecs.EnumCodec
 import dev.mayaqq.cynosure.core.codecs.fieldOf
 import dev.mayaqq.cynosure.utils.serialization.defaults.Vector3fSerializer
 import invoke.kitty.kritter.utils.Either
@@ -26,7 +27,7 @@ public data class ModelElementRotation(
     public companion object {
         public val CODEC: Codec<ModelElementRotation> = RecordCodecBuilder.create { it.group(
             Codec.FLOAT.fieldOf("angle").forGetter(ModelElementRotation::angle),
-            Direction.Axis.CODEC.fieldOf("axis").forGetter(ModelElementRotation::axis),
+            EnumCodec.of<Direction.Axis>().fieldOf("axis").forGetter(ModelElementRotation::axis),
             ExtraCodecs.VECTOR3F.fieldOf("origin").forGetter(ModelElementRotation::origin),
             Codec.BOOL.optionalFieldOf("rescale", false).forGetter(ModelElementRotation::rescale)
         ).apply(it, ::ModelElementRotation) }
@@ -96,7 +97,7 @@ public data class ModelElement(
             instance.group(
             ExtraCodecs.VECTOR3F.fieldOf("from").forGetter(ModelElement::from),
             ExtraCodecs.VECTOR3F.fieldOf("to").forGetter(ModelElement::to),
-            Codec.simpleMap(Direction.CODEC,
+            Codec.simpleMap(EnumCodec.of<Direction>(),
                 ModelElementFace.CODEC, Keyable.forStrings(fun() = Direction.entries.stream().map { it.serializedName })).fieldOf("faces").forGetter(
                 ModelElement::faces),
             ModelElementRotation.CODEC.optionalFieldOf("rotation").forGetter { Optional.ofNullable(it.rotation) },

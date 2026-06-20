@@ -2,12 +2,9 @@ package dev.mayaqq.cynosure.client.models.baked
 
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
+import dev.mayaqq.cynosure.core.provideVertex
 import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.White
-import invoke.kitty.kritter.utils.color.floatAlpha
-import invoke.kitty.kritter.utils.color.floatBlue
-import invoke.kitty.kritter.utils.color.floatGreen
-import invoke.kitty.kritter.utils.color.floatRed
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.texture.OverlayTexture
 import org.joml.Vector3f
@@ -38,9 +35,9 @@ public open class CustomBakedModel(
             normalVec.set(mesh.normalX(i), mesh.normalY(i), mesh.normalZ(i))
                 .mul(stack.last().normal())
 
-            buffer.vertex(
+            buffer.provideVertex(
                 posVec.x, posVec.y, posVec.z,
-                color.floatRed, color.floatGreen, color.floatBlue, color.floatAlpha,
+                color,
                 mesh.u(i), mesh.v(i),
                 overlay, light,
                 normalVec.x, normalVec.y, normalVec.z
