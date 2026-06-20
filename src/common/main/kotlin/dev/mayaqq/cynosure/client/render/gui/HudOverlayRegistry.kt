@@ -53,6 +53,9 @@ public fun interface HudOverlay {
 }
 
 public object VanillaHud {
+
+    public val ids: LinkedHashSet<ResourceLocation> = linkedSetOf()
+
     @JvmField public val VIGNETTE: ResourceLocation = create("vignette")
     @JvmField public val SPYGLASS: ResourceLocation = create("spyglass")
     @JvmField public val HELMET: ResourceLocation = create("helmet")
@@ -78,9 +81,6 @@ public object VanillaHud {
     @JvmField public val SCOREBOARD: ResourceLocation = create("scoreboard")
     @JvmField public val CHAT: ResourceLocation = create("chat_panel")
     @JvmField public val PLAYER_LIST: ResourceLocation = create("player_list")
-
-    public val ids: LinkedHashSet<ResourceLocation> = linkedSetOf()
-
 
     private fun create(id: String) = identifierOf("minecraft", id).also { ids.add(it) }
 }

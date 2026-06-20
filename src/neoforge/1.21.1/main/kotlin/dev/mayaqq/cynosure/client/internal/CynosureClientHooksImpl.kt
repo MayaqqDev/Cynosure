@@ -16,7 +16,6 @@ import net.neoforged.fml.loading.FMLEnvironment
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent
 
 @CynosureInternal
-@EventBusSubscriber(modid = MODID)
 internal class CynosureClientHooksImpl : CynosureClientHooks {
     override fun registerReloadListener(id: ResourceLocation, listener: PreparableReloadListener) {
         require(!CLIENT_RELOAD_LISTENERS.containsKey(id)) { "Attempting to register duplicate listener id $id" }

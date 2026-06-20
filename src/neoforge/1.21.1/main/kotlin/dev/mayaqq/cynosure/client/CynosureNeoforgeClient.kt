@@ -77,7 +77,11 @@ internal object CynosureNeoforgeClient {
     fun registerGuiOverlays(event: RegisterGuiLayersEvent) {
         VanillaHud.ids.forEach {
 
-            require(vanillaGuiLayers.find { e -> e == it } != null) { "$it has an incorrect forge id" }
+            if (vanillaGuiLayers.find { e -> e == it } == null) {
+                //TODO: solve this
+                Cynosure.error("$it is a valid ID only on 1.20.1.")
+                return@forEach
+            }
             event.registerBelow(it, modId("overlays_${it.path}")) { guiGraphics, deltaTracker ->
                 RenderSystem.enableBlend()
                 RenderSystem.disableDepthTest()

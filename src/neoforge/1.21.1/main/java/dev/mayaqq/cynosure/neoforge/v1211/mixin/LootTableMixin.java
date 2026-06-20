@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.v1211.mixin;
+package dev.mayaqq.cynosure.neoforge.v1211.mixin;
 
 import dev.mayaqq.cynosure.injection.ILootTable;
 import kotlin.OptionalExpectation;

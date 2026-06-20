@@ -3,6 +3,9 @@
   "minVersion": "0.8",
   "package": "dev.mayaqq.cynosure.fabric.v1201.mixin",
   "compatibilityLevel": "JAVA_17",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "refmap": "cynosure.refmap.json",
   "mixins": [
     "ServerGamePacketListenerImplMixin",

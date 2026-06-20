@@ -4,6 +4,9 @@
   "package": "dev.mayaqq.cynosure.v1201.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "cynosure.refmap.json",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "mixins": [
     "PlayerListMixin",
     "LivingEntityMixin",
@@ -12,7 +15,8 @@
   ],
   "client": [
     "client.ItemStackMixin",
-    "client.GameRendererMixin"
+    "client.GameRendererMixin",
+    "client.LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

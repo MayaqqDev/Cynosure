@@ -4,6 +4,9 @@
   "package": "dev.mayaqq.cynosure.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "cynosure.refmap.json",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "mixins": [
     "ChunkHolderMixin",
     "DataFixersMixin",
@@ -23,7 +26,6 @@
     "accessor.SplashRendererAccessor",
     "client.CapeLayerMixin",
     "client.GameRendererMixin",
-    "client.LevelRendererMixin",
     "client.MinecraftMixin",
     "client.ParticleEngineMixin",
     "client.RenderBuffersMixin",

@@ -71,7 +71,7 @@ cloche {
             api(libs.kotlinx.coroutines)
             api(libs.bytecodecs)
             api(libs.javax.annotations)
-            implementation(libs.nullevt)
+            implementation(skipIncludeTransformation(libs.nullevt))
         }
     }
 
@@ -121,6 +121,7 @@ cloche {
             include(libs.forge.mixinextras) { isTransitive = false }
             include(libs.bytecodecs)
             include(libs.kotlin.metadata)
+            include(libs.kotlin.reflect)
 
             modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
         }
@@ -226,6 +227,9 @@ cloche {
             modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
 
             include(libs.forge.kritter1201) { isTransitive = false }
+
+            legacyClasspath(libs.nullevt)
+            include(libs.nullevt)
         }
     }
 

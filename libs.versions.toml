@@ -32,6 +32,7 @@ mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 mixinextras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixinextras" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 # Intentionally using latest kt metadata version for more compatibility
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version = "2.1.20" }
 bytecodecs = { module = "com.teamresourceful:bytecodecs", version.ref = "bytecodecs" }

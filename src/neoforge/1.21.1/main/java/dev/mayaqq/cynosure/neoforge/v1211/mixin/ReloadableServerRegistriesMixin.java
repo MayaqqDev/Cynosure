@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.v1211.mixin;
+package dev.mayaqq.cynosure.neoforge.v1211.mixin;
 
 import com.google.gson.JsonElement;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

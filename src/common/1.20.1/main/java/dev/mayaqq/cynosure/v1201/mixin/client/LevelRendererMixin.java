@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.mixin.client;
+package dev.mayaqq.cynosure.v1201.mixin.client;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
@@ -9,11 +9,9 @@ import dev.mayaqq.cynosure.client.render.RenderTypeRegistry;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.*;
 import org.joml.Matrix4f;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // Mixin check: Probably works?!

@@ -1,14 +1,17 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.mayaqq.cynosure.forge.v1211.mixin",
+  "package": "dev.mayaqq.cynosure.neoforge.v1211.mixin",
   "compatibilityLevel": "JAVA_17",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "mixins": [
-    "ReloadableServerRegistries",
+    "ReloadableServerRegistriesMixin",
     "LootTableMixin"
   ],
   "client": [
-    "client.LevelRendrerMixin"
+    "client.LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

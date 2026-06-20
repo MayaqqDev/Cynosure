@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.forge.v1211.mixin.client;
+package dev.mayaqq.cynosure.neoforge.v1211.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;

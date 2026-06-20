@@ -79,60 +79,59 @@ public object ForgeEvents {
     }
 
     @SubscribeEvent
-    public fun onBlockEvent(event: NeoForgeBlockEvent) {
-        when (event) {
-            is NeoForgeBlockBreakEvent -> BlockEvent.Break(event.level, event.state, event.pos, event.player).post()
-            is NeoForgeBlockPlaceEvent -> BlockEvent.Place(event.level, event.state, event.pos, event.entity).post()
-            is NeoforgeFluidPlaceEvent -> {}
+    public fun onBlockPlace(event: NeoForgeBlockPlaceEvent) {
+        BlockEvent.Place(event.level, event.state, event.pos, event.entity).post()
+    }
+
+    @SubscribeEvent
+    public fun onBlockBreak(event: NeoForgeBlockBreakEvent) {
+        BlockEvent.Break(event.level, event.state, event.pos, event.player).post()
+    }
+
+    @SubscribeEvent
+    public fun onRightClickBlock(event: PlayerInteractEvent.RightClickBlock) {
+        val result = InteractionEvent.UseBlock(event.level, event.entity, event.hand, event.hitVec).post()
+        if (result != null) {
+            event.cancellationResult = result
+            event.isCanceled = result.consumesAction()
         }
     }
 
     @SubscribeEvent
-    public fun onPlayerInteract(event: PlayerInteractEvent) {
-        var result: InteractionResult? = null
-
-        when (event) {
-            is PlayerInteractEvent.RightClickBlock -> {
-                result = InteractionEvent.UseBlock(
-                    event.level, event.entity, event.hand, event.hitVec
-                ).post()
-                if (result != null) {
-                    event.cancellationResult = result
-                }
-            }
-            is PlayerInteractEvent.LeftClickBlock -> {
-                result = InteractionEvent.AttackBlock(
-                    event.level, event.entity, event.hand, event.pos, event.face!!
-                ).post()
-            }
-            is PlayerInteractEvent.EntityInteractSpecific -> {
-                result = InteractionEvent.UseEntity(
-                    event.level, event.entity, event.hand, event.target, event.localPos, InteractionEvent.UseEntity.Phase.SPECIFIC
-                ).post()
-                if (result != null) {
-                    event.cancellationResult = result
-                }
-            }
-            is PlayerInteractEvent.EntityInteract -> {
-                result = InteractionEvent.UseEntity(
-                    event.level, event.entity, event.hand, event.target, null, InteractionEvent.UseEntity.Phase.GENERAL
-                ).post()
-                if (result != null) {
-                    event.cancellationResult = result
-                }
-            }
-            is PlayerInteractEvent.RightClickItem -> {
-                result = InteractionEvent.UseItem(
-                    event.level, event.entity, event.hand
-                ).post()
-                if (result != null) {
-                    event.cancellationResult = result
-                }
-            }
-            else -> result = null
+    public fun onLeftClickBlock(event: PlayerInteractEvent.LeftClickBlock) {
+        val result = InteractionEvent.AttackBlock(event.level, event.entity, event.hand, event.pos, event.face!!).post()
+        if (result != null) {
+            event.isCanceled = result.consumesAction()
         }
+    }
 
-        if (event is ICancellableEvent && result != null) {
+    @SubscribeEvent
+    public fun onInteractSpecific(event: PlayerInteractEvent.EntityInteractSpecific) {
+        val result = InteractionEvent.UseEntity(
+            event.level, event.entity, event.hand, event.target, event.localPos, InteractionEvent.UseEntity.Phase.SPECIFIC
+        ).post()
+        if (result != null) {
+            event.cancellationResult = result
+            event.isCanceled = result.consumesAction()
+        }
+    }
+
+    @SubscribeEvent
+    public fun onInteractEntity(event: PlayerInteractEvent.EntityInteract) {
+        val result = InteractionEvent.UseEntity(
+            event.level, event.entity, event.hand, event.target, null, InteractionEvent.UseEntity.Phase.GENERAL
+        ).post()
+        if (result != null) {
+            event.cancellationResult = result
+            event.isCanceled = result.consumesAction()
+        }
+    }
+
+    @SubscribeEvent
+    public fun onRightClickItem(event: PlayerInteractEvent.RightClickItem) {
+        val result = InteractionEvent.UseItem(event.level, event.entity, event.hand).post()
+        if (result != null) {
+            event.cancellationResult = result
             event.isCanceled = result.consumesAction()
         }
     }
@@ -202,12 +201,12 @@ public object ForgeEvents {
     }
 
     @SubscribeEvent
-    public fun onTickWorldPre(event: LevelTickEvent) {
+    public fun onTickWorldPre(event: LevelTickEvent.Pre) {
         dev.mayaqq.cynosure.events.world.LevelEvent.BeginTick(event.level).post()
     }
 
     @SubscribeEvent
-    public fun onTickWorldPost(event: LevelTickEvent) {
+    public fun onTickWorldPost(event: LevelTickEvent.Post) {
         dev.mayaqq.cynosure.events.world.LevelEvent.EndTick(event.level).post()
     }
 
