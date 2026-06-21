@@ -1,5 +1,6 @@
 package dev.mayaqq.cynosure.v1211.mixin;
 
+import com.google.common.collect.ImmutableList;
 import dev.mayaqq.cynosure.injection.ILootTableBuilder;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -17,11 +18,11 @@ import java.util.List;
 public class LootTableBuilderMixin implements ILootTableBuilder {
     @Shadow
     @Final
-    private List<LootPool> pools;
+    private ImmutableList.Builder<LootPool> pools;
 
     @Shadow
     @Final
-    private List<LootItemFunction> functions;
+    private ImmutableList.Builder<LootItemFunction> functions;
 
     @Override
     public void cynosure_apply(@NotNull List<@NotNull LootItemFunction> functions) {

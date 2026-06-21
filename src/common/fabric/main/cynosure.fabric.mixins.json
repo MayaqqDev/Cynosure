@@ -9,7 +9,6 @@
   "mixins": [
     "EntityMixin",
     "FuelRegistryMixin",
-    "LootTableMixin",
     "PersistentEntitySectionManagerMixin",
     "PlayerMixin",
     "RecipeBookTypeMixin",
@@ -17,8 +16,7 @@
     "LivingEntityMixin"
   ],
   "client": [
-    "client.EntityRenderersMixin",
-    "client.LanguageManagerMixin"
+    "client.EntityRenderersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -11,6 +11,7 @@ import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.MinecraftColors
 import invoke.kitty.kritter.utils.color.White
 import invoke.kitty.kritter.utils.color.rgb
+import invoke.kitty.kritter.utils.color.toColor
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.Level
 import java.util.*
@@ -195,7 +196,7 @@ public object TextStyle {
         }
 
     public var MutableComponent.color: Color
-        get() = this.style.color?.value?.let { return@let rgb(it) } ?: White
+        get() = this.style.color?.value?.let { return@let it.toColor() } ?: White
         set(value) {
             this.style { withColor(value.toInt()) }
         }

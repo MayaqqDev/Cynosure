@@ -10,6 +10,7 @@ import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.DarkGray
 import invoke.kitty.kritter.utils.color.LightGray
 import invoke.kitty.kritter.utils.color.rgb
+import invoke.kitty.kritter.utils.color.toColor
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -69,7 +70,7 @@ public class DescriptionTooltip(
             public val Default: Theme = Theme(
                 DarkGray,
                 LightGray,
-                rgb(0x84597E),
+                0x84597E.toColor(),
                 0
             )
         }

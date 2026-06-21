@@ -14,7 +14,8 @@
     "CommandsMixin",
     "AttributeSupplierBuilderAccessor",
     "AttributeSupplierMixin",
-    "AbstractFurnaceBlockEntityMixin"
+    "AbstractFurnaceBlockEntityMixin",
+    "LootTableMixin"
   ],
   "client": [
     "client.MinecraftMixin",
