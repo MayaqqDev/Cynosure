@@ -1,8 +1,6 @@
 @file:Suppress("PropertyName", "UnstableApiUsage")
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import dev.mayaqq.nullevtfix.MakeForgeMod
-
 
 plugins {
     alias(libs.plugins.modpublish)
@@ -71,9 +69,11 @@ cloche {
             api(libs.bytecodecs)
             api(libs.javax.annotations)
             implementation(skipIncludeTransformation(libs.nullevt)) {
+                /*
                 attributes {
                     attribute(fixedAttribute, true)
                 }
+                 */
             }
         }
     }
@@ -121,7 +121,6 @@ cloche {
         dependencies {
             api(libs.javax.annotations)
 
-            include(libs.forge.mixinextras) { isTransitive = false }
             include(libs.bytecodecs)
             include(libs.kotlin.metadata)
             include(libs.kotlin.reflect)
@@ -231,9 +230,11 @@ cloche {
             modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
 
             include(libs.nullevt) {
+                /*
                 attributes {
                     attribute(fixedAttribute, true)
                 }
+                 */
             }
 
             include(libs.kotlin.reflect)
@@ -263,21 +264,6 @@ cloche {
             modImplementation(skipIncludeTransformation(libs.forge.kritter1211))
 
             include(libs.forge.kritter1211) { isTransitive = false }
-        }
-    }
-}
-
-val fixedAttribute = Attribute.of("forge-mod-type", Boolean::class.javaObjectType)
-
-dependencies {
-    registerTransform(MakeForgeMod::class) {
-        from.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, ArtifactTypeDefinition.JAR_TYPE).attribute(fixedAttribute, false)
-        to.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, ArtifactTypeDefinition.JAR_TYPE).attribute(fixedAttribute, true)
-    }
-
-    artifactTypes {
-        named(ArtifactTypeDefinition.JAR_TYPE) {
-            attributes.attribute(fixedAttribute, false)
         }
     }
 }
