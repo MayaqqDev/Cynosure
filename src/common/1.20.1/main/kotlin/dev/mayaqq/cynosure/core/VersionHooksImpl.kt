@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.core
 
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.serialization.DataResult
+import dev.mayaqq.cynosure.effects.hasEffect
 import dev.mayaqq.cynosure.utils.getAttribute
 import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.floatAlpha
@@ -18,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.FastColor
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -29,6 +31,18 @@ internal object VersionHooksImpl : VersionHooks {
     override fun parseIdentifier(both: String): ResourceLocation = ResourceLocation(both)
 
     override fun getStatusEffect(instance: MobEffectInstance): MobEffect = instance.effect
+
+    override fun hasStatusEffect(entity: LivingEntity, effect: MobEffect): Boolean = entity.hasEffect(effect)
+
+    override fun createMobEffectInstance(
+        effect: MobEffect,
+        duration: Int,
+        amplifier: Int,
+        ambient: Boolean,
+        visible: Boolean,
+        showIcon: Boolean,
+        hiddenEffect: MobEffectInstance?
+    ) = MobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon, hiddenEffect, effect.createFactorData())
 
     override fun <R> DataResult<R>.toKtResult(allowPartial: Boolean): Result<R> =
         get().map(

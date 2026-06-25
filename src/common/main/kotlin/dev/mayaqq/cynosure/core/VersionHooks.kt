@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
@@ -33,6 +34,16 @@ public interface VersionHooks {
     public fun parseIdentifier(both: String): ResourceLocation
 
     public fun getStatusEffect(instance: MobEffectInstance): MobEffect
+    public fun hasStatusEffect(entity: LivingEntity, effect: MobEffect): Boolean
+    public fun createMobEffectInstance(
+        effect: MobEffect,
+        duration: Int,
+        amplifier: Int,
+        ambient: Boolean,
+        visible: Boolean,
+        showIcon: Boolean,
+        hiddenEffect: MobEffectInstance? = null
+    ): MobEffectInstance
 
     public fun <R> DataResult<R>.toKtResult(allowPartial: Boolean = false): Result<R>
 

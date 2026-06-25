@@ -5,6 +5,7 @@ import dev.mayaqq.cynosure.core.VersionHooks
 import invoke.kitty.kritter.utils.mapBacked
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.LivingEntity
 
 ///**
 // * A collection of extra properties for MobEffects.
@@ -23,3 +24,15 @@ import net.minecraft.world.effect.MobEffectInstance
 public var MobEffect.updateless: Boolean by mapBacked(false)
 
 public fun MobEffectInstance.effect(): MobEffect = VersionHooks.getStatusEffect(this)
+
+public fun LivingEntity.hasEffect(effect: MobEffect): Boolean = VersionHooks.hasStatusEffect(this, effect)
+
+public fun newMobEffectInstance(
+    effect: MobEffect,
+    duration: Int = 0,
+    amplifier: Int = 0,
+    ambient: Boolean = false,
+    visible: Boolean = true,
+    showIcon: Boolean = visible,
+    hiddenEffect: MobEffectInstance? = null
+): MobEffectInstance = VersionHooks.createMobEffectInstance(effect, duration, amplifier, ambient, visible, showIcon, hiddenEffect)
