@@ -8,9 +8,11 @@ import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.level.block.Block
 
@@ -47,4 +49,6 @@ public interface VersionHooks {
     public fun addVertex(consumer: VertexConsumer, x: Float, y: Float, z: Float, color: Color, u: Float, v: Float, packedOverlay: Int, packedLight: Int, normalX: Float, normalY: Float, normalZ: Float): VertexConsumer
 
     public fun addToAttributeBuilder(builder: AttributeSupplier.Builder, attribute: Attribute): AttributeSupplier.Builder
+
+    public fun getPlayerAttribute(player: ServerPlayer, attribute: Attribute): AttributeInstance?
 }

@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.core
 
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.serialization.DataResult
+import dev.mayaqq.cynosure.utils.getAttribute
 import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.floatAlpha
 import invoke.kitty.kritter.utils.color.floatBlue
@@ -13,10 +14,12 @@ import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.FastColor
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeInstance
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.level.block.Block
 
@@ -62,4 +65,5 @@ internal object VersionHooksImpl : VersionHooks {
         attribute: Attribute
     ): AttributeSupplier.Builder = builder.add(attribute)
 
+    override fun getPlayerAttribute(player: ServerPlayer, attribute: Attribute): AttributeInstance? = player.getAttribute(attribute)
 }
