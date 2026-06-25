@@ -9,7 +9,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-public actual class GlassLikeBlock actual constructor(properties: Properties) : HalfTransparentBlock(properties) {
+public actual open class GlassLikeBlock actual constructor(properties: Properties) : HalfTransparentBlock(properties) {
     override fun getVisualShape(
         state: BlockState,
         level: BlockGetter,
