@@ -8,15 +8,4 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-public open class GlassLikeBlock(properties: Properties) : HalfTransparentBlock(properties) {
-    override fun getVisualShape(
-        state: BlockState,
-        level: BlockGetter,
-        pos: BlockPos,
-        context: CollisionContext
-    ): VoxelShape = Shapes.empty()
-
-    override fun getShadeBrightness(state: BlockState, level: BlockGetter, pos: BlockPos): Float = 1.0f
-
-    protected open fun propagatesSkylightDown(state: BlockState, level: BlockGetter, pos: BlockPos): Boolean = true
-}
+public expect class GlassLikeBlock(properties: Properties) : HalfTransparentBlock
