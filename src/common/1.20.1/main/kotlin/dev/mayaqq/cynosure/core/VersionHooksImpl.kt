@@ -16,6 +16,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FastColor
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.level.block.Block
 
 internal object VersionHooksImpl : VersionHooks {
@@ -54,5 +56,10 @@ internal object VersionHooksImpl : VersionHooks {
         consumer.vertex(x, y, z, color.floatRed, color.floatGreen, color.floatBlue, color.floatAlpha, u, v, packedOverlay, packedLight, normalX, normalY, normalZ)
         return consumer
     }
+
+    override fun addToAttributeBuilder(
+        builder: AttributeSupplier.Builder,
+        attribute: Attribute
+    ): AttributeSupplier.Builder = builder.add(attribute)
 
 }

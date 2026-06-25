@@ -10,6 +10,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.level.block.Block
 
 public fun identifier(namespace: String, path: String): ResourceLocation = VersionHooks.makeIdentifier(namespace, path)
@@ -43,4 +45,6 @@ public interface VersionHooks {
     public fun addVertex(consumer: VertexConsumer, x: Double, y: Double, z: Double): VertexConsumer
 
     public fun addVertex(consumer: VertexConsumer, x: Float, y: Float, z: Float, color: Color, u: Float, v: Float, packedOverlay: Int, packedLight: Int, normalX: Float, normalY: Float, normalZ: Float): VertexConsumer
+
+    public fun addToAttributeBuilder(builder: AttributeSupplier.Builder, attribute: Attribute): AttributeSupplier.Builder
 }

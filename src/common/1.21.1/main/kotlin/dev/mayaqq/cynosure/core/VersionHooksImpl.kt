@@ -6,6 +6,7 @@ import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.toUInt
 import invoke.kitty.kritter.utils.result.failure
 import invoke.kitty.kritter.utils.result.success
+import net.minecraft.core.Holder
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.NbtAccounter
 import net.minecraft.network.chat.Component
@@ -13,6 +14,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.entity.ai.attributes.Attribute
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.level.block.Block
 
 internal object VersionHooksImpl : VersionHooks {
@@ -53,4 +56,5 @@ internal object VersionHooksImpl : VersionHooks {
         return consumer
     }
 
+    override fun addToAttributeBuilder(builder: AttributeSupplier.Builder, attribute: Attribute): AttributeSupplier.Builder = builder.add(Holder.direct(attribute))
 }
