@@ -7,4 +7,4 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 
 public fun AttributeSupplier.toBuilder(): AttributeSupplier.Builder = CynosureHooks.attributeSupplierToBuilder(this)
 
-public fun AttributeSupplier.Builder.add(attribute: Attribute): Unit = VersionHooks.addToAttributeBuilder(this, attribute)
+public fun AttributeSupplier.Builder.add(attribute: Attribute): AttributeSupplier.Builder = VersionHooks.addToAttributeBuilder(this, attribute)
