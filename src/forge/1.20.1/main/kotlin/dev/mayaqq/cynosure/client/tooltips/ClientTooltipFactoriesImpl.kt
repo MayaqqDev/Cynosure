@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber
 import java.lang.reflect.Field
 import java.util.function.Function
 
-@EventBusSubscriber(value = [Dist.CLIENT], modid = MODID, bus = EventBusSubscriber.Bus.MOD)
 @Suppress("UNCHECKED_CAST")
 internal object ClientTooltipFactoriesImpl : ClientTooltipFactories {
 

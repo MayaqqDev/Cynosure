@@ -35,10 +35,8 @@ import net.minecraftforge.client.event.RegisterShadersEvent
 import net.minecraftforge.client.gui.overlay.ForgeGui
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay
 import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
-@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 public object CynosureForgeClient {
     @SubscribeEvent
     public fun clientSetup(event: FMLClientSetupEvent) {

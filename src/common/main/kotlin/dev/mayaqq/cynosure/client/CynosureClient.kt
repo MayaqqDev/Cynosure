@@ -13,6 +13,7 @@ import invoke.kitty.kritter.platform.Side
 @EventSubscriber(Side.CLIENT)
 public object CynosureClient {
     public fun init() {
+        TempClientCynosureEvents.subAll()
     }
 
     @Subscription

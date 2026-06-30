@@ -61,7 +61,6 @@ private typealias NeoForgeBlockBreakEvent = net.neoforged.neoforge.event.level.B
 private typealias NeoForgeBlockPlaceEvent = net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent
 private typealias NeoforgeFluidPlaceEvent = net.neoforged.neoforge.event.level.BlockEvent.FluidPlaceBlockEvent
 
-@EventBusSubscriber(modid = MODID)
 public object ForgeEvents {
     @SubscribeEvent
     public fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {

@@ -1,9 +1,19 @@
 package dev.mayaqq.cynosure
 
 import dev.mayaqq.cynosure.biome.CarverRegistry
+import dev.mayaqq.cynosure.client.CynosureNeoforgeClient
+import dev.mayaqq.cynosure.client.events.CynosureForgeClientEvents
+import dev.mayaqq.cynosure.client.internal.ClientHooksEventListener
+import dev.mayaqq.cynosure.client.keymapping.KeyMappingRegistryEventSubscriber
+import dev.mayaqq.cynosure.client.tooltips.ClientTooltipFactoriesImpl
 import dev.mayaqq.cynosure.core.identifier
+import dev.mayaqq.cynosure.events.ForgeEvents
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
+import invoke.kitty.kritter.platform.Mod
+import invoke.kitty.kritter.platform.forge.EntrypointHandler
+import invoke.kitty.kritter.platform.forge.eventBus
+import invoke.kitty.kritter.utils.clientOnly
 import net.minecraft.network.chat.Component
 import net.minecraft.server.packs.PackLocationInfo
 import net.minecraft.server.packs.PackSelectionConfig
@@ -14,23 +24,36 @@ import net.minecraft.server.packs.repository.KnownPack
 import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.PackSource
 import net.neoforged.fml.ModList
-import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddPackFindersEvent
 import net.neoforged.neoforgespi.locating.IModFile
-import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 import java.util.Optional
 
-@Mod(MODID)
-@EventBusSubscriber
-public object CynosureNeoforge {
-    init {
-        CynosureForgeLike.init()
-        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
+@EntrypointHandler("init")
+fun init(mod: Mod) {
+    CynosureForgeLike.init()
+    CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(mod.eventBus)
+    mod.eventBus.let { modBus ->
+        modBus.register(CynosureNeoforge)
+        clientOnly {
+            modBus.register(CynosureNeoforgeClient)
+            modBus.register(ClientHooksEventListener)
+            modBus.register(KeyMappingRegistryEventSubscriber)
+            modBus.register(ClientTooltipFactoriesImpl)
+        }
     }
+    NeoForge.EVENT_BUS.let { gameBus ->
+        gameBus.register(ForgeEvents)
+        clientOnly {
+            gameBus.register(CynosureForgeClientEvents)
+        }
+    }
+}
+
+public object CynosureNeoforge {
 
     @SubscribeEvent
     public fun lateInit(event: FMLCommonSetupEvent) {

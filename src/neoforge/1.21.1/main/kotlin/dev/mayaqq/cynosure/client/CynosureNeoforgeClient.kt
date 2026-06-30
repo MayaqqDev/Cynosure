@@ -43,7 +43,6 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent
 import net.neoforged.neoforge.client.event.RegisterShadersEvent
 import java.util.Objects
 
-@EventBusSubscriber(modid = MODID, value = [Dist.CLIENT])
 internal object CynosureNeoforgeClient {
     @SubscribeEvent
     fun clientSetup(event: FMLClientSetupEvent) {

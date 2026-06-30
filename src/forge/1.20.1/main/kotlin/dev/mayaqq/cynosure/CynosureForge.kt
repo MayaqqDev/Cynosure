@@ -1,30 +1,54 @@
 package dev.mayaqq.cynosure
 
 import dev.mayaqq.cynosure.biome.CarverRegistry
+import dev.mayaqq.cynosure.client.CynosureForgeClient
+import dev.mayaqq.cynosure.client.events.CynosureForgeClientEvents
+import dev.mayaqq.cynosure.client.internal.ClientHooksEventListener
+import dev.mayaqq.cynosure.client.keymapping.KeyMappingRegistryEventSubscriber
+import dev.mayaqq.cynosure.client.tooltips.ClientTooltipFactoriesImpl
+import dev.mayaqq.cynosure.events.ForgeEvents
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
+import invoke.kitty.kritter.platform.Mod
+import invoke.kitty.kritter.platform.forge.EntrypointHandler
+import invoke.kitty.kritter.platform.forge.eventBus
+import invoke.kitty.kritter.utils.clientOnly
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.PathPackResources
 import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.PackSource
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.AddPackFindersEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.Bindings
 import net.minecraftforge.fml.ModList
-import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.forgespi.locating.IModFile
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
 
-@Mod(MODID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public object CynosureForge {
-    init {
-        CynosureForgeLike.init()
-        CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(MOD_BUS)
-        MOD_BUS.register(this)
+@EntrypointHandler("init")
+fun init(mod: Mod) {
+    CynosureForgeLike.init()
+    CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(mod.eventBus)
+    mod.eventBus.let { modBus ->
+        modBus.register(CynosureForge)
+        clientOnly {
+            modBus.register(CynosureForgeClient)
+            modBus.register(ClientHooksEventListener)
+            modBus.register(KeyMappingRegistryEventSubscriber)
+            modBus.register(ClientTooltipFactoriesImpl)
+        }
     }
+    MinecraftForge.EVENT_BUS.let { gameBus ->
+        gameBus.register(ForgeEvents)
+        clientOnly {
+            gameBus.register(CynosureForgeClientEvents)
+        }
+    }
+}
+
+object CynosureForge {
 
     @SubscribeEvent
     public fun lateInit(event: FMLCommonSetupEvent) {

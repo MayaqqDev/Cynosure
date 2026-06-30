@@ -19,7 +19,6 @@ import net.minecraft.server.packs.PackType
 public object CommonCynosureClientFabric {
     @CynosureInternal
     public fun init() {
-        CommonCynosureFabric.lateinit()
         ClientFapiFeed.feed()
 
         ParticleFactoryRegistrationEvent(object : ParticleFactoryRegistrationEvent.Context {

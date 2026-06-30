@@ -32,7 +32,6 @@ internal class CynosureClientHooksImpl : CynosureClientHooks {
     }
 }
 
-@EventBusSubscriber(modid = MODID)
 public object ClientHooksEventListener {
     internal val CLIENT_RELOAD_LISTENERS: MutableMap<ResourceLocation, PreparableReloadListener> = mutableMapOf()
     internal val DEFERRED_CLIENT_RELOAD_LISTENERS: MutableList<PreparableReloadListener> = mutableListOf()

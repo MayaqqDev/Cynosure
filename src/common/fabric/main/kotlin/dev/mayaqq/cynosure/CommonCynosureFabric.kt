@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure
 
 import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.PostInitEvent
+import dev.mayaqq.cynosure.events.api.MainBus
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.fapiFeed
 import dev.mayaqq.cynosure.internal.arrayOrNull

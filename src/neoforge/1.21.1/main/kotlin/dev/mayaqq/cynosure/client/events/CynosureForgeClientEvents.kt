@@ -25,7 +25,6 @@ internal val LevelRenderer.level get() = (this as LevelRendererAccessor).level
 
 internal var capturedFrustum: Frustum? = null
 
-@EventBusSubscriber(value = [Dist.CLIENT], modid = MODID)
 public object CynosureForgeClientEvents {
     @SubscribeEvent
     public fun onLevelRender(event: RenderLevelStageEvent) {

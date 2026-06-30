@@ -49,6 +49,8 @@ forge-kotlin1211 = { module = "thedarkcolour:kotlinforforge-neoforge", version.r
 forge-mixinextras = { module = "io.github.llamalad7:mixinextras-forge", version.ref = "mixinextras" }
 forge-kritter1201 = { module = "invoke.kitty.kritter:kritter-1.20.1-forge", version.ref = "kritter" }
 forge-kritter1211 = { module = "invoke.kitty.kritter:kritter-1.21.1-neoforge", version.ref = "kritter" }
+forge-kritter1201-lang = { module = "invoke.kitty.kritter:kritter-1.20.1-forge-lang", version.ref = "kritter" }
+forge-kritter1211-lang = { module = "invoke.kitty.kritter:kritter-1.21.1-neoforge-lang", version.ref = "kritter" }
 
 [bundles]
 

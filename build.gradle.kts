@@ -158,17 +158,16 @@ cloche {
         }
 
         metadata {
-            entrypoint("main") {
-                adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.CynosureFabric::init")
-            }
-            entrypoint("client") {
-                adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.client.CynosureClientFabric::init")
+            entrypoint("kritter:init") {
+                value.set("dev.mayaqq.cynosure::init")
             }
             entrypoint("server") {
                 adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
+                value.set("dev.mayaqq.cynosure.CommonCynosureFabric::lateinit")
+            }
+            entrypoint("client") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CommonCynosureFabric::lateinit")
             }
         }
     }
@@ -192,17 +191,16 @@ cloche {
         }
 
         metadata {
-            entrypoint("main") {
-                adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.CynosureFabric::init")
-            }
-            entrypoint("client") {
-                adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.client.CynosureClientFabric::init")
+            entrypoint("kritter:init") {
+                value.set("dev.mayaqq.cynosure::init")
             }
             entrypoint("server") {
                 adapter.set("kotlin")
-                value.set("dev.mayaqq.cynosure.CynosureFabric::lateinit")
+                value.set("dev.mayaqq.cynosure.CommonCynosureFabric::lateinit")
+            }
+            entrypoint("client") {
+                adapter.set("kotlin")
+                value.set("dev.mayaqq.cynosure.CommonCynosureFabric::lateinit")
             }
         }
     }
@@ -219,8 +217,8 @@ cloche {
         mixins.from(file("src/forge/1.20.1/main/cynosure-1.20.1.neoforge.mixins.json"))
 
         metadata {
-            modLoader = "kotlinforforge"
-            loaderVersion("4.12.0")
+            modLoader = "kritter"
+            loaderVersion("2.0.0")
             blurLogo = false
         }
 
@@ -228,6 +226,7 @@ cloche {
 
             api(libs.forge.kotlin1201)
             modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
+            modImplementation(libs.forge.kritter1201.lang)
 
             include(libs.nullevt) {
                 /*
@@ -254,14 +253,16 @@ cloche {
         mixins.from(file("src/neoforge/1.21.1/main/cynosure-1.21.1.neoforge.mixins.json"))
 
         metadata {
-            modLoader = "kotlinforforge"
-            loaderVersion("5.10.0")
+            modLoader = "kritter"
+            loaderVersion("2.0.0")
             blurLogo = false
         }
 
         dependencies {
             api(libs.forge.kotlin1211)
             modImplementation(skipIncludeTransformation(libs.forge.kritter1211))
+
+            modImplementation(libs.forge.kritter1211.lang)
 
             include(libs.forge.kritter1211) { isTransitive = false }
         }
@@ -308,19 +309,19 @@ publishing {
     }
 
     repositories {
-        val username = null // try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/username"] } catch (_: Exception) { null }
-        val password = null // try { onePassword["op://nmnrp3mc2nkriiiwwk4f7q73jm/Sappho Maven/password"] } catch (_: Exception) { null }
-//        if (username != null && password != null) {
-//            maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
-//                name = "sapphoCompany"
-//                credentials {
-//                    this.username = username.get() as String?
-//                    this.password = password.get()
-//                }
-//            }
-//        } else {
-//            println("Sappho Company credentials not present.")
-//        }
+        val username = System.getenv("MAVEN_USERNAME")
+        val password = System.getenv(("MAVEN_PASSWORD"))
+        if (username != null && password != null) {
+            maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
+                name = "sapphoCompany"
+                credentials {
+                    this.username = username as String?
+                    this.password = password
+                }
+            }
+        } else {
+            println("Sappho Company credentials not present.")
+        }
     }
 }
 

@@ -20,7 +20,9 @@ actual fun getRegistryAccess(): RegistryAccess {
     }
 }
 
-@Subscription
-fun onServerStart(event: ServerEvent.Starting) {
-    server = event.server
+object BytecodecUtilsImpl {
+    @Subscription
+    fun onServerStart(event: ServerEvent.Starting) {
+        server = event.server
+    }
 }

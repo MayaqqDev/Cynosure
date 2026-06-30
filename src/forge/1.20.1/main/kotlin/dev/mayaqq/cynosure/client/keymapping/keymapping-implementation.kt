@@ -33,7 +33,6 @@ internal object KeyMappingRegistryImpl : KeyMappingRegistry {
     }
 }
 
-@EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 public object KeyMappingRegistryEventSubscriber {
     @SubscribeEvent
     public fun onKeyMappingRegister(event: RegisterKeyMappingsEvent) {

@@ -19,6 +19,7 @@ public inline fun modId(path: String): ResourceLocation = identifier(MODID, path
 public object Cynosure : Logger by LoggerFactory.getLogger(NAME) {
     public fun init() {
         info("Initializing $NAME")
+        TempCynosureEvents.subAll()
         if (DEBUG_DIR.exists()) DEBUG_DIR.deleteRecursively()
     }
 }
