@@ -20,7 +20,8 @@
     "accessor.ChunkMapAccessor",
     "accessor.PoiTypesInvoker",
     "accessor.TrackedEntityAccessor",
-    "PoiTypesMixin"
+    "PoiTypesMixin",
+    "BlockEntityTypeMixin"
   ],
   "client": [
     "accessor.SplashRendererAccessor",
