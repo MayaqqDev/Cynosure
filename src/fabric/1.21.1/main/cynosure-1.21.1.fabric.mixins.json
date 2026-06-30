@@ -22,7 +22,8 @@
     "client.LevelRendererMixin",
     "client.GuiMixin",
     "client.EffectInstanceMixin",
-    "client.ClientLevelMixin"
+    "client.ClientLevelMixin",
+    "client.LanguageManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
