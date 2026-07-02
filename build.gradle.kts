@@ -309,8 +309,8 @@ publishing {
     }
 
     repositories {
-        val username = System.getenv("MAVEN_USERNAME")
-        val password = System.getenv(("MAVEN_PASSWORD"))
+        val username = properties["maven_username"]?.toString()
+        val password = properties["maven_password"]?.toString()
         if (username != null && password != null) {
             maven("https://maven.is-immensely.gay/${properties["maven_category"]}") {
                 name = "sapphoCompany"
