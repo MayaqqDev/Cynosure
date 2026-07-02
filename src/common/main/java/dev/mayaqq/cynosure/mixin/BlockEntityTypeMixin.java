@@ -40,6 +40,6 @@ public class BlockEntityTypeMixin {
         MainBus.INSTANCE.post(event);
         var newBlocks = event.getBedBlocks();
         newBlocks.addAll(List.of(blocks));
-        return (Block[]) newBlocks.toArray();
+        return newBlocks.toArray(Block[]::new);
     }
 }
