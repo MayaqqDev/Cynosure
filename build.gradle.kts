@@ -192,7 +192,7 @@ cloche {
 
         metadata {
             entrypoint("kritter:init") {
-                value.set("dev.mayaqq.cynosure::init")
+                value.set("dev.mayaqq.cynosure.CynosureFabricKt::init")
             }
             entrypoint("server") {
                 adapter.set("kotlin")
