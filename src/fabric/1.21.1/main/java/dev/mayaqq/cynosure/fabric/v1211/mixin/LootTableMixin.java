@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.Optional;
 
 // Mixin check: needs work
 
@@ -29,7 +30,7 @@ public class LootTableMixin implements ILootTable {
     @Shadow
     @Final
     @Nullable
-    private ResourceLocation randomSequence;
+    private Optional<ResourceLocation> randomSequence;
 
     @Override
     public @NotNull List<@NotNull LootPool> cynosure_getPools() {
@@ -43,6 +44,6 @@ public class LootTableMixin implements ILootTable {
 
     @Override
     public @NotNull ResourceLocation cynosure_getRandomSequnence() {
-        return this.randomSequence;
+        return this.randomSequence.get();
     }
 }
