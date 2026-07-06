@@ -146,6 +146,14 @@ cloche {
             official()
             parchment(libs.versions.parchment1201)
         }
+
+        mixins.from(
+            file("src/fabric/1.20.1/main/cynosure-1.20.1.fabric.mixins.json"),
+            file("src/common/main/cynosure.mixins.json"),
+            file("src/common/fabric/main/cynosure.fabric.mixins.json"),
+            file("src/common/1.20.1/main/cynosure-1.20.1.mixins.json")
+        )
+
         loaderVersion = libs.versions.fabric
         minecraftVersion = libs.versions.minecraft1201
 
@@ -177,6 +185,14 @@ cloche {
             official()
             parchment(libs.versions.parchment1211)
         }
+
+        mixins.from(
+            file("src/fabric/1.21.1/main/cynosure-1.21.1.fabric.mixins.json"),
+            file("src/common/main/cynosure.mixins.json"),
+            file("src/common/fabric/main/cynosure.fabric.mixins.json"),
+            file("src/common/1.21.1/main/cynosure-1.21.1.mixins.json")
+        )
+
         dependsOn(fabricCommon, common1211)
         loaderVersion = libs.versions.fabric
         minecraftVersion = libs.versions.minecraft1211
@@ -210,11 +226,17 @@ cloche {
             official()
             parchment(libs.versions.parchment1201)
         }
+
+        mixins.from(
+            file("src/forge/1.20.1/main/cynosure-1.20.1.forge.mixins.json"),
+            file("src/common/main/cynosure.mixins.json"),
+            file("src/common/forgeLike/main/cynosure.forge.mixins.json"),
+            file("src/common/1.20.1/main/cynosure-1.20.1.mixins.json")
+        )
+
         dependsOn(forgeLike, common1201)
         loaderVersion = libs.versions.forge1201
         minecraftVersion = libs.versions.minecraft1201
-
-        mixins.from(file("src/forge/1.20.1/main/cynosure-1.20.1.neoforge.mixins.json"))
 
         metadata {
             modLoader = "kritter"
@@ -247,10 +269,17 @@ cloche {
             official()
             parchment(libs.versions.parchment1211)
         }
+
+        mixins.from(
+            file("src/neoforge/1.21.1/main/cynosure-1.21.1.neoforge.mixins.json"),
+            file("src/common/main/cynosure.mixins.json"),
+            file("src/common/forgeLike/main/cynosure.forge.mixins.json"),
+            file("src/common/1.21.1/main/cynosure-1.21.1.mixins.json")
+        )
+
         loaderVersion = libs.versions.neoforge1211
         minecraftVersion = libs.versions.minecraft1211
 
-        mixins.from(file("src/neoforge/1.21.1/main/cynosure-1.21.1.neoforge.mixins.json"))
 
         metadata {
             modLoader = "kritter"
