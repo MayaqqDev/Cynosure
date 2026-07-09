@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // Mixin check: Probably works?!
 
 @Mixin(LevelRenderer.class)
-@SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
 public class LevelRendererMixin {
 
     @Definition(id = "endBatch", method = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;endBatch(Lnet/minecraft/client/renderer/RenderType;)V")
