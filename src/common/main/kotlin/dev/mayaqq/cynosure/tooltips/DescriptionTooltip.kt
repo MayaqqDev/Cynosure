@@ -9,7 +9,6 @@ import dev.mayaqq.cynosure.utils.language.words
 import invoke.kitty.kritter.utils.color.Color
 import invoke.kitty.kritter.utils.color.DarkGray
 import invoke.kitty.kritter.utils.color.LightGray
-import invoke.kitty.kritter.utils.color.rgb
 import invoke.kitty.kritter.utils.color.toColor
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
