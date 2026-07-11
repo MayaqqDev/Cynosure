@@ -33,7 +33,6 @@ public object CommonCynosureClientFabric {
             }
         }).post()
 
-        KeybindRegistrationEvent(fun(mapping) { KeyBindingHelper.registerKeyBinding(mapping) }).post()
         ClientReloadListenerEvent(fun(id, listener) =
             CynosureHooksImpl.registerReloadListener(id, PackType.CLIENT_RESOURCES, listener)
         ).post()

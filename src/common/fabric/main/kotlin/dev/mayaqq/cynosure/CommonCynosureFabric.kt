@@ -1,12 +1,14 @@
 package dev.mayaqq.cynosure
 
+import dev.mayaqq.cynosure.client.events.KeybindRegistrationEvent
 import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.PostInitEvent
-import dev.mayaqq.cynosure.events.api.MainBus
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.events.fapiFeed
 import dev.mayaqq.cynosure.internal.arrayOrNull
 import dev.mayaqq.cynosure.internal.getCynosureValue
+import invoke.kitty.kritter.utils.clientOnly
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.fabric.impl.resource.loader.ResourceManagerHelperImpl
@@ -32,6 +34,10 @@ public object CommonCynosureFabric {
     internal fun lateinit() {
         val a = typeOf<MutableMap<out String, Int>>()
         PostInitEvent.post()
+
+        clientOnly {
+            KeybindRegistrationEvent(fun(mapping) { KeyBindingHelper.registerKeyBinding(mapping) }).post()
+        }
     }
 
     private fun loadModPacks(mod: ModContainer, packs: CvArray) {
