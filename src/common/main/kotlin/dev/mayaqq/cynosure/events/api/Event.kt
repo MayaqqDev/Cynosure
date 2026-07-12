@@ -1,16 +1,14 @@
 package dev.mayaqq.cynosure.events.api
 
 /**
- * Base interface for all events
+ * Base class for all events
  */
-public abstract class Event
+public abstract class Event : uwu.serenity.nullbus.event.Event
 
 /**
  * Annotation marking an event class as a base class. This prevents people from subscribing to events of this class directly
  */
-@Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS)
-public annotation class RootEventClass
+public typealias RootEventClass = uwu.serenity.nullbus.event.RootEventClass
 
 /**
  * Event base class with a simple cancelling implementation
@@ -18,7 +16,7 @@ public annotation class RootEventClass
 @RootEventClass
 public abstract class CancellableEvent : Event() {
 
-    public open var isCancelled: Boolean = false
+    override var isCancelled: Boolean = false
         protected set
 
     public fun cancel() {

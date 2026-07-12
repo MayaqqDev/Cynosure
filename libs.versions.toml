@@ -51,6 +51,7 @@ forge-kritter1201 = { module = "invoke.kitty.kritter:kritter-1.20.1-forge", vers
 forge-kritter1211 = { module = "invoke.kitty.kritter:kritter-1.21.1-neoforge", version.ref = "kritter" }
 forge-kritter1201-lang = { module = "invoke.kitty.kritter:kritter-1.20.1-forge-lang", version.ref = "kritter" }
 forge-kritter1211-lang = { module = "invoke.kitty.kritter:kritter-1.21.1-neoforge-lang", version.ref = "kritter" }
+nullbus = { module = "uwu.serenity:nullbus", version = "1.7.3" }
 
 [bundles]
 

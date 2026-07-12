@@ -68,6 +68,7 @@ cloche {
             api(libs.kotlinx.coroutines)
             api(libs.bytecodecs)
             api(libs.javax.annotations)
+            api(libs.nullbus)
             implementation(skipIncludeTransformation(libs.nullevt)) {
                 /*
                 attributes {
