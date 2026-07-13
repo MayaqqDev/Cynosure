@@ -15,9 +15,6 @@
     "ServerLevelMixin",
     "LivingEntityMixin"
   ],
-  "client": [
-    "client.EntityRenderersMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

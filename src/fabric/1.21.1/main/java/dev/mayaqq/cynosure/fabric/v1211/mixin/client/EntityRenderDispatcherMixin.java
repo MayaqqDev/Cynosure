@@ -1,4 +1,4 @@
-package dev.mayaqq.cynosure.fabric.mixin.client;
+package dev.mayaqq.cynosure.fabric.v1211.mixin.client;
 
 import dev.mayaqq.cynosure.client.events.entity.RenderLayerRegistrationEvent;
 import dev.mayaqq.cynosure.events.api.MainBus;
@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,9 +26,9 @@ import java.util.Map;
 // Mixin check: should work
 
 @Mixin(EntityRenderDispatcher.class)
-public class EntityRenderersMixin {
+public class EntityRenderDispatcherMixin {
 
-    @Shadow private Map<String, EntityRenderer<? extends Player>> playerRenderers;
+    @Shadow private Map<PlayerSkin.Model, EntityRenderer<? extends Player>> playerRenderers;
 
     @Shadow private Map<EntityType<?>, EntityRenderer<?>> renderers;
 
@@ -41,7 +42,7 @@ public class EntityRenderersMixin {
         RenderLayerRegistrationEvent event = new RenderLayerRegistrationEvent((EntityRenderDispatcher) (Object) this, entityModels, new RenderLayerRegistrationEvent.Context() {
             @Override
             public @Nullable EntityRenderer<? extends Player> getSkin(@NotNull String name) {
-                return playerRenderers.get(name);
+                return playerRenderers.get(PlayerSkin.Model.byName(name));
             }
 
             @SuppressWarnings("unchecked")

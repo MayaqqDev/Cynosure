@@ -23,7 +23,8 @@
     "client.GuiMixin",
     "client.EffectInstanceMixin",
     "client.ClientLevelMixin",
-    "client.LanguageManagerMixin"
+    "client.LanguageManagerMixin",
+    "client.EntityRenderDispatcherMixin"
   ],
   "injectors": {
     "defaultRequire": 1
