@@ -1,6 +1,7 @@
 package dev.mayaqq.cynosure.client.events.tooltip
 
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import dev.mayaqq.cynosure.items.extensions.CustomTooltip
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.player.Player
@@ -15,6 +16,7 @@ import net.minecraft.world.item.TooltipFlag
  * @property flag provided tooltip flags
  * @property player the player holding the item
  */
+@RootEventClass
 public class ModifyTooltipComponentsEvent(
     public val stack: ItemStack,
     public val flag: TooltipFlag,

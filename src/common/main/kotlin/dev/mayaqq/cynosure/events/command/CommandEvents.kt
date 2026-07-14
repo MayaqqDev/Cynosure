@@ -10,6 +10,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.mayaqq.cynosure.events.api.CancellableEvent
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.commands.CommandBuildContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -24,6 +25,7 @@ public typealias ArgumentCommandBuilder<T> = CommandBuilder<RequiredArgumentBuil
  * @property parseResults allows changing the command's parse results
  * @property exception exception to be thrown if the event is cancelled
  */
+@RootEventClass
 public class CommandExecuteEvent(
     public var parseResults: ParseResults<CommandSourceStack>,
     public var exception: Throwable?
@@ -32,6 +34,7 @@ public class CommandExecuteEvent(
 /**
  * Fired during command registration, allows you to register custom commands
  */
+@RootEventClass
 public class CommandRegistrationEvent(
     public val dispatcher: CommandDispatcher<CommandSourceStack>,
     public val context: CommandBuildContext,

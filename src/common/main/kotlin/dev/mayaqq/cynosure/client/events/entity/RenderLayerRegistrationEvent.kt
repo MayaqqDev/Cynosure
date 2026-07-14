@@ -3,6 +3,7 @@ package dev.mayaqq.cynosure.client.events.entity
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.client.utils.DefaultSkin
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import dev.mayaqq.cynosure.mixin.client.accessor.LivingEntityRendererAccessor
 import net.minecraft.client.model.EntityModel
 import net.minecraft.client.model.geom.EntityModelSet
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Player
 import org.jetbrains.annotations.ApiStatus.NonExtendable
 
 
+@RootEventClass
 public class RenderLayerRegistrationEvent(
     public val renderers: EntityRenderDispatcher,
     public val models: EntityModelSet,
