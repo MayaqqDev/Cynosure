@@ -3,6 +3,7 @@ package dev.mayaqq.cynosure.events.api
 /**
  * Base class for all events
  */
+@RootEventClass
 public abstract class Event : uwu.serenity.nullbus.event.Event
 
 /**
