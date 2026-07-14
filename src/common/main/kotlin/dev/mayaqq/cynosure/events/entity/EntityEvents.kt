@@ -40,14 +40,10 @@ public sealed class LivingEntityEvent(public val entity: LivingEntity) : Cancell
     public class EffectExpire(entity: LivingEntity, public val instance: MobEffectInstance?, public val effect: MobEffect? = instance?.effect()) : LivingEntityEvent(entity)
 }
 
-@RootEventClass
 public class MountEvent(public val entity: Entity, public val mount: Entity?, public val isMounting: Boolean) : CancellableEvent()
 
-@RootEventClass
 public class EntityDamageSourceEvent(public val entity: Entity, public val source: DamageSource) : ReturningEvent<DamageSource>()
 
-@RootEventClass
 public class EntityDamageEvent(public val entity: Entity, public val source: DamageSource, public val amount: Float) : ReturningEvent<Float>()
 
-@RootEventClass
 public class EntityCreatedEvent(public val entity: Entity, public val level: Level) : CancellableEvent()

@@ -3,7 +3,6 @@ package dev.mayaqq.cynosure.client.events
 import com.mojang.blaze3d.vertex.VertexFormat
 import dev.mayaqq.cynosure.CynosureInternal
 import dev.mayaqq.cynosure.events.api.Event
-import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.particle.ParticleProvider
 import net.minecraft.client.particle.ParticleRenderType
@@ -16,7 +15,6 @@ import net.minecraft.server.packs.resources.PreparableReloadListener
 import org.jetbrains.annotations.ApiStatus
 import kotlin.reflect.KMutableProperty0
 
-@RootEventClass
 public class ParticleFactoryRegistrationEvent(private val context: Context) : Event() {
 
     public fun <T : ParticleOptions> register(type: ParticleType<T>, provider: ParticleProvider<T>) {
@@ -36,7 +34,6 @@ public class ParticleFactoryRegistrationEvent(private val context: Context) : Ev
     }
 }
 
-@RootEventClass
 public class ParticleRenderTypeRegistrationEvent(
     private val renderOrder: MutableList<ParticleRenderType>
 ) : Event() {
@@ -56,7 +53,6 @@ public class ParticleRenderTypeRegistrationEvent(
     }
 }
 
-@RootEventClass
 public class CoreShaderRegistrationEvent(private val context: Context) : Event() {
 
     public fun register(
@@ -80,7 +76,6 @@ public class CoreShaderRegistrationEvent(private val context: Context) : Event()
     }
 }
 
-@RootEventClass
 public class KeybindRegistrationEvent(private val context: Context) : Event() {
     public fun register(mapping: KeyMapping) {
         context.register(mapping)
@@ -93,7 +88,6 @@ public class KeybindRegistrationEvent(private val context: Context) : Event() {
     }
 }
 
-@RootEventClass
 public class ClientReloadListenerEvent(private val context: Context) : Event() {
     public fun register(id: ResourceLocation, listener: PreparableReloadListener) {
         context.register(id, listener)
