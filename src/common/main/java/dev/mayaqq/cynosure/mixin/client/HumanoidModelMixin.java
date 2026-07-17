@@ -1,5 +1,8 @@
 package dev.mayaqq.cynosure.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import dev.mayaqq.cynosure.client.models.poses.CynosureArmAnimation;
 import dev.mayaqq.cynosure.client.models.poses.CynosureArmPose;
 import dev.mayaqq.cynosure.injection.client.IHumanoidModel;
@@ -116,5 +119,33 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
                 if (cynosure$customRightArmPose != null) this.cynosure$customRightArmPose.modifyOffhandArm(model, entity, this.rightArm);
             }
         }
+    }
+
+    @Definition(id = "rightArmPose", field = "Lnet/minecraft/client/model/HumanoidModel;rightArmPose:Lnet/minecraft/client/model/HumanoidModel$ArmPose;")
+    @Definition(id = "SPYGLASS", field = "Lnet/minecraft/client/model/HumanoidModel$ArmPose;SPYGLASS:Lnet/minecraft/client/model/HumanoidModel$ArmPose;")
+    @Expression("this.rightArmPose != SPYGLASS")
+    @ModifyExpressionValue(
+            method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
+            at = @At("MIXINEXTRAS:EXPRESSION")
+    )
+    private boolean cancelWhenCustomRightArm(boolean original) {
+        if (cynosure$customRightArmPose != null && cynosure$customRightArmPose.getCancelSwing()) return false;
+        if (cynosure$customRightArmAnimation != null && cynosure$customRightArmAnimation.getCancelSwing()) return false;
+
+        return original;
+    }
+
+    @Definition(id = "leftArmPose", field = "Lnet/minecraft/client/model/HumanoidModel;leftArmPose:Lnet/minecraft/client/model/HumanoidModel$ArmPose;")
+    @Definition(id = "SPYGLASS", field = "Lnet/minecraft/client/model/HumanoidModel$ArmPose;SPYGLASS:Lnet/minecraft/client/model/HumanoidModel$ArmPose;")
+    @Expression("this.leftArmPose != SPYGLASS")
+    @ModifyExpressionValue(
+            method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
+            at = @At("MIXINEXTRAS:EXPRESSION")
+    )
+    private boolean cancelWhenCustomLeftArm(boolean original) {
+        if (cynosure$customLeftArmPose != null && cynosure$customLeftArmPose.getCancelSwing()) return false;
+        if (cynosure$customLeftArmAnimation != null && cynosure$customLeftArmAnimation.getCancelSwing()) return false;
+
+        return original;
     }
 }
