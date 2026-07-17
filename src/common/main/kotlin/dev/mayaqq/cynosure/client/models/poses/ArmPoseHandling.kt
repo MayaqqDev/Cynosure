@@ -22,14 +22,14 @@ internal object ArmPoseHandling {
         val mStack = player.getItemInHand(InteractionHand.MAIN_HAND)
         val oStack = player.getItemInHand(InteractionHand.OFF_HAND)
 
-        val mPose = mStack.item.getExtension<CustomArmPose>()?.getArmPose(mStack)
+        var mPose = mStack.item.getExtension<CustomArmPose>()?.getArmPose(mStack)
         var oPose = oStack.item.getExtension<CustomArmPose>()?.getArmPose(oStack)
 
-        val mAnim = mStack.item.getExtension<CustomArmAnimation>()?.getArmAnimation(mStack)
+        var mAnim = mStack.item.getExtension<CustomArmAnimation>()?.getArmAnimation(mStack)
         var oAnim = oStack.item.getExtension<CustomArmAnimation>()?.getArmAnimation(oStack)
 
-        if (mPose?.twohanded == true) oPose = mPose
-        if (mAnim?.twohanded == true) oAnim = mAnim
+        if (mPose?.twohanded == true) oPose = mPose else if (oPose?.twohanded == true) mPose = oPose
+        if (mAnim?.twohanded == true) oAnim = mAnim else if (oAnim?.twohanded == true) mAnim = oAnim
 
         if (mPose != null || mAnim != null) {
             if (isMainRight) {
