@@ -93,23 +93,27 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
             boolean isUsedMain = entity.getUsedItemHand() == InteractionHand.MAIN_HAND;
 
             if (isMainRight == isUsedMain) {
-                this.cynosure$customRightArmAnimation.modifyMainArm(model, entity, this.rightArm);
-                if (this.cynosure$customRightArmAnimation.getTwohanded()) {
-                    this.cynosure$customRightArmAnimation.modifyOffhandArm(model, entity, this.leftArm);
+                if (this.cynosure$customRightArmAnimation != null) {
+                    this.cynosure$customRightArmAnimation.modifyMainArm(model, entity, this.rightArm);
+                    if (this.cynosure$customRightArmAnimation.getTwohanded()) {
+                        this.cynosure$customRightArmAnimation.modifyOffhandArm(model, entity, this.leftArm);
+                    }
                 }
             } else {
-                this.cynosure$customLeftArmAnimation.modifyMainArm(model, entity, this.leftArm);
-                if (this.cynosure$customLeftArmAnimation.getTwohanded()) {
-                    this.cynosure$customLeftArmAnimation.modifyOffhandArm(model, entity, this.rightArm);
+                if (this.cynosure$customLeftArmAnimation != null) {
+                    this.cynosure$customLeftArmAnimation.modifyMainArm(model, entity, this.leftArm);
+                    if (this.cynosure$customLeftArmAnimation.getTwohanded()) {
+                        this.cynosure$customLeftArmAnimation.modifyOffhandArm(model, entity, this.rightArm);
+                    }
                 }
             }
         } else {
             if (isMainRight) {
-                this.cynosure$customRightArmPose.modifyMainArm(model, entity, this.rightArm);
-                this.cynosure$customLeftArmPose.modifyOffhandArm(model, entity, this.leftArm);
+                if (cynosure$customRightArmPose != null) this.cynosure$customRightArmPose.modifyMainArm(model, entity, this.rightArm);
+                if (cynosure$customLeftArmPose != null) this.cynosure$customLeftArmPose.modifyOffhandArm(model, entity, this.leftArm);
             } else {
-                this.cynosure$customLeftArmPose.modifyMainArm(model, entity, this.leftArm);
-                this.cynosure$customRightArmPose.modifyOffhandArm(model, entity, this.rightArm);
+                if (cynosure$customLeftArmPose != null) this.cynosure$customLeftArmPose.modifyMainArm(model, entity, this.leftArm);
+                if (cynosure$customRightArmPose != null) this.cynosure$customRightArmPose.modifyOffhandArm(model, entity, this.rightArm);
             }
         }
     }
