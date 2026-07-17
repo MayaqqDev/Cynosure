@@ -16,8 +16,8 @@ public class PlayerRendererMixin {
             method = "setModelProperties",
             at = @At("TAIL")
     )
-    public void injectCynosureArmPose(AbstractClientPlayer player, CallbackInfo ci, @Local PlayerModel<AbstractClientPlayer> model, @Local boolean isSpectator) {
-        if (!isSpectator) {
+    public void injectCynosureArmPose(AbstractClientPlayer player, CallbackInfo ci, @Local PlayerModel<AbstractClientPlayer> model) {
+        if (!player.isSpectator()) {
             ArmPoseHandling.addPropertiesToModel(player, model);
         }
     }
