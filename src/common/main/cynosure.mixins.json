@@ -31,7 +31,9 @@
     "client.ParticleEngineMixin",
     "client.RenderBuffersMixin",
     "client.SplashManagerMixin",
-    "client.accessor.LivingEntityRendererAccessor"
+    "client.accessor.LivingEntityRendererAccessor",
+    "client.HumanoidModelMixin",
+    "client.PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

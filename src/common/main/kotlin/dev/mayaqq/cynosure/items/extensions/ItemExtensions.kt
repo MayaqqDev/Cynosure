@@ -1,5 +1,7 @@
 package dev.mayaqq.cynosure.items.extensions
 
+import dev.mayaqq.cynosure.client.models.poses.CynosureArmAnimation
+import dev.mayaqq.cynosure.client.models.poses.CynosureArmPose
 import dev.mayaqq.cynosure.core.extensions.Extension
 import dev.mayaqq.cynosure.core.extensions.ExtensionRegistry
 import net.minecraft.client.player.AbstractClientPlayer
@@ -82,5 +84,16 @@ public fun interface DisablesCape : ItemExtension {
  */
 public fun interface CustomTooltip : ItemExtension {
     public fun MutableList<Component>.modifyTooltip(stack: ItemStack, player: Player?, flags: TooltipFlag)
+}
+
+/**
+ * Allows adding custom Arm poses for item
+ */
+public fun interface CustomArmPose : ItemExtension {
+    public fun getArmPose(stack: ItemStack) : CynosureArmPose
+}
+
+public fun interface CustomArmAnimation : ItemExtension {
+    public fun getArmAnimation(stack: ItemStack) : CynosureArmAnimation
 }
 
