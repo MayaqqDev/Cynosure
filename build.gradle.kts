@@ -69,13 +69,9 @@ cloche {
             api(libs.bytecodecs)
             api(libs.javax.annotations)
             api(libs.nullbus)
-            implementation(skipIncludeTransformation(libs.nullevt)) {
-                /*
-                attributes {
-                    attribute(fixedAttribute, true)
-                }
-                 */
-            }
+            implementation(skipIncludeTransformation(libs.nullevt))
+
+            include(skipIncludeTransformation(libs.nullbus))
         }
     }
 
@@ -251,13 +247,7 @@ cloche {
             modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
             modImplementation(libs.forge.kritter1201.lang)
 
-            include(libs.nullevt) {
-                /*
-                attributes {
-                    attribute(fixedAttribute, true)
-                }
-                 */
-            }
+            include(libs.nullevt)
 
             include(libs.kotlin.reflect)
             include(libs.forge.kritter1201) { isTransitive = false }
