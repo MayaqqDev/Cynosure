@@ -1,5 +1,10 @@
 @file:Suppress("PropertyName", "UnstableApiUsage")
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import earth.terrarium.cloche.api.target.ForgeLikeTarget
+import net.msrandom.minecraftcodev.core.utils.toPath
+import net.msrandom.minecraftcodev.includes.IncludesJar
+import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
@@ -10,6 +15,7 @@ plugins {
     // Need to explicitly set ksp versions cs cloche loads an old version by default
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
     //id("dev.isxander.secrets") version "0.1.0"
+    id("com.gradleup.shadow") version "8.3.8"
     `maven-publish`
 }
 
@@ -42,6 +48,20 @@ repositories {
     mavenLocal()
 }
 
+val libraries = listOf(
+    libs.nullbus
+)
+
+val shadowSery: Configuration by configurations.creating {
+    isTransitive = false
+}
+
+dependencies {
+    libraries.forEach {
+        shadowSery(it)
+    }
+}
+
 cloche {
     metadata {
         modId = mod_id
@@ -70,8 +90,6 @@ cloche {
             api(libs.javax.annotations)
             api(libs.nullbus)
             implementation(skipIncludeTransformation(libs.nullevt))
-
-            include(skipIncludeTransformation(libs.nullbus))
         }
     }
 
@@ -106,6 +124,7 @@ cloche {
 
             include(libs.kotlin.metadata)
             include(libs.bytecodecs)
+            include(libs.nullbus)
 
             modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
         }
@@ -247,9 +266,6 @@ cloche {
             modImplementation(skipIncludeTransformation(libs.forge.kritter1201))
             modImplementation(libs.forge.kritter1201.lang)
 
-            include(libs.nullevt)
-
-            include(libs.kotlin.reflect)
             include(libs.forge.kritter1201) { isTransitive = false }
         }
     }
@@ -285,6 +301,38 @@ cloche {
             modImplementation(libs.forge.kritter1211.lang)
 
             include(libs.forge.kritter1211) { isTransitive = false }
+        }
+    }
+
+    targets.withType<ForgeLikeTarget>().all {
+        tasks.register<ShadowJar>("${name.replace(":", "").replace(".", "")}FatJar") {
+            from(zipTree(finalJar.map { it.archiveFile }))
+            configurations = listOf(shadowSery)
+            archiveClassifier = this@all.name.replace(":", "-")
+        }
+
+        tasks.named<IncludesJar>("${name.replace(":", "").replace(".", "")}IncludeJar") {
+            this.archiveClassifier = this.archiveClassifier.get() + "-unshadowed"
+            this.destinationDirectory = this.destinationDirectory.get().dir("unshadowed")
+        }
+    }
+
+    artifacts {
+        targets.withType<ForgeLikeTarget>().all {
+            archives(tasks.named("${name.replace(":", "").replace(".", "")}FatJar"))
+        }
+    }
+    targets.withType<ForgeLikeTarget>().all {
+        configurations.named(sourceSet.apiElementsConfigurationName) {
+            artifacts.clear()
+
+            project.artifacts.add(sourceSet.apiElementsConfigurationName, tasks.named("${this@all.name.replace(":", "").replace(".", "")}FatJar"))
+        }
+
+        configurations.named(sourceSet.runtimeElementsConfigurationName) {
+            artifacts.clear()
+
+            project.artifacts.add(sourceSet.runtimeElementsConfigurationName, tasks.named("${this@all.name.replace(":", "").replace(".", "")}FatJar"))
         }
     }
 }
