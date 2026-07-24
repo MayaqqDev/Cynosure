@@ -62,6 +62,8 @@ dependencies {
     }
 }
 
+fun String.clean(): String = this.replace(":", "").replace(".", "")
+
 cloche {
     metadata {
         modId = mod_id
@@ -305,13 +307,13 @@ cloche {
     }
 
     targets.withType<ForgeLikeTarget>().all {
-        tasks.register<ShadowJar>("${name.replace(":", "").replace(".", "")}FatJar") {
+        tasks.register<ShadowJar>("${name.clean()}FatJar") {
             from(zipTree(finalJar.map { it.archiveFile }))
             configurations = listOf(shadowSery)
             archiveClassifier = this@all.name.replace(":", "-")
         }
 
-        tasks.named<IncludesJar>("${name.replace(":", "").replace(".", "")}IncludeJar") {
+        tasks.named<IncludesJar>("${name.clean()}IncludeJar") {
             this.archiveClassifier = this.archiveClassifier.get() + "-unshadowed"
             this.destinationDirectory = this.destinationDirectory.get().dir("unshadowed")
         }
@@ -319,20 +321,16 @@ cloche {
 
     artifacts {
         targets.withType<ForgeLikeTarget>().all {
-            archives(tasks.named("${name.replace(":", "").replace(".", "")}FatJar"))
+            archives(tasks.named("${name.clean()}FatJar"))
         }
     }
     targets.withType<ForgeLikeTarget>().all {
-        configurations.named(sourceSet.apiElementsConfigurationName) {
-            artifacts.clear()
+        listOf(sourceSet.apiElementsConfigurationName, sourceSet.runtimeElementsConfigurationName).forEach { confName ->
+            configurations.named(confName) {
+                artifacts.clear()
 
-            project.artifacts.add(sourceSet.apiElementsConfigurationName, tasks.named("${this@all.name.replace(":", "").replace(".", "")}FatJar"))
-        }
-
-        configurations.named(sourceSet.runtimeElementsConfigurationName) {
-            artifacts.clear()
-
-            project.artifacts.add(sourceSet.runtimeElementsConfigurationName, tasks.named("${this@all.name.replace(":", "").replace(".", "")}FatJar"))
+                project.artifacts.add(confName, tasks.named("${this@all.name.clean()}FatJar"))
+            }
         }
     }
 }
