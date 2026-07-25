@@ -7,14 +7,14 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes
-import net.neoforged.neoforge.common.NeoForgeMod
+import net.neoforged.neoforge.common.CommonHooks
 
 /**
  * Hacking forge lessgooo
  */
 internal val ATTRIBUTE_MAP: MutableMap<EntityType<out LivingEntity>, AttributeSupplier> by lazy {
     try {
-        val field = NeoForgeMod::class.java.getDeclaredField("ATTRIBUTES")
+        val field = CommonHooks::class.java.getDeclaredField("FORGE_ATTRIBUTES")
         field.isAccessible = true
         return@lazy field.get(null) as MutableMap<EntityType<out LivingEntity>, AttributeSupplier>
     } catch(ex: ReflectiveOperationException) {
