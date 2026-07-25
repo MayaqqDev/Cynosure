@@ -124,10 +124,6 @@ cloche {
             modApi(libs.fabric.kotlin)
             api(libs.javax.annotations)
 
-            include(libs.kotlin.metadata)
-            include(libs.bytecodecs)
-            include(libs.nullbus)
-
             modCompileOnly("maven.modrinth:iris:1.7.6+1.20.1") { isTransitive = false }
         }
     }
@@ -138,10 +134,6 @@ cloche {
 
         dependencies {
             api(libs.javax.annotations)
-
-            include(libs.bytecodecs)
-            include(libs.kotlin.metadata)
-            include(libs.kotlin.reflect)
 
             modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
         }
@@ -181,6 +173,8 @@ cloche {
             fabricApi(libs.versions.fapi1201)
             modImplementation(libs.fabric.kritter1201)
             include(libs.fabric.kritter1201)
+            include(libs.bytecodecs)
+            include(libs.nullbus)
         }
 
         metadata {
@@ -222,6 +216,8 @@ cloche {
             modImplementation(libs.fabric.kritter1211)
 
             include(libs.fabric.kritter1211)
+            include(libs.bytecodecs)
+            include(libs.nullbus)
         }
 
         metadata {
@@ -269,6 +265,7 @@ cloche {
             modImplementation(libs.forge.kritter1201.lang)
 
             include(libs.forge.kritter1201) { isTransitive = false }
+            include(libs.bytecodecs)
         }
     }
 
@@ -303,34 +300,19 @@ cloche {
             modImplementation(libs.forge.kritter1211.lang)
 
             include(libs.forge.kritter1211) { isTransitive = false }
+            include(libs.bytecodecs)
         }
     }
 
     targets.withType<ForgeLikeTarget>().all {
-        tasks.register<ShadowJar>("${name.clean()}FatJar") {
-            from(zipTree(finalJar.map { it.archiveFile }))
-            configurations = listOf(shadowSery)
-            archiveClassifier = this@all.name.replace(":", "-")
-        }
-
-        tasks.named<IncludesJar>("${name.clean()}IncludeJar") {
-            this.archiveClassifier = this.archiveClassifier.get() + "-unshadowed"
-            this.destinationDirectory = this.destinationDirectory.get().dir("unshadowed")
-        }
-    }
-
-    artifacts {
-        targets.withType<ForgeLikeTarget>().all {
-            archives(tasks.named("${name.clean()}FatJar"))
-        }
-    }
-    targets.withType<ForgeLikeTarget>().all {
-        listOf(sourceSet.apiElementsConfigurationName, sourceSet.runtimeElementsConfigurationName).forEach { confName ->
-            configurations.named(confName) {
-                artifacts.clear()
-
-                project.artifacts.add(confName, tasks.named("${this@all.name.clean()}FatJar"))
+        tasks.named<Jar>(sourceSet.jarTaskName) {
+            val unpackedFiles = listOf(shadowSery).map { elements ->
+                elements.map { location ->
+                    zipTree(location)
+                }
             }
+
+            from(unpackedFiles)
         }
     }
 }
