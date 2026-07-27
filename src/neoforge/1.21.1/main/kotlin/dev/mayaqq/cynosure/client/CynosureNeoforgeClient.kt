@@ -11,6 +11,7 @@ import dev.mayaqq.cynosure.client.events.ParticleFactoryRegistrationEvent
 import dev.mayaqq.cynosure.client.events.entity.RenderLayerRegistrationEvent
 import dev.mayaqq.cynosure.client.render.gui.HudOverlayRegistry
 import dev.mayaqq.cynosure.client.render.gui.VanillaHud
+import dev.mayaqq.cynosure.client.render.oldToNew
 import dev.mayaqq.cynosure.client.render.vanillaGuiLayers
 import dev.mayaqq.cynosure.client.utils.DefaultSkin
 import dev.mayaqq.cynosure.events.api.post
@@ -75,13 +76,12 @@ internal object CynosureNeoforgeClient {
     @SubscribeEvent
     fun registerGuiOverlays(event: RegisterGuiLayersEvent) {
         VanillaHud.ids.forEach {
-
-            if (vanillaGuiLayers.find { e -> e == it } == null) {
-                //TODO: solve this
-                Cynosure.error("$it is a valid ID only on 1.20.1.")
+            val id = oldToNew[it]?: run {
+                Cynosure.error("Cannot find id $it for overlay")
                 return@forEach
             }
-            event.registerBelow(it, modId("overlays_${it.path}")) { guiGraphics, deltaTracker ->
+
+            event.registerBelow(id, modId("overlays_$it")) { guiGraphics, deltaTracker ->
                 RenderSystem.enableBlend()
                 RenderSystem.disableDepthTest()
                 //TODO: check if using McClient.gui is okay
