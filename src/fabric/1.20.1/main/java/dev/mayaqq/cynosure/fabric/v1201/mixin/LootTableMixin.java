@@ -42,7 +42,7 @@ public class LootTableMixin implements ILootTable {
     }
 
     @Override
-    public @NotNull ResourceLocation cynosure_getRandomSequnence() {
+    public @Nullable ResourceLocation cynosure_getRandomSequnence() {
         return this.randomSequence;
     }
 }

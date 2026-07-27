@@ -10,5 +10,8 @@ import net.minecraft.world.level.storage.loot.LootTable
 public fun LootTable.copy(): LootTable.Builder = LootTable.lootTable()
         .setParamSet(this.paramSet)
         .pools(this.lootPools)
-        .apply(this.lootFunctions)
-        .setRandomSequence(this.lootRandomSequence)
+        .apply(this.lootFunctions).let {
+            this.lootRandomSequence?.let{ sequence -> it.setRandomSequence(sequence) }
+        it
+    }
+
