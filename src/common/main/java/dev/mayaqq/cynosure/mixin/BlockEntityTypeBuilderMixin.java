@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Mixin(BlockEntityType.Builder.class)
-public class BlockEntityTypeBuilderMixin<T extends BlockEntity> {
+public class BlockEntityTypeBuilderMixin {
     @ModifyVariable(
             method = "<init>",
             at = @At(
@@ -23,7 +23,7 @@ public class BlockEntityTypeBuilderMixin<T extends BlockEntity> {
             ordinal = 1,
             argsOnly = true
     )
-    private Set<Block> modifyBedArgs(Set<Block> validBlocks, @Local BlockEntityType.BlockEntitySupplier<? extends T> supplier) {
+    private static Set<Block> modifyBedArgs(Set<Block> validBlocks, @Local(argsOnly = true) BlockEntityType.BlockEntitySupplier supplier) {
         var event = new VanillaBlockEntityRegistrationEvent(supplier.getClass().componentType());
         MainBus.INSTANCE.post(event);
         var newBlocks = event.getBlocks();
