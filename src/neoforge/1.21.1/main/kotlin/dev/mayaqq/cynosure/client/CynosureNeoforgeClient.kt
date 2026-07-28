@@ -81,7 +81,7 @@ internal object CynosureNeoforgeClient {
                 return@forEach
             }
 
-            event.registerBelow(id, modId("overlays_$it")) { guiGraphics, deltaTracker ->
+            event.registerBelow(id, modId("overlays_${it.path}")) { guiGraphics, deltaTracker ->
                 RenderSystem.enableBlend()
                 RenderSystem.disableDepthTest()
                 //TODO: check if using McClient.gui is okay

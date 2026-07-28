@@ -21,6 +21,7 @@
     "accessor.PoiTypesInvoker",
     "accessor.TrackedEntityAccessor",
     "PoiTypesMixin",
+    "BlockEntityTypeMixin",
     "BlockEntityTypeBuilderMixin"
   ],
   "client": [

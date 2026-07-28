@@ -396,3 +396,5 @@ accessible field com/mojang/blaze3d/platform/GlStateManager$BooleanState enabled
 
 # PoiType
 accessible field net/minecraft/world/entity/ai/village/poi/PoiType matchingStates Ljava/util/Set;
+#Block Entity Types
+accessible field net/minecraft/world/level/block/entity/BlockEntityType$Builder validBlocks Ljava/util/Set;
