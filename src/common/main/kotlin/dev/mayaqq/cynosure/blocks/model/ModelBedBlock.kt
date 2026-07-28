@@ -60,7 +60,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
  */
 
 
-public class ModelBedBlock(properties: Properties, color: DyeColor? = null) : BedBlock(color, properties) {
+public open class ModelBedBlock(properties: Properties, color: DyeColor? = null) : BedBlock(color, properties) {
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
     override fun skipRendering(state: BlockState, neigborState: BlockState, offset: Direction): Boolean = neigborState.block is BedBlock
 
