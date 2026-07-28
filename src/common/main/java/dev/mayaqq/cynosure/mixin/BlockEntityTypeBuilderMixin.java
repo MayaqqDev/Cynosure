@@ -23,7 +23,7 @@ public class BlockEntityTypeBuilderMixin<T extends BlockEntity> {
             ordinal = 1,
             argsOnly = true
     )
-    private static Set<Block> modifyBedArgs(Set<Block> validBlocks, @Local BlockEntityType.BlockEntitySupplier<? extends T> supplier) {
+    private Set<Block> modifyBedArgs(Set<Block> validBlocks, @Local BlockEntityType.BlockEntitySupplier<? extends T> supplier) {
         var event = new VanillaBlockEntityRegistrationEvent(supplier.getClass().componentType());
         MainBus.INSTANCE.post(event);
         var newBlocks = event.getBlocks();
