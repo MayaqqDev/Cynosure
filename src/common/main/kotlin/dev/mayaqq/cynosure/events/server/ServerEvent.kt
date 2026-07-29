@@ -1,8 +1,10 @@
 package dev.mayaqq.cynosure.events.server
 
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.server.MinecraftServer
 
+@RootEventClass
 public sealed class ServerEvent(
     public val server: MinecraftServer
 ) : Event() {

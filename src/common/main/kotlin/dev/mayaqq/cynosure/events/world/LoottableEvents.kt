@@ -2,10 +2,12 @@ package dev.mayaqq.cynosure.events.world
 
 import dev.mayaqq.cynosure.events.api.Event
 import dev.mayaqq.cynosure.events.api.ReturningEvent
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.level.storage.loot.LootTable
 
+@RootEventClass
 public sealed class LoottableEvents(
     public val id: ResourceLocation,
 ) : ReturningEvent<LootTable?>() {

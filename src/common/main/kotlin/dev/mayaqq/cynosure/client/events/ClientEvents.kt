@@ -1,7 +1,9 @@
 package dev.mayaqq.cynosure.client.events
 
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 
+@RootEventClass
 public sealed class ClientTickEvent : Event() {
 
     /**

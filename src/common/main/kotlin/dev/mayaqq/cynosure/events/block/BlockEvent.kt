@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.events.block
 
 import dev.mayaqq.cynosure.events.api.CancellableEvent
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.item.FallingBlockEntity
@@ -10,6 +11,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.state.BlockState
 
+@RootEventClass
 public sealed class BlockEvent(
     public val level: LevelAccessor,
     public val state: BlockState,
@@ -37,6 +39,7 @@ public sealed class BlockEvent(
     ) : BlockEvent(level, state, pos)
 }
 
+@RootEventClass
 public sealed class FallingBlockEvent(
     public val level: Level,
     public open val fallingState: BlockState,

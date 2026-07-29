@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 
+@RootEventClass
 public sealed class EntityTrackingEvent(
     public val entity: Entity,
     public val player: ServerPlayer

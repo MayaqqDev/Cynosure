@@ -1,10 +1,12 @@
 package dev.mayaqq.cynosure.events.world
 
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import invoke.kitty.kritter.platform.Side
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 
+@RootEventClass
 public sealed class LevelEvent(
     public open val level: Level
 ) : Event() {

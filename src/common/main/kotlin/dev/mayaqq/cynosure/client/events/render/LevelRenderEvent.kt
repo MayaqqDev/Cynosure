@@ -2,6 +2,7 @@ package dev.mayaqq.cynosure.client.events.render
 
 import com.mojang.blaze3d.vertex.PoseStack
 import dev.mayaqq.cynosure.events.api.Event
+import dev.mayaqq.cynosure.events.api.RootEventClass
 import net.minecraft.client.Camera
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.LevelRenderer
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.HitResult
 
+@RootEventClass
 public sealed class LevelRenderEvent(
     public val level: ClientLevel,
     public val renderer: LevelRenderer,
