@@ -10,6 +10,8 @@ import dev.mayaqq.cynosure.core.identifier
 import dev.mayaqq.cynosure.events.ForgeEvents
 import dev.mayaqq.cynosure.events.PostInitEvent
 import dev.mayaqq.cynosure.events.api.post
+import dev.mayaqq.cynosure.text.Text
+import invoke.kitty.kritter.events.LateInitEvent
 import invoke.kitty.kritter.platform.Mod
 import invoke.kitty.kritter.platform.forge.EntrypointHandler
 import invoke.kitty.kritter.platform.forge.eventBus
@@ -29,6 +31,7 @@ import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddPackFindersEvent
+import net.neoforged.neoforgespi.language.IModInfo
 import net.neoforged.neoforgespi.locating.IModFile
 import java.util.Optional
 
@@ -36,6 +39,7 @@ import java.util.Optional
 fun init(mod: Mod) {
     CynosureForgeLike.init()
     CarverRegistry.BIOME_MODIFIER_SERIALIZERS.register(mod.eventBus)
+    LateInitEvent.subscribe { CynosureNeoforge.modPropertiesInit() }
     mod.eventBus.let { modBus ->
         modBus.register(CynosureNeoforge)
         clientOnly {
@@ -60,23 +64,44 @@ public object CynosureNeoforge {
         event.enqueueWork(PostInitEvent::post)
     }
 
+    private val resourcemetadata: MutableList<Pair<IModInfo, List<*>>> = mutableListOf()
+    private val datametadata: MutableList<Pair<IModInfo, List<*>>> = mutableListOf()
+
+    private val packSource = PackSource.create(PackSource.decorateWithSource("pack.source.cynosure"), false)
+
+    fun modPropertiesInit() {
+        for (mod in ModList.get().mods) {
+            (mod.modProperties.getCynosureValue("resourcepacks") as? List<*>)?.let { data ->
+                resourcemetadata.add(mod to data)
+                Cynosure.info("Resource data found in ${mod.modId}: $data")
+            }
+            (mod.modProperties.getCynosureValue("datapacks") as? List<*>)?.let { data ->
+                datametadata.add(mod to data)
+                Cynosure.info("Datapack data found in ${mod.modId}: $data")
+            }
+        }
+    }
+
     @SubscribeEvent
     public fun addPackFinders(event: AddPackFindersEvent) {
-        //TODO: test this whole thing.
-        for (mod in ModList.get().mods) {
-            val resourcemetadata = mod.modProperties.getCynosureValue("resourcepacks") as? List<*> ?: continue
-            val datametadata = mod.modProperties.getCynosureValue("datapacks") as? List<*> ?: continue
+        resourcemetadata.forEach { (mod, data) ->
             try {
                 if (event.packType == PackType.CLIENT_RESOURCES)
-                    for (pack in resourcemetadata) {
+                    for (pack in data) {
                         when (pack) {
                             is String -> event.createPack(mod.owningFile.file,
                                 identifier(mod.modId, pack)
                             )
                         }
                     }
+            } catch (ex: Exception) {
+                Cynosure.error("Failed to load resourcepack for ${mod.modId}")
+            }
+        }
+        datametadata.forEach { (mod, data) ->
+            try {
                 if (event.packType == PackType.SERVER_DATA)
-                    for (pack in datametadata) {
+                    for (pack in data) {
                         when (pack) {
                             is String -> event.createDataPack(mod.owningFile.file,
                                 identifier(mod.modId, pack)
@@ -84,17 +109,17 @@ public object CynosureNeoforge {
                         }
                     }
             } catch (ex: Exception) {
-                Cynosure.error("Failed to load ${if (event.packType == PackType.CLIENT_RESOURCES) "resourcepack" else "datapack"} for mod ${mod.modId}")
+                Cynosure.error("Failed to load datapack for ${mod.modId}")
             }
         }
     }
 
     private fun AddPackFindersEvent.createPack(modFile: IModFile, id: ResourceLocation) {
-        val resourcePath = modFile.findResource("resourcepacks/$id")
+        val resourcePath = modFile.findResource("resourcepacks/${id.path}")
         val locationInfo = PackLocationInfo(
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("resourcepack")),
-            PackSource.BUILT_IN,
+            packSource,
             Optional.of(
                 KnownPack(
                     id.namespace,
@@ -122,11 +147,11 @@ public object CynosureNeoforge {
     }
 
     private fun AddPackFindersEvent.createDataPack(modFile: IModFile, id: ResourceLocation) {
-        val resourcePath = modFile.findResource("datapacks/$id")
+        val resourcePath = modFile.findResource("datapacks/${id.path}")
         val locationInfo = PackLocationInfo(
             "${id.namespace}/${id.path}",
             Component.translatable(id.toLanguageKey("datapack")),
-            PackSource.BUILT_IN,
+            packSource,
             Optional.of(
                 KnownPack(
                     id.namespace,
