@@ -73,11 +73,9 @@ public object CynosureNeoforge {
         for (mod in ModList.get().mods) {
             (mod.modProperties.getCynosureValue("resourcepacks") as? List<*>)?.let { data ->
                 resourcemetadata.add(mod to data)
-                Cynosure.info("Resource data found in ${mod.modId}: $data")
             }
             (mod.modProperties.getCynosureValue("datapacks") as? List<*>)?.let { data ->
                 datametadata.add(mod to data)
-                Cynosure.info("Datapack data found in ${mod.modId}: $data")
             }
         }
     }
