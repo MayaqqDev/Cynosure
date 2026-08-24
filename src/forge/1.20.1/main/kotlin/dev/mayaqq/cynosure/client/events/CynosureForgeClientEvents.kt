@@ -5,8 +5,10 @@ import dev.mayaqq.cynosure.MODID
 import dev.mayaqq.cynosure.client.events.render.BeginHudRenderEvent
 import dev.mayaqq.cynosure.client.events.render.EndHudRenderEvent
 import dev.mayaqq.cynosure.client.events.render.LevelRenderEvent
+import dev.mayaqq.cynosure.client.events.screen.ScreenEvents
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.forge.mixin.client.LevelRendererAccessor
+import dev.mayaqq.cynosure.helpers.McClient
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.culling.Frustum
@@ -15,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.RenderGuiEvent
 import net.minecraftforge.client.event.RenderHighlightEvent
 import net.minecraftforge.client.event.RenderLevelStageEvent
+import net.minecraftforge.client.event.ScreenEvent
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber
@@ -89,5 +92,15 @@ public object CynosureForgeClientEvents {
             TickEvent.Phase.START -> ClientTickEvent.Begin.post()
             TickEvent.Phase.END -> ClientTickEvent.End.post()
         }
+    }
+
+    @SubscribeEvent
+    public fun onScreenInitPre(event: ScreenEvent.Init.Pre) {
+        ScreenEvents.BeforeInit(McClient, event.screen, event.listenersList).post()
+    }
+
+    @SubscribeEvent
+    public fun onScreenInitPost(event: ScreenEvent.Init.Post) {
+        ScreenEvents.AfterInit(McClient, event.screen, event.listenersList).post()
     }
 }

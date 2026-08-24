@@ -5,8 +5,10 @@ import dev.mayaqq.cynosure.MODID
 import dev.mayaqq.cynosure.client.events.render.BeginHudRenderEvent
 import dev.mayaqq.cynosure.client.events.render.EndHudRenderEvent
 import dev.mayaqq.cynosure.client.events.render.LevelRenderEvent
+import dev.mayaqq.cynosure.client.events.screen.ScreenEvents
 import dev.mayaqq.cynosure.events.api.post
 import dev.mayaqq.cynosure.forge.mixin.client.LevelRendererAccessor
+import dev.mayaqq.cynosure.helpers.McClient
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.culling.Frustum
@@ -17,6 +19,7 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderGuiEvent
 import net.neoforged.neoforge.client.event.RenderHighlightEvent
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent
+import net.neoforged.neoforge.client.event.ScreenEvent
 
 internal val LevelRenderer.renderBuffers get() = (this as LevelRendererAccessor).renderBuffers
 internal val RenderLevelStageEvent.bufferSource get() = (this.levelRenderer as LevelRendererAccessor).renderBuffers.bufferSource()
@@ -90,5 +93,15 @@ public object CynosureForgeClientEvents {
     @SubscribeEvent
     public fun onClientTickEnd(event: net.neoforged.neoforge.client.event.ClientTickEvent.Post) {
         ClientTickEvent.End.post()
+    }
+
+    @SubscribeEvent
+    public fun onScreenInitPre(event: ScreenEvent.Init.Pre) {
+        ScreenEvents.BeforeInit(McClient, event.screen, event.listenersList).post()
+    }
+
+    @SubscribeEvent
+    public fun onScreenInitPost(event: ScreenEvent.Init.Post) {
+        ScreenEvents.AfterInit(McClient, event.screen, event.listenersList).post()
     }
 }
