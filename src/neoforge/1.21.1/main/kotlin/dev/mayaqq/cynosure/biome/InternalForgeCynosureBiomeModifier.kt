@@ -22,13 +22,6 @@ import kotlin.jvm.optionals.getOrNull
 
 internal class InternalForgeCynosureBiomeModifier(val ops: RegistryOps<*>) : BiomeModifier {
 
-    private var internalRegistryAccess: HolderLookup.Provider? = null
-    val registryAccess: HolderLookup.Provider
-        get() = run {
-            if (internalRegistryAccess == null) internalRegistryAccess = VanillaRegistries.createLookup()
-            internalRegistryAccess!!
-        }
-
     override fun modify(
         biome: Holder<Biome>,
         phase: BiomeModifier.Phase,
