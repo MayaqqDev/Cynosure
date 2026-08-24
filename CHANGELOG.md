@@ -1,5 +1,6 @@
-# Cynosure `@VERSION@` `1.20.1` `Fabric & Forge`
+# Cynosure `@VERSION@` `1.21.1` `Fabric & Forge`
 
 ### Changelog:
-- New Kritter
-    - Removed Transaction Manager
+- 1.21.1 support
+- bunch of rewrites for things to make them work together
+- Awaiting rewrite, probably don't use this lol :sob:
