@@ -383,4 +383,69 @@ publishing {
     }
 }
 
-class PublishMetadata(val loaderName: String, val modloaders: Array<String>, val requires: Array<String>, val jar: Provider<RegularFile>, val suffix: String)
+publishMods {
+    val loaders = arrayOf(
+        PublishMetadata(
+            "Fabric",
+            arrayOf("fabric", "quilt"),
+            arrayOf("fabric-api", "fabric-language-kotlin"),
+            cloche.targets["fabric:1.21.1"].finalJar.flatMap(Jar::getArchiveFile),
+            "-fabric"
+        ),
+        PublishMetadata(
+            "Neoforge",
+            arrayOf("neoforge"),
+            arrayOf("kotlin-for-forge"),
+            cloche.targets["neoforge:1.21.1"].finalJar.flatMap(Jar::getArchiveFile),
+            "-neoforge"
+        )
+    )
+    val mcVersion = "1.21.1"
+    changelog = file("CHANGELOG.md").readText().replace("@VERSION@", modVersion)
+    type = BETA
+
+    val optionsCurseforge = curseforgeOptions {
+        accessToken = properties["curseforge_token"]?.toString()
+        minecraftVersions.add(mcVersion)
+        projectId = "1259952"
+        javaVersions.add(JavaVersion.VERSION_21)
+        clientRequired = true
+        serverRequired = true
+    }
+
+    val optionsModrinth = modrinthOptions {
+        accessToken = properties["modrinth_token"]?.toString()
+        projectId = "4JVfdODB"
+        minecraftVersions.add(mcVersion)
+    }
+
+    loaders.forEach { loader ->
+        loader.apply {
+            curseforge("curseforge$loaderName") {
+                from(optionsCurseforge)
+                modLoaders.addAll(*modloaders)
+                file = jar
+                displayName = "$mod_name $modVersion $loaderName"
+                version = "$modVersion$suffix"
+                requires(*requires)
+            }
+
+            modrinth("modrinth$loaderName") {
+                from(optionsModrinth)
+                modLoaders.addAll(*modloaders)
+                file = jar
+                displayName = "$mod_name $modVersion $loaderName"
+                version = "$modVersion$suffix"
+                requires(*requires)
+            }
+        }
+    }
+}
+
+class PublishMetadata(
+    val loaderName: String,
+    val modloaders: Array<String>,
+    val requires: Array<String>,
+    val jar: Provider<RegularFile>,
+    val suffix: String
+)
