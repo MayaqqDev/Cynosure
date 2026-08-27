@@ -114,7 +114,7 @@ cloche {
             dependency {
                 modId = "fabric-language-kotlin"
                 version {
-                    start = "1.13.7+kotlin.2.2.21"
+                    start = "1.13.13+kotlin.2.4.10"
                     startInclusive = true
                 }
             }
@@ -136,6 +136,16 @@ cloche {
             api(libs.javax.annotations)
 
             modCompileOnly("maven.modrinth:oculus:1.20.1-1.8.0") { isTransitive = false }
+        }
+
+        metadata {
+            dependency {
+                modId = "kotlinforforge"
+                version {
+                    start = "5.11.0"
+                    startInclusive = true
+                }
+            }
         }
     }
 
