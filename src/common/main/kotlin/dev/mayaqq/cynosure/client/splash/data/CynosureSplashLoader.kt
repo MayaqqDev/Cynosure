@@ -23,12 +23,6 @@ public object CynosureSplashLoader : SimpleJsonResourceReloadListener(Gson(), "s
 
     public var splashes: MutableList<Component> = mutableListOf()
 
-    /**
-     * Set the amount of splashes you added, sadly currently Minecraft Loads Data After Splashes, so this is just
-     *  an assumed amount
-     */
-    public var amount: Int = 0;
-
     override fun apply(items: MutableMap<ResourceLocation, JsonElement>, manager: ResourceManager, profiler: ProfilerFiller) {
         this.splashes.clear()
         items.forEach { (key, value) ->

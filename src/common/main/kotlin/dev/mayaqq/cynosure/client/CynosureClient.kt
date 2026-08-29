@@ -1,25 +1,20 @@
 package dev.mayaqq.cynosure.client
 
-import dev.mayaqq.cynosure.client.events.ClientReloadListenerEvent
 import dev.mayaqq.cynosure.client.models.entity.AnimationDataLoader
 import dev.mayaqq.cynosure.client.models.entity.ModelDataLoader
 import dev.mayaqq.cynosure.client.splash.data.CynosureSplashLoader
-import dev.mayaqq.cynosure.data.registerResourcepackReloadListener
-import dev.mayaqq.cynosure.events.api.EventSubscriber
-import dev.mayaqq.cynosure.events.api.Subscription
 import dev.mayaqq.cynosure.modId
-import invoke.kitty.kritter.platform.Side
+import invoke.kitty.kritter.platform.forge.EntrypointHandler
+import invoke.kitty.kritter.resources.registerReloadListener
+import net.minecraft.server.packs.PackType
 
-@EventSubscriber(Side.CLIENT)
 public object CynosureClient {
-    public fun init() {
-        TempClientCynosureEvents.subAll()
-    }
+    public fun init() {}
+}
 
-    @Subscription
-    internal fun onReloadListeners(event: ClientReloadListenerEvent) {
-        event.register(modId("data_entity_models"), ModelDataLoader)
-        event.register(modId("data_entity_animations"), AnimationDataLoader)
-        event.register(modId("splashes"), CynosureSplashLoader)
-    }
+@EntrypointHandler("client")
+public fun kritterInit() {
+    registerReloadListener(PackType.CLIENT_RESOURCES, modId("data_entity_models"), ModelDataLoader)
+    registerReloadListener(PackType.CLIENT_RESOURCES, modId("data_entity_animations"), AnimationDataLoader)
+    registerReloadListener(PackType.CLIENT_RESOURCES, modId("splashes"), CynosureSplashLoader)
 }
