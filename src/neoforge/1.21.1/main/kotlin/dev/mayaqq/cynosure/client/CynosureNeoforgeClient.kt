@@ -82,8 +82,6 @@ internal object CynosureNeoforgeClient {
             }
 
             event.registerBelow(id, modId("overlays_${it.path}")) { guiGraphics, deltaTracker ->
-                RenderSystem.enableBlend()
-                RenderSystem.disableDepthTest()
                 //TODO: check if using McClient.gui is okay
                 HudOverlayRegistry.sorted[it]?.forEach { overlay -> overlay.render(McClient.gui, guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false)) }
             }

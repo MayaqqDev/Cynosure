@@ -71,8 +71,6 @@ public object CynosureForgeClient {
         VanillaHud.ids.forEach {
             require(VanillaGuiOverlay.entries.find { e -> e.id() == it } != null) { "$it has an incorrect forge id" }
             event.registerBelow(it, "cynosure_overlays_${it.path}") { forgeGui: ForgeGui, guiGraphics: GuiGraphics, fl: Float, i: Int, i1: Int ->
-                RenderSystem.enableBlend()
-                RenderSystem.disableDepthTest()
                 HudOverlayRegistry.sorted[it]?.forEach { overlay -> overlay.render(forgeGui, guiGraphics, fl) }
             }
         }
