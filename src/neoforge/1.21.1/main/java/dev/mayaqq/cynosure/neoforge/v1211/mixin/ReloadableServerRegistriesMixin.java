@@ -78,7 +78,7 @@ public abstract class ReloadableServerRegistriesMixin {
     }
 
     @WrapOperation(method = "lambda$scheduleElementParse$3", at = @At(value = "INVOKE", target = "Ljava/util/Optional;ifPresent(Ljava/util/function/Consumer;)V"))
-    private static <T> void modifyLootTable(Optional<T> optionalTable, Consumer<? super T> action, Operation<Void> original, @Local(argsOnly = true) ResourceLocation id, @Local(argsOnly = true) RegistryOps<JsonElement> ops) {
+    private static <T> void changeLootTable(Optional<T> optionalTable, Consumer<? super T> action, Operation<Void> original, @Local(argsOnly = true) ResourceLocation id, @Local(argsOnly = true) RegistryOps<JsonElement> ops) {
         original.call(optionalTable.map(table -> cynosure$modifyLootTable(table, id, ops)), action);
     }
 
@@ -95,6 +95,7 @@ public abstract class ReloadableServerRegistriesMixin {
         var replace = new LoottableEvents.Replace(id, table);
         MainBus.INSTANCE.post(replace);
         LootTable replacement = replace.getResult();
+        var lootTableId = table.getLootTableId();
 
         if (replacement != null) {
             // Set the loot table to MODIFY to be the replacement loot table.
@@ -107,7 +108,11 @@ public abstract class ReloadableServerRegistriesMixin {
         var modify = new LoottableEvents.Modify(id, builder);
         MainBus.INSTANCE.post(modify);
 
-        return (T) builder.build();
+        LootTable newTable = builder.build();
+
+        newTable.setLootTableId(lootTableId);
+
+        return (T) newTable;
     }
 
     @Inject(method = "lambda$scheduleElementParse$4", at = @At("RETURN"))
