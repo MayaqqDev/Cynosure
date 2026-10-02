@@ -1,0 +1,15 @@
+build
+.gradle
+
+# No Agents file here, like we would that lmao
+
+.vscode
+bin
+
+out
+.idea
+*.iml
+*.ipr
+*.iws
+/run/
+/.kotlin/

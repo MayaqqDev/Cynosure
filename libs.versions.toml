@@ -1,0 +1,11 @@
+[versions]
+cloche = "0.19.14"
+kotlin = "2.2.10"
+
+[libraries]
+
+[bundles]
+
+[plugins]
+cloche = { id = "earth.terrarium.cloche", version.ref = "cloche" }
+modpublish = { id = "me.modmuss50.mod-publish-plugin", version = "1.1.0" }
