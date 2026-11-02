@@ -3,6 +3,9 @@ package dev.mayaqq.cynosure.mixin.client;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import dev.mayaqq.cynosure.client.models.poses.CynosureArmAnimation;
 import dev.mayaqq.cynosure.client.models.poses.CynosureArmPose;
 import dev.mayaqq.cynosure.injection.client.IHumanoidModel;
@@ -29,6 +32,8 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
     @Shadow
     @Final
     public ModelPart leftArm;
+    @Shadow
+    public boolean crouching;
     @Unique
     CynosureArmPose cynosure$customRightArmPose = null;
 
@@ -89,7 +94,11 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
                     target = "Lnet/minecraft/world/entity/LivingEntity;isUsingItem()Z"
             )
     )
-    private void injectOnAnimation(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
+    private void injectOnAnimation(
+            T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
+            CallbackInfo ci,
+            @Local LocalRef<Float> rightHandYRot, @Local LocalRef<Float> leftHandYRot
+    ) {
         boolean isMainRight = entity.getMainArm() == HumanoidArm.RIGHT;
         HumanoidModel<? extends LivingEntity> model = (HumanoidModel<? extends LivingEntity>) (Object) this;
         if (entity.isUsingItem()) {
@@ -98,25 +107,49 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
             if (isMainRight == isUsedMain) {
                 if (this.cynosure$customRightArmAnimation != null) {
                     this.cynosure$customRightArmAnimation.modifyMainArm(model, entity, this.rightArm, ageInTicks);
+                    float mainYRot = this.rightArm.yRot;
+                    rightHandYRot.set(mainYRot);
                     if (this.cynosure$customRightArmAnimation.getTwohanded()) {
                         this.cynosure$customRightArmAnimation.modifyOffhandArm(model, entity, this.leftArm, ageInTicks);
+                        float offhandArmYRot = this.leftArm.yRot;
+                        leftHandYRot.set(offhandArmYRot);
                     }
                 }
             } else {
                 if (this.cynosure$customLeftArmAnimation != null) {
                     this.cynosure$customLeftArmAnimation.modifyMainArm(model, entity, this.leftArm, ageInTicks);
+                    float mainYRot = this.leftArm.yRot;
+                    leftHandYRot.set(mainYRot);
                     if (this.cynosure$customLeftArmAnimation.getTwohanded()) {
+                        float offhandArmYRot = this.rightArm.yRot;
+                        rightHandYRot.set(offhandArmYRot);
                         this.cynosure$customLeftArmAnimation.modifyOffhandArm(model, entity, this.rightArm, ageInTicks);
                     }
                 }
             }
         } else {
             if (isMainRight) {
-                if (cynosure$customRightArmPose != null) this.cynosure$customRightArmPose.modifyMainArm(model, entity, this.rightArm, ageInTicks);
-                if (cynosure$customLeftArmPose != null) this.cynosure$customLeftArmPose.modifyOffhandArm(model, entity, this.leftArm, ageInTicks);
+                if (cynosure$customRightArmPose != null) {
+                    this.cynosure$customRightArmPose.modifyMainArm(model, entity, this.rightArm, ageInTicks);
+                    float mainYRot = this.rightArm.yRot;
+                    rightHandYRot.set(mainYRot);
+                }
+                if (cynosure$customLeftArmPose != null) {
+                    this.cynosure$customLeftArmPose.modifyOffhandArm(model, entity, this.leftArm, ageInTicks);
+                    float offhandArmYRot = this.leftArm.yRot;
+                    leftHandYRot.set(offhandArmYRot);
+                }
             } else {
-                if (cynosure$customLeftArmPose != null) this.cynosure$customLeftArmPose.modifyMainArm(model, entity, this.leftArm, ageInTicks);
-                if (cynosure$customRightArmPose != null) this.cynosure$customRightArmPose.modifyOffhandArm(model, entity, this.rightArm, ageInTicks);
+                if (cynosure$customLeftArmPose != null) {
+                    this.cynosure$customLeftArmPose.modifyMainArm(model, entity, this.leftArm, ageInTicks);
+                    float mainYRot = this.leftArm.yRot;
+                    leftHandYRot.set(mainYRot);
+                }
+                if (cynosure$customRightArmPose != null) {
+                    this.cynosure$customRightArmPose.modifyOffhandArm(model, entity, this.rightArm, ageInTicks);
+                    float offhandArmYRot = this.rightArm.yRot;
+                    rightHandYRot.set(offhandArmYRot);
+                }
             }
         }
     }
@@ -128,7 +161,14 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
             method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
             at = @At("MIXINEXTRAS:EXPRESSION")
     )
-    private boolean cancelWhenCustomRightArm(boolean original) {
+    private boolean cancelWhenCustomRightArm(boolean original, @Local Float rightHandYRot, @Local Float leftHandYRot) {
+        if (rightHandYRot != null) {
+            this.rightArm.yRot += rightHandYRot;
+        }
+        if (leftHandYRot != null) {
+            this.leftArm.yRot += leftHandYRot;
+        }
+
         if (cynosure$customRightArmPose != null && cynosure$customRightArmPose.getCancelSwing()) return false;
         if (cynosure$customRightArmAnimation != null && cynosure$customRightArmAnimation.getCancelSwing()) return false;
 
