@@ -1,4 +1,4 @@
 # Cynosure `@VERSION@` `1.21.1` `Fabric & Forge`
 
 ### Changelog:
-- Fix arm yRot modification
+- Okay im gonna not release stuff like this now
