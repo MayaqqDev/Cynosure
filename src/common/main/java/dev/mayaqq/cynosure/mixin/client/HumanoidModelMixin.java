@@ -193,7 +193,7 @@ public class HumanoidModelMixin<T extends LivingEntity> implements IHumanoidMode
             method = "poseLeftArm"
     )
     private void cancelLeftArmAnimation(T livingEntity, Operation<Void> original) {
-        if (cynosure$leftArmAnimated) original.call(livingEntity);
+        if (!cynosure$leftArmAnimated) original.call(livingEntity);
     }
 
     @WrapMethod(
