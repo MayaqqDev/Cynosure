@@ -34,7 +34,8 @@
     "client.SplashManagerMixin",
     "client.accessor.LivingEntityRendererAccessor",
     "client.HumanoidModelMixin",
-    "client.PlayerRendererMixin"
+    "client.PlayerRendererMixin",
+    "client.ItemInHandRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
